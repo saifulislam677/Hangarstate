@@ -18,7 +18,6 @@ main{max-width:1100px;margin:auto;padding:12px;display:grid;gap:12px}
 .card h2{font-size:16px;margin:0 0 10px}
 .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .row>*{flex:1;min-width:140px}
-.datebox{max-width:100%}
 label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:4px}
 input,select,button{font:inherit;touch-action:manipulation}
 input[type=date],input[type=search],input[type=text],select{width:100%;padding:10px 12px;border:1px solid #cbd8d0;border-radius:8px;background:#fff;color:var(--ink);font-size:14px}
@@ -27,7 +26,6 @@ button.secondary{background:#e8efeb;color:var(--green)}
 button.danger{background:#fff0f0;color:var(--red);border:1px solid #f0cccc}
 button.small{padding:5px 8px;font-size:11px;min-height:30px}
 
-/* METRICS GRID RESPONSIVE */
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
 .metric{background:#f3f7f4;border:1px solid var(--line);border-radius:10px;padding:10px}
 .metric strong{display:block;font-size:20px;line-height:1.1}
@@ -38,7 +36,6 @@ button.small{padding:5px 8px;font-size:11px;min-height:30px}
 .tab.active{background:var(--green);color:#fff}
 .hint{font-size:11px;color:var(--muted);margin:6px 0 0}
 
-/* ROSTER ITEM MOBILE RESPONSIVE */
 .rank-block{border:1px solid var(--line);border-radius:10px;margin-top:8px;overflow:hidden}
 .rank-head{background:#f2f6f3;padding:8px 10px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:13px}
 .person{display:flex;gap:8px;align-items:center;padding:10px;border-top:1px solid #edf1ee;flex-wrap:wrap}
@@ -56,7 +53,7 @@ th{background:#f3f7f4;color:#3e5148}
 .statusnote{padding:8px 10px;border-radius:8px;background:#fff8df;color:#66531c;font-size:11px;margin-top:8px}
 .hidden{display:none!important}
 
-/* MODAL POPUP STYLES */
+/* LEAVE MODAL STYLES */
 .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:9999;padding:15px;backdrop-filter:blur(2px)}
 .modal-card{background:#fff;border-radius:14px;width:100%;max-width:420px;padding:20px;box-shadow:0 10px 25px rgba(0,0,0,0.2);animation:popIn 0.2s ease-out}
 @keyframes popIn{from{transform:scale(0.92);opacity:0}to{transform:scale(1);opacity:1}}
@@ -80,8 +77,8 @@ th{background:#f3f7f4;color:#3e5148}
 .print-grid .rankcol{text-align:left;width:6%;font-weight:bold;writing-mode:horizontal-tb;transform:none;height:auto;font-size:8px}
 .print-grid .totalrow{font-weight:bold;background:#eee!important}
 
-/* 4-COLUMN EXACT LAYOUT BELOW GRID */
-.print-layout-container{display:grid;grid-template-columns:1.1fr 1.1fr 1.8fr 1.1fr;gap:12px;margin-top:8px;align-items:start}
+/* 4-COLUMN LAYOUT BELOW GRID */
+.print-layout-container{display:grid;grid-template-columns:1.1fr 1.1fr 1.8fr 1.1fr;gap:10px;margin-top:8px;align-items:start}
 .print-col{display:flex;flex-direction:column;gap:8px}
 
 .print-block{break-inside:avoid}
@@ -100,10 +97,8 @@ th{background:#f3f7f4;color:#3e5148}
 @media(min-width:780px){
  main{grid-template-columns:1fr 1fr;align-items:start}
  .wide{grid-column:1/-1}
- .datebox{max-width:240px}
 }
 
-/* MOBILE RESPONSIVE PRINT CONTAINER PREVIEW */
 @media(max-width:779px){
  .print-layout-container{grid-template-columns:1fr;gap:10px}
 }
@@ -118,7 +113,7 @@ th{background:#f3f7f4;color:#3e5148}
  #printState{display:block!important}
  #screenPreviewWrapper{border:0;padding:0;margin:0}
  .print-grid th{background:#fff!important}
- .print-layout-container{grid-template-columns:1.1fr 1.1fr 1.8fr 1.1fr;gap:12px}
+ .print-layout-container{grid-template-columns:1.1fr 1.1fr 1.8fr 1.1fr;gap:10px}
  .signatures-bottom{margin-top:10px}
  .signatures-bottom b{margin-bottom:10px}
 }
@@ -146,7 +141,7 @@ th{background:#f3f7f4;color:#3e5148}
 
 <!-- LIVE SCREEN PREVIEW SECTION -->
 <section class="card wide no-print" id="screenPreviewSection">
- <h2>Live Print Sheet Preview (100% Match with Photo)</h2>
+ <h2>Live Print Sheet Preview (100% Match)</h2>
  <div id="screenPreviewWrapper">
   <div class="print-top-header">
    <div class="unit-title">AC Taking & Handing over Flt</div>
@@ -156,7 +151,7 @@ th{background:#f3f7f4;color:#3e5148}
   <table class="print-grid" id="previewGrid"></table>
   <div class="print-layout-container" id="previewListsContainer"></div>
   <div class="signatures-bottom">
-   <div><b>PREPARED BY</b><br><span>PARVEZ<br>SGT</span></div>
+   <div><b>PREPARED BY</b><br><span id="previewPreparedBy">PARVEZ<br>SGT</span></div>
    <div><b>JCOIC</b></div>
    <div><b>OIC</b></div>
   </div>
@@ -185,6 +180,14 @@ th{background:#f3f7f4;color:#3e5148}
    <div><label for="newName">PERSONNEL NAME</label><input id="newName" type="text" placeholder="Enter full name"></div>
   </div>
   <div style="margin-top:10px"><button id="addPersonBtn" type="button">Add Person</button></div>
+ </div>
+
+ <div class="card" style="margin:12px 0;background:#f8faf8;box-shadow:none">
+  <h2 style="margin-bottom:10px">Edit "PREPARED BY" Signature</h2>
+  <div class="row">
+   <div><label for="prepName">NAME</label><input id="prepName" type="text" value="PARVEZ"></div>
+   <div><label for="prepRank">RANK</label><input id="prepRank" type="text" value="SGT"></div>
+  </div>
  </div>
 
  <div id="roster"></div>
@@ -217,7 +220,7 @@ th{background:#f3f7f4;color:#3e5148}
  <table class="print-grid" id="printGrid"></table>
  <div class="print-layout-container" id="printListsContainer"></div>
  <div class="signatures-bottom">
-  <div><b>PREPARED BY</b><br><span>PARVEZ<br>SGT</span></div>
+  <div><b>PREPARED BY</b><br><span id="printPreparedBy">PARVEZ<br>SGT</span></div>
   <div><b>JCOIC</b></div>
   <div><b>OIC</b></div>
  </div>
@@ -282,12 +285,14 @@ let ranks=[
 const statuses=["All Duty On","All Duty Off","Leave","QRF Duty","CMH","Form 295","On Parade","Civil Tech","TD/Courier","Mess/Canteen","CMH SR/FMLY SR","CMH / M Room Admit","Milk Duty","EDP/PG/ITD C","BASAE Out/Exam","Under Clearance","GST/GH","Afternoon","Parade","Out of Parade","Attachment"];
 const statusShort={"All Duty On":"Duty On","All Duty Off":"Duty Off","Leave":"Leave","QRF Duty":"QRF Duty","CMH":"CMH","Form 295":"Form 295","On Parade":"On Parade","Civil Tech":"Civil Tech","TD/Courier":"TD/Courier","Mess/Canteen":"Mess/Canteen","CMH SR/FMLY SR":"CMH SR/FMLY SR","CMH / M Room Admit":"CMH / M Room Admit","Milk Duty":"Milk Duty","EDP/PG/ITD C":"EDP/PG/ITD C","BASAE Out/Exam":"BASAE Out/Exam","Under Clearance":"Under Clearance","GST/GH":"GST/GH","Afternoon":"Afternoon","Parade":"Parade","Out of Parade":"Out of Parade","Attachment":"Attachment"};
 
+const militaryOrder=["MWO","SWO","WO","SGT","CPL","LAC","AC"];
+
 let people=[];
 function rebuildPeople(){people=[];ranks.forEach(g=>g.names.forEach((name,i)=>people.push({id:g.rank+"_"+i,rank:g.rank,name})));}
 rebuildPeople();
 
 function totalManpower(){return people.length}
-function militaryCount(){return people.filter(p=>["MWO","SWO","WO","SGT","CPL","LAC","AC"].includes(p.rank)).length}
+function militaryCount(){return people.filter(p=>militaryOrder.includes(p.rank)).length}
 const $=id=>document.getElementById(id);
 let current={},currentLeave={},activeStatus="Leave",saved={},activeLeavePersonId=null;
 
@@ -346,7 +351,6 @@ function renderRoster(){
  $("roster").innerHTML=html||'<div class="empty">No personnel match your filters.</div>';
  $("roster").querySelectorAll("select[data-person]").forEach(sel=>sel.onchange=()=>{
    const id=sel.dataset.person;
-   const oldVal = current[id];
    current[id]=sel.value;
    if(sel.value==="Leave"){
      openLeaveModal(id);
@@ -358,7 +362,6 @@ function renderRoster(){
  $("roster").querySelectorAll("[data-delete]").forEach(btn=>btn.onclick=()=>deletePerson(btn.dataset.delete));
 }
 
-/* LEAVE MODAL CONTROLS */
 function openLeaveModal(id){
  activeLeavePersonId = id;
  const p = people.find(x=>x.id===id);
@@ -383,7 +386,6 @@ $("saveLeaveBtn").onclick = ()=>{
  const type = $("modalLeaveType").value;
  const from = $("modalStartDate").value;
  const to = $("modalReportDate").value;
- 
  currentLeave[activeLeavePersonId] = {type, from, to};
  closeLeaveModal();
  renderAll();
@@ -394,7 +396,6 @@ function displayDate(iso){if(!iso)return "";const a=iso.split("-");return a.leng
 function deletePerson(id){
  const person=people.find(p=>p.id===id);if(!person)return;
  if(!confirm(`Are you sure you want to delete ${person.rank} ${person.name}?`)) return;
- 
  const g=ranks.find(group=>group.rank===person.rank);
  if(g){
   g.names=g.names.filter(n=>n!==person.name);
@@ -472,7 +473,6 @@ function generateGridHTML(){
   ["ON PARADE",p=>current[p.id]==="On Parade"&&p.rank!=="Civilian"]
  ];
 
- const mainRanks=["MWO","SWO","WO","SGT","CPL","LAC","AC"];
  const attachedActualRank=p=>{
    if(p.rank!=="Attachment") return p.rank;
    const m=p.name.match(/^(MWO|SWO|WO|SGT|CPL|LAC|AC)\b/i);
@@ -481,7 +481,7 @@ function generateGridHTML(){
 
  let html="<thead><tr><th class='vertical rankcol'>RANK</th>"+cols.map(c=>`<th class='vertical'>${esc(c[0])}</th>`).join("")+"</tr></thead><tbody>";
 
- mainRanks.forEach(r=>{
+ militaryOrder.forEach(r=>{
   const officeList = people.filter(p=>p.rank===r);
   const attachedForThisRank = people.filter(p=>(p.rank==="Attachment"||current[p.id]==="Attachment") && attachedActualRank(p)===r);
   
@@ -501,7 +501,7 @@ function generateGridHTML(){
  });
 
  html+=`<tr class="totalrow"><th class="rankcol">TOTAL</th>`+cols.map((c,i)=>{
-  const list=people.filter(p=>mainRanks.includes(p.rank));
+  const list=people.filter(p=>militaryOrder.includes(p.rank));
   const totalAttached = people.filter(p=>p.rank==="Attachment"||current[p.id]==="Attachment").length;
   const totalOffice = list.filter(p=>current[p.id]!=="TD/Courier"&&current[p.id]!=="Attachment").length;
   
@@ -520,30 +520,35 @@ function generateGridHTML(){
  return html+"</tbody>";
 }
 
-/* GENERATE LEAVE TEXT SPECIFICALLY FORMATTED: Rank Name (Type wef Start to End) */
+/* DISPOSAL LISTS GENERATION WITH SEPARATE 1,2,3... NUMBERING PER CATEGORY */
 function generateListsHTML(){
- let currentNum=1;
 
- function getItems(key){
+ function getCategoryBlock(key, title){
   let list=[];
   if(key==="ATTACHMENT"){
-    list=people.filter(p=>p.rank==="Attachment"||current[p.id]==="Attachment");
+    // Strictly Attachment personnel only
+    list=people.filter(p=>p.rank==="Attachment"||(current[p.id]==="Attachment"&&p.rank!=="Civilian"));
   } else if(key==="Civil Tech"){
     list=people.filter(p=>p.rank==="Civilian");
-  } else if(key==="ALL DUTY ON"){
-    list=people.filter(p=>p.rank!=="Civilian"&&current[p.id]==="All Duty On");
-  } else if(key==="ALL DUTY OFF"){
-    list=people.filter(p=>p.rank!=="Civilian"&&current[p.id]==="All Duty Off");
-  } else if(key==="F-295"){
-    list=people.filter(p=>p.rank!=="Civilian"&&current[p.id]==="Form 295");
   } else if(key==="ON PARADE"){
-    list=people.filter(p=>p.rank!=="Civilian"&&current[p.id]==="On Parade");
+    // Strictly On Parade military personnel, sorted strictly by Rank Hierarchy
+    list=people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]==="On Parade"&&current[p.id]!=="Attachment");
+    list.sort((a,b)=>militaryOrder.indexOf(a.rank) - militaryOrder.indexOf(b.rank));
+  } else if(key==="ALL DUTY ON"){
+    list=people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]==="All Duty On");
+  } else if(key==="ALL DUTY OFF"){
+    list=people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]==="All Duty Off");
+  } else if(key==="F-295"){
+    list=people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]==="Form 295");
   } else {
-    list=people.filter(p=>p.rank!=="Civilian"&&current[p.id]===key);
+    list=people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]===key);
   }
 
-  return list.map(p=>{
-   let numStr = currentNum++;
+  if(!list.length) return "";
+
+  let numCount = 1;
+  let itemsHtml = list.map(p=>{
+   let numStr = numCount++;
    let textContent="";
    if(key==="ATTACHMENT"){
      textContent = `${esc(p.rank)} ${esc(p.name)}`;
@@ -554,9 +559,9 @@ function generateListsHTML(){
      const toStr=lv.to?displayDate(lv.to):"";
      let dateSpan = "";
      if(fromStr && toStr){
-       dateSpan = ` ( ${esc(typeStr)} wef ${esc(fromStr)} to ${esc(toStr)})`;
+       dateSpan = ` (${esc(typeStr)} wef ${esc(fromStr)} to ${esc(toStr)})`;
      } else if(fromStr){
-       dateSpan = ` ( ${esc(typeStr)} wef ${esc(fromStr)})`;
+       dateSpan = ` (${esc(typeStr)} wef ${esc(fromStr)})`;
      }
      textContent = `${esc(p.rank)} ${esc(p.name)}${dateSpan}`;
    } else if(key==="Civil Tech"){
@@ -566,41 +571,51 @@ function generateListsHTML(){
    }
    return `<li><span class="item-num">${numStr}</span><span class="item-text">${textContent}</span></li>`;
   }).join("");
+
+  const gridClass = key==="ON PARADE" ? 'class="on-parade-grid"' : '';
+  return `<div class="print-block"><h3>${title}</h3><ol ${gridClass}>${itemsHtml}</ol></div>`;
  }
 
- const leaveItems = getItems("Leave");
- const qrfItems = getItems("QRF Duty");
- const cmhItems = getItems("CMH");
+ // Columns structure
+ const leaveBlock = getCategoryBlock("Leave", "LEAVE");
+ const qrfBlock = getCategoryBlock("QRF Duty", "QRF DUTY");
+ const cmhBlock = getCategoryBlock("CMH", "CMH");
 
- const dutyOnItems = getItems("ALL DUTY ON");
- const dutyOffItems = getItems("ALL DUTY OFF");
- const f295Items = getItems("F-295");
+ const dutyOnBlock = getCategoryBlock("All Duty On", "ALL DUTY ON");
+ const dutyOffBlock = getCategoryBlock("All Duty Off", "ALL DUTY OFF");
+ const f295Block = getCategoryBlock("F-295", "F-295");
+ const messBlock = getCategoryBlock("Mess/Canteen", "MESS / CANTEEN");
+ const tdBlock = getCategoryBlock("TD/Courier", "TD / COURIER");
+ const edpBlock = getCategoryBlock("EDP/PG/ITD C", "ED / PPGF / ATTD C");
 
- const onParadeItems = getItems("ON PARADE");
+ const onParadeBlock = getCategoryBlock("ON PARADE", "ON PARADE");
 
- const attachItems = getItems("ATTACHMENT");
- const civilTechItems = getItems("Civil Tech");
+ const attachBlock = getCategoryBlock("ATTACHMENT", "ATTACHMENT");
+ const civilTechBlock = getCategoryBlock("Civil Tech", "Civil Tech");
 
  return `
   <div class="print-col">
-   ${leaveItems?`<div class="print-block"><h3>LEAVE</h3><ol>${leaveItems}</ol></div>`:''}
-   ${qrfItems?`<div class="print-block"><h3>QRF DUTY</h3><ol>${qrfItems}</ol></div>`:''}
-   ${cmhItems?`<div class="print-block"><h3>CMH</h3><ol>${cmhItems}</ol></div>`:''}
+   ${leaveBlock}
+   ${qrfBlock}
+   ${cmhBlock}
   </div>
 
   <div class="print-col">
-   ${dutyOnItems?`<div class="print-block"><h3>ALL DUTY ON</h3><ol>${dutyOnItems}</ol></div>`:''}
-   ${dutyOffItems?`<div class="print-block"><h3>ALL DUTY OFF</h3><ol>${dutyOffItems}</ol></div>`:''}
-   ${f295Items?`<div class="print-block"><h3>F-295</h3><ol>${f295Items}</ol></div>`:''}
+   ${dutyOnBlock}
+   ${dutyOffBlock}
+   ${f295Block}
+   ${messBlock}
+   ${tdBlock}
+   ${edpBlock}
   </div>
 
   <div class="print-col">
-   ${onParadeItems?`<div class="print-block"><h3>ON PARADE</h3><ol class="on-parade-grid">${onParadeItems}</ol></div>`:''}
+   ${onParadeBlock}
   </div>
 
   <div class="print-col">
-   ${attachItems?`<div class="print-block"><h3>ATTACHMENT</h3><ol>${attachItems}</ol></div>`:''}
-   ${civilTechItems?`<div class="print-block"><h3>Civil Tech</h3><ol>${civilTechItems}</ol></div>`:''}
+   ${attachBlock}
+   ${civilTechBlock}
   </div>
  `;
 }
@@ -610,14 +625,23 @@ function renderPrintState(){
  const grid=generateGridHTML();
  const lists=generateListsHTML();
 
+ const pName = esc($("prepName").value.trim() || "PARVEZ");
+ const pRank = esc($("prepRank").value.trim() || "SGT");
+ const preparedHtml = `${pName}<br>${pRank}`;
+
  $("printDate").textContent=formattedDate;
  $("printGrid").innerHTML=grid;
  $("printListsContainer").innerHTML=lists;
+ $("printPreparedBy").innerHTML=preparedHtml;
 
  $("previewDate").textContent=formattedDate;
  $("previewGrid").innerHTML=grid;
  $("previewListsContainer").innerHTML=lists;
+ $("previewPreparedBy").innerHTML=preparedHtml;
 }
+
+$("prepName").oninput = renderPrintState;
+$("prepRank").oninput = renderPrintState;
 
 function renderAll(reRoster=true){renderMetrics();renderTabs();refreshRankSelectors();if(reRoster)renderRoster();renderRankTable();renderDetails();renderPrintState()}
 
