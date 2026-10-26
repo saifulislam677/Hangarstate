@@ -13,7 +13,8 @@
 <!-- ExcelJS Library (real .xlsx with formatting) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <style>
-:root{--green:#123b32;--lime:#d6f07a;--bg:#f3f6f4;--card:#fff;--ink:#182521;--muted:#687771;--line:#dce5df;--red:#a33232}
+:root{--green:#123b32;--lime:#d6f07a;--bg:#f3f6f4;--card:#fff;--ink:#182521;--muted:#687771;--line:#dce5df;--red:#a33232;
+--fs:10pt;--ff:Arial,Helvetica,"Liberation Sans",sans-serif;--fw:normal;--k:1}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);font:13px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--ink);-webkit-tap-highlight-color:transparent;overflow-x:hidden}
 
 header{background:var(--green);color:#fff;padding:14px}header .eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--lime);font-weight:800}h1{font-size:20px;line-height:1.15;margin:4px 0}header p{margin:0;color:#d8e5df;font-size:12px}
@@ -26,52 +27,47 @@ button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointe
 .tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f3f7f4;color:#3e5148}.empty{color:var(--muted);padding:8px 0}.foot{font-size:11px;color:var(--muted);text-align:center;padding:8px}.statusnote{padding:6px 8px;border-radius:6px;background:#fff8df;color:#66531c;font-size:11px;margin-top:6px}.hidden{display:none!important}
 .modal-overlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:9999;padding:12px;backdrop-filter:blur(2px)}.modal-card{background:#fff;border-radius:12px;width:100%;max-width:400px;padding:16px;box-shadow:0 10px 25px #0003;animation:popIn .2s ease-out}@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}.modal-card h3{margin:0 0 3px;font-size:16px;color:var(--green)}.modal-card p{margin:0 0 10px;font-size:11px;color:var(--muted)}.modal-form{display:flex;flex-direction:column;gap:10px}.modal-actions{display:flex;gap:6px;margin-top:12px;justify-content:flex-end}
 
-#screenPreviewWrapper{background:#fff;border:2px solid var(--green);border-radius:8px;padding:12px;margin-top:10px;overflow-x:auto}
+#screenPreviewWrapper{background:#fff;border:2px solid var(--green);border-radius:8px;padding:12px;margin-top:10px;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 
-/* A4 LANDSCAPE EXACT PHOTO MATCH FORMAT */
-.print-top-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px;font-size:10px;border-bottom:2px solid #000;padding-bottom:2px}
-.print-top-header .unit-title{font-size:11px;text-transform:uppercase}
-.print-top-header .doc-title{font-size:12px;text-transform:uppercase;text-decoration:underline}
-.print-top-header .date-str{font-size:10px}
+/* =====================================================================
+   PARADE STATE SHEET  (preview + print + PDF all use these rules)
+   Page: A4 landscape. Margins: left/right 25mm, top 20mm, bottom 15mm.
+   Font: Arial. All sizes shrink together with --k if the page is too full.
+   ===================================================================== */
+.sheet-inner{width:247mm;background:#fff;color:#000;font-family:var(--ff);font-size:calc(var(--fs)*var(--k));font-weight:var(--fw);line-height:1.15;text-align:left}
+.sheet-inner *{font-family:inherit}
+.sh-head{position:relative;text-align:center;margin:0 0 calc(3mm*var(--k))}
+.sh-head .t1,.sh-head .t2{display:block;font-weight:700;text-decoration:underline;font-size:calc((var(--fs) + 1pt)*var(--k));line-height:1.3}
+.sh-head .sh-date{position:absolute;right:0;bottom:0;white-space:nowrap;font-weight:var(--fw);font-size:calc(var(--fs)*var(--k))}
+.sheet-note{text-align:center;margin:0 0 calc(1.5mm*var(--k));font-size:calc((var(--fs) - 1pt)*var(--k))}
 
-/* FORCED SOLID BORDERS & CENTERING FIXES */
-.print-grid{width:100%;border-collapse:collapse;table-layout:fixed;font-size:7.5px;empty-cells:show!important;border:1.5px solid #000}
-.print-grid th,.print-grid td{border:1.5px solid #000!important;padding:2px 2px;text-align:center;vertical-align:middle!important;white-space:normal;overflow-wrap:anywhere;height:16px}
-.print-grid th{background:#eaeaea!important;color:#000;text-align:center!important}
+.print-grid{width:100%;border-collapse:collapse;table-layout:fixed;empty-cells:show;border:.35mm solid #000;font-size:calc(var(--fs)*var(--k))}
+.print-grid th,.print-grid td{border:.35mm solid #000!important;padding:0 .6mm!important;text-align:center;vertical-align:middle;white-space:nowrap;overflow:hidden;height:calc(4.7mm*var(--k));background:#fff!important;color:#000!important;font-weight:var(--fw)}
+.print-grid .rankcol{font-size:inherit}
+.print-grid th.vertical{height:calc(32mm*var(--k));padding:0!important;overflow:hidden}
+.print-grid .vwrap{position:relative;width:100%;height:calc(32mm*var(--k))}
+.print-grid .rot-text{position:absolute;left:50%;top:50%;width:calc(30mm*var(--k));transform:translate(-50%,-50%) rotate(-90deg);transform-origin:center center;text-align:left;white-space:normal;word-break:break-word;line-height:1.1;font-size:calc((var(--fs) - 1.5pt)*var(--k));font-weight:var(--fw)}
 
-/* FIXED VERTICAL HEADINGS */
-.print-grid th.vertical{height:95px;padding:0!important;vertical-align:middle!important;text-align:center!important;overflow:hidden}
-.print-grid th.vertical .vwrap{position:relative;width:100%;height:95px;overflow:hidden}
-.print-grid th.vertical .rot-text{
-  position:absolute;
-  left:50%;top:50%;
-  width:88px;
-  transform:translate(-50%,-50%) rotate(-90deg);
-  transform-origin:center center;
-  text-align:center;
-  white-space:normal;
-  word-break:break-word;
-  line-height:1.1;
-  font-size:inherit;
-  font-weight:inherit;
-}
-.print-grid .rankcol{text-align:center!important;vertical-align:middle!important;width:5.5%;font-size:7.5px;background:#eaeaea!important}
-.print-grid .totalrow{background:#dedede!important;font-weight:900}
+.print-layout-container{display:grid;grid-template-columns:1.45fr 1.2fr 1fr 1.9fr .95fr;gap:0 calc(3mm*var(--k));margin-top:calc(4mm*var(--k));align-items:start}
+.print-col{display:flex;flex-direction:column;gap:calc(2.5mm*var(--k));min-width:0}
+.print-block{break-inside:avoid;border:none;padding:0;background:#fff;min-width:0}
+.print-block h3{font-size:inherit;font-weight:700;text-decoration:underline;margin:0 0 calc(.8mm*var(--k));text-align:left;padding:0;background:transparent}
+.print-block ol{margin:0;padding:0;list-style:none}
+.print-block li{display:flex;gap:calc(1.6mm*var(--k));line-height:1.18;margin:0;padding:0;break-inside:avoid}
+.print-block li .item-num{width:calc(5mm*var(--k));text-align:right;flex-shrink:0}
+.print-block li .item-text{flex:1;min-width:0;word-break:break-word}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:0 calc(3mm*var(--k))}
 
-/* EXACT 4-COLUMN MATCHING PHOTO LAYOUT */
-.print-layout-container{display:grid;grid-template-columns:1.2fr 1.3fr 2fr 1.1fr;gap:6px;margin-top:6px;align-items:start}
-.print-col{display:flex;flex-direction:column;gap:6px}
-.print-block{break-inside:avoid;border:none!important;padding:2px;background:#fff}
-.print-block h3{font-size:8px;text-decoration:underline;margin:0 0 2px;text-transform:uppercase;text-align:left;background:transparent;padding:0;font-weight:900}
-.print-block ol{margin:0;padding-left:0;list-style:none}
-.print-block li{margin:0 0 1px;line-height:1.05;font-size:7.5px;display:flex;gap:3px}
-.print-block li .item-num{width:12px;text-align:right;flex-shrink:0}
-.print-block li .item-text{flex:1}
-.on-parade-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px 6px}
+.signatures-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:calc(6mm*var(--k));min-height:calc(24mm*var(--k));align-items:start}
+.signatures-bottom b{display:block;font-weight:700;text-decoration:underline}
+.signatures-bottom .sg-l{text-align:left;padding-left:calc(8mm*var(--k))}
+.signatures-bottom .sg-c{text-align:center}
+.signatures-bottom .sg-r{text-align:right;padding-right:calc(8mm*var(--k))}
+.signatures-bottom .sg-name{font-weight:700;margin-top:calc(1.5mm*var(--k))}
 
-.signatures-bottom{display:grid;grid-template-columns:1.2fr 1.8fr 1.2fr;margin-top:12px;align-items:end}
-.signatures-bottom div{text-align:center;font-size:8.5px}
-.signatures-bottom b{display:block;text-decoration:underline;margin-bottom:12px}
+/* page box used for print + PDF (hidden on screen) */
+#printState{width:297mm;height:209mm;padding:20mm 25mm 15mm 25mm;box-sizing:border-box;background:#fff;overflow:hidden}
+#printState.measuring{display:block!important;position:absolute!important;left:-99999px!important;top:0!important;visibility:hidden!important;height:auto!important;overflow:visible!important}
 
 .red-date-filter{background:#a33232;color:#fff;border:1.5px solid #782222;font-weight:800;border-radius:6px;padding:6px 10px;font-size:12px;cursor:pointer}
 .red-date-filter option{background:#fff;color:#182521;font-weight:600}
@@ -92,31 +88,6 @@ button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointe
 @keyframes introFloat{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 
 @media(min-width:780px){main{grid-template-columns:1fr 1fr;align-items:start}.wide{grid-column:1/-1}}
-@media print{
-  @page{size:A4 landscape;margin:2mm}
-  html,body{width:297mm;height:auto;background:#fff;font-size:7.5px;color:#000;margin:0;padding:0;overflow:visible}
-  header,.no-print,.tabs,.foot,#reportArea,#editorArea,.screen-only,.hint,.statusnote,#togglePreviewBtn,.modal-overlay,#introOverlay{display:none!important}
-  main{display:block;max-width:none;padding:0;margin:0}
-  .card{box-shadow:none;border:0;padding:0;margin:0}
-  #printState{display:block!important;width:100%;break-inside:avoid;page-break-inside:avoid}
-  #screenPreviewWrapper{border:0;padding:0;margin:0}
-  .print-grid th{background:#eee!important;color:#000!important}
-  .print-grid td{color:#000!important}
-  .print-block{border:none!important}
-  .print-layout-container{grid-template-columns:1.2fr 1.3fr 2fr 1.1fr;gap:6px}
-  .signatures-bottom{margin-top:10px}
-  .signatures-bottom b{margin-bottom:10px}
-  /* shorter headings in print so everything fits on one page */
-  .print-grid th.vertical,
-  .print-grid th.vertical .vwrap{height:72px!important}
-  .print-grid th.vertical .rot-text{width:66px!important}
-  /* keep all table lines in print preview */
-  .print-grid,.print-grid th,.print-grid td{
-    border:1.5px solid #000!important;
-    -webkit-print-color-adjust:exact;
-    print-color-adjust:exact;
-  }
-}
 
 body, main, .card, .row, .row > *, .person, .person .name { min-width: 0; }
 main { width: 100%; padding: 8px; gap: 8px; }
@@ -124,11 +95,6 @@ main { width: 100%; padding: 8px; gap: 8px; }
 .row { gap: 6px; }
 .row > * { flex: 1 1 140px; min-width: 0; }
 .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-#screenPreviewWrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-left: 6px; }
-#screenPreviewWrapper > .print-top-header,
-#screenPreviewWrapper > .print-grid,
-#screenPreviewWrapper > .print-layout-container,
-#screenPreviewWrapper > .signatures-bottom { min-width: 780px; }
 input, select, button { max-width: 100%; }
 .person { align-items: flex-start; }
 .person select { min-width: 0; }
@@ -148,13 +114,16 @@ input, select, button { max-width: 100%; }
   .modal-overlay { padding: 8px; }
   .modal-card { max-height: 90dvh; overflow-y: auto; padding: 12px; }
 }
-@media print {
-  main { width: auto; padding: 0; }
-  .metrics { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
-  #screenPreviewWrapper > .print-top-header,
-  #screenPreviewWrapper > .print-grid,
-  #screenPreviewWrapper > .print-layout-container,
-  #screenPreviewWrapper > .signatures-bottom { min-width: 0; }
+
+/* ===================== PRINT ===================== */
+@page{size:A4 landscape;margin:0}
+@media print{
+  html,body{width:297mm;height:209mm;margin:0!important;padding:0!important;background:#fff!important;overflow:hidden!important}
+  header,.no-print,.foot,#reportArea,#editorArea,.screen-only,.hint,.statusnote,.modal-overlay,#introOverlay{display:none!important}
+  main{display:block!important;max-width:none!important;width:auto!important;padding:0!important;margin:0!important;gap:0}
+  .card{box-shadow:none;border:0;padding:0;margin:0;background:#fff}
+  #printState{display:block!important;position:static!important;margin:0;page-break-inside:avoid;break-inside:avoid}
+  .sheet-inner,.sheet-inner *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
@@ -195,6 +164,7 @@ input, select, button { max-width: 100%; }
     </div>
   </div>
   <p class="hint">Edits save permanently in Cloud Realtime Database & local browser memory.</p>
+  <p class="hint"><b>Print setup:</b> Paper A4 · Landscape · Margins Default/None · Scale 100% · Headers and footers OFF. Page margins are built in (left/right 25 mm, top 20 mm, bottom 15 mm).</p>
 </section>
 
 <section class="card wide no-print" id="screenPreviewSection">
@@ -203,36 +173,30 @@ input, select, button { max-width: 100%; }
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
       <div>
         <label for="fontFamilySelect" style="margin:0;font-size:10px">Font Family:</label>
-        <select id="fontFamilySelect" style="width:110px;padding:3px;font-size:11px">
-          <option value="system-ui, sans-serif" selected>Standard (System)</option>
-          <option value="Arial, sans-serif">Arial</option>
-          <option value="Times New Roman, serif">Times New Roman</option>
-          <option value="Calibri, sans-serif">Calibri</option>
-          <option value="Segoe UI, sans-serif">Segoe UI</option>
-          <option value="Courier New, monospace">Courier New</option>
+        <select id="fontFamilySelect" style="width:130px;padding:3px;font-size:11px">
+          <option value='Arial, Helvetica, "Liberation Sans", sans-serif' selected>Arial (like sheet)</option>
+          <option value="'Times New Roman', Times, serif">Times New Roman</option>
+          <option value="Calibri, Carlito, sans-serif">Calibri</option>
+          <option value="'Segoe UI', sans-serif">Segoe UI</option>
+          <option value="'Courier New', monospace">Courier New</option>
         </select>
       </div>
       <div>
-        <label for="fontSizeSelect" style="margin:0;font-size:10px">Font Size:</label>
+        <label for="fontSizeSelect" style="margin:0;font-size:10px">Font Size (pt):</label>
         <select id="fontSizeSelect" style="width:90px;padding:3px;font-size:11px">
-          <option value="5px">5 px</option>
-          <option value="6px">6 px</option>
-          <option value="7px" selected>7 px (Std)</option>
-          <option value="8px">8 px</option>
-          <option value="9px">9 px</option>
-          <option value="10px">10 px</option>
-          <option value="12px">12 px</option>
-          <option value="14px">14 px</option>
-          <option value="16px">16 px</option>
-          <option value="20px">20 px</option>
+          <option value="7pt">7 pt</option>
+          <option value="8pt">8 pt</option>
+          <option value="9pt">9 pt</option>
+          <option value="10pt" selected>10 pt (Std)</option>
+          <option value="11pt">11 pt</option>
+          <option value="12pt">12 pt</option>
         </select>
       </div>
       <div>
         <label for="fontWeightSelect" style="margin:0;font-size:10px">Font Weight:</label>
         <select id="fontWeightSelect" style="width:85px;padding:3px;font-size:11px">
-          <option value="normal">Normal</option>
-          <option value="bold" selected>Bold (100%)</option>
-          <option value="900">Black (Max)</option>
+          <option value="normal" selected>Normal</option>
+          <option value="bold">Bold</option>
         </select>
       </div>
       <button class="secondary small" id="editNotesBtn" type="button">Edit Custom Note</button>
@@ -242,7 +206,7 @@ input, select, button { max-width: 100%; }
     <label for="customNoteInput" style="font-size:10px">Custom Subtitle / Note (Optional):</label>
     <input type="text" id="customNoteInput" placeholder="Type any special note or adjustment here before printing...">
   </div>
-  <div id="screenPreviewWrapper"><div class="print-top-header"><div class="unit-title">AC Taking & Handing over Flt</div><div class="doc-title">Parade/ PT/FOD state</div><div class="date-str">DATE : <span id="previewDate"></span></div></div><div id="customNoteDisplay" class="hidden" style="font-size:8px;text-align:center;margin-bottom:2px"></div><table class="print-grid" id="previewGrid"></table><div class="print-layout-container" id="previewListsContainer"></div><div class="signatures-bottom"><div><b>PREPARED BY</b><br><span id="previewPreparedBy">PARVEZ<br>SGT</span></div><div><b>JCOIC</b></div><div><b>OIC</b></div></div></div>
+  <div id="screenPreviewWrapper"><div class="sheet-inner" id="previewSheet"><div class="sh-head"><span class="t1">PARADE STATE</span><span class="t2">AC TAKING & HANDING OVER FLT (HANGAR)</span><div class="sh-date">DATE : <span id="previewDate"></span></div></div><div id="customNoteDisplay" class="sheet-note hidden"></div><table class="print-grid" id="previewGrid"></table><div class="print-layout-container" id="previewListsContainer"></div><div class="signatures-bottom"><div class="sg-l"><b>PREPARED BY</b><div class="sg-name" id="previewPreparedBy">PARVEZ<br>SGT</div></div><div class="sg-c"><b>JCOIC</b></div><div class="sg-r"><b>OIC</b></div></div></div></div>
 </section>
 
 <section class="card wide no-print"><h2>Manpower overview</h2><div class="metrics" id="metrics"></div><div class="statusnote">Counting rule: each person has one current status only. Total counts are strictly distinct.</div></section>
@@ -253,7 +217,7 @@ input, select, button { max-width: 100%; }
 
 <section class="card no-print" id="reportArea"><h2>Final state report & PC Backup</h2><div id="reportSummary"></div><div class="row" style="margin:10px 0"><button class="secondary" id="exportBackup" type="button">Backup to PC File (.JSON)</button><button class="secondary" id="exportHtmlBtn" type="button">Export Updated index.html File</button><button class="secondary" id="importBtn" type="button">Restore from PC File</button><input id="importFile" type="file" accept="application/json" class="hidden"></div><h2 style="margin-top:14px">Rank-wise status count</h2><div class="tablewrap" id="rankTable"></div><h2 style="margin-top:14px">Personnel by status</h2><div id="statusDetails"></div></section>
 
-<section id="printState" class="hidden"><div class="print-top-header"><div class="unit-title">AC Taking & Handing over Flt</div><div class="doc-title">Parade/ PT/FOD state</div><div class="date-str">DATE : <span id="printDate"></span></div></div><div id="printCustomNoteDisplay" class="hidden" style="font-size:8px;text-align:center;margin-bottom:2px"></div><table class="print-grid" id="printGrid"></table><div class="print-layout-container" id="printListsContainer"></div><div class="signatures-bottom"><div><b>PREPARED BY</b><br><span id="printPreparedBy">PARVEZ<br>SGT</span></div><div><b>JCOIC</b></div><div><b>OIC</b></div></div></section>
+<section id="printState" class="hidden"><div class="sheet-inner"><div class="sh-head"><span class="t1">PARADE STATE</span><span class="t2">AC TAKING & HANDING OVER FLT (HANGAR)</span><div class="sh-date">DATE : <span id="printDate"></span></div></div><div id="printCustomNoteDisplay" class="sheet-note hidden"></div><table class="print-grid" id="printGrid"></table><div class="print-layout-container" id="printListsContainer"></div><div class="signatures-bottom"><div class="sg-l"><b>PREPARED BY</b><div class="sg-name" id="printPreparedBy">PARVEZ<br>SGT</div></div><div class="sg-c"><b>JCOIC</b></div><div class="sg-r"><b>OIC</b></div></div></div></section>
 
 <!-- LEAVE MODAL -->
 <div id="leaveModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalPersonName">Leave Details</h3><p>Specify leave type and report date for this person.</p><div class="modal-form"><div><label for="modalLeaveType">TYPE OF LEAVE</label><select id="modalLeaveType"><option value="A/L">A/L (Annual Leave)</option><option value="S/L">S/L (Sick Leave)</option><option value="R/L">R/L (Recreation Leave)</option><option value="C/L">C/L (Casual Leave)</option></select></div><div><label for="modalReportDate">REPORT DATE / TO DATE</label><input type="date" id="modalReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeModalBtn">Cancel</button><button type="button" id="saveLeaveBtn">Save Leave</button></div></div></div>
@@ -1168,7 +1132,7 @@ function getActiveColumns(){
  return cols;
 }
 
-// ONE source of numbers used by the preview, PDF and Excel
+// ONE source of numbers used by the preview, print, PDF and Excel
 function computeGridData(){
  const cols = getActiveColumns();
  const rows = [];
@@ -1205,24 +1169,28 @@ function computeGridData(){
  return {cols,rows};
 }
 
+// like the printed sheet: TOTAL row shows every number (also 0); rank rows leave 0 blank except EFFECTIVE STRG
+function cellText(row,i,n){
+ if(row.total)return String(n);
+ if(n!==0)return String(n);
+ return i===3?"0":"";
+}
+
 function generateGridHTML(){
  const {cols,rows} = computeGridData();
- const headCell = (txt, extra) => `<th class='vertical${extra||""}'><div class='vwrap'><span class='rot-text'>${esc(txt)}</span></div></th>`;
- let h="<thead><tr>"+headCell("RANK"," rankcol")+cols.map(c=>headCell(c[0],"")).join("")+"</tr></thead><tbody>";
+ const head=(txt,extra)=>`<th class="vertical${extra||""}"><div class="vwrap"><span class="rot-text">${esc(txt)}</span></div></th>`;
+ let h=`<colgroup><col style="width:6%">${cols.map(()=>"<col>").join("")}</colgroup>`;
+ h+="<thead><tr>"+head("RANK"," rankcol")+cols.map(c=>head(c[0],"")).join("")+"</tr></thead><tbody>";
  rows.forEach(row=>{
-  h+=`<tr${row.total?' class="totalrow"':''}><th class="rankcol">${esc(row.label)}</th>`+row.vals.map(n=>`<td>${n!==0?n:""}</td>`).join("")+"</tr>";
+  h+=`<tr${row.total?' class="totalrow"':''}><th class="rankcol">${esc(row.label)}</th>`+row.vals.map((n,i)=>`<td>${cellText(row,i,n)}</td>`).join("")+"</tr>";
  });
  return h+"</tbody>";
 }
 
-// ONE source of list blocks used by the preview, PDF and Excel
+// ONE source of list blocks used by the preview, print, PDF and Excel
 function buildListBlocks(){
  function getList(k){
   if(k==="Civil Tech") return people.filter(p=>p.rank==="Civilian");
-  if(k==="On Parade") return people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]==="On Parade");
-  if(k==="ON PT") return people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]==="ON PT");
-  if(k==="ON FOD") return people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]==="ON FOD");
-  if(k==="TD/Courier") return people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]==="TD/Courier");
   return people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]===k);
  }
 
@@ -1242,9 +1210,7 @@ function buildListBlocks(){
      t = `${p.rank} ${p.name}`;
    }
 
-   if(k==="TD/Courier"){
-    t += " - TD";
-   } else if(k==="All Duty On" && currentDuty[p.id]){
+   if(k==="All Duty On" && currentDuty[p.id]){
     t += ` - ${formatDutyText(currentDuty[p.id])}`;
    } else if(k==="Civil Tech" && currentDuty[p.id]){
     t += ` - ${formatDutyText(currentDuty[p.id])}`;
@@ -1257,7 +1223,7 @@ function buildListBlocks(){
    }
    return t;
   });
-  return {k,title,items,grid:["On Parade","ON PT","ON FOD"].includes(k)};
+  return {k,title,items,grid:["On Parade","ON PT","ON FOD"].includes(k),start:0};
  }
 
  const paradeBlocks = [];
@@ -1271,24 +1237,68 @@ function buildListBlocks(){
   paradeBlocks.push(["ON FOD","ON FOD"]);
  }
 
- const columnLayout = [
-  [["Leave","LEAVE"], ["QRF Duty","QRF DUTY"], ["CMH","CMH"]],
-  [["All Duty On","ALL DUTY ON"], ["All Duty Off","ALL DUTY OFF"], ["Form 295","F-295"]],
+ const layout = [
+  [["Leave","LEAVE"], ["CMH / M Room Admit","CMH ADMIT"], ["CMH","CMH"]],
+  [["All Duty On","ALL DUTY ON"], ["All Duty Off","ALL DUTY OFF"]],
+  [["QRF Duty","QRF DUTY"], ["Form 295","F-295"], ["TD/Courier","TD"]],
   paradeBlocks,
   [["ATTACHMENT","ATTACHMENT"], ["Civil Tech","Civil Tech"]]
  ];
 
- return columnLayout.map(group=>group.map(([k,t])=>block(k,t)).filter(Boolean));
+ const cols = layout.map(g=>g.map(([k,t])=>block(k,t)).filter(Boolean));
+
+ // continuous numbering like the printed sheet: ON PARADE 1..n, ATTACHMENT n+1.., Civil Tech after that
+ const flat=[].concat.apply([],cols);
+ let base=0;
+ flat.filter(b=>["On Parade","ON PT","ON FOD"].includes(b.k)).forEach(b=>{b.start=base;base+=b.items.length});
+ const att=flat.find(b=>b.k==="ATTACHMENT");
+ if(att){att.start=base;base+=att.items.length}
+ const ct=flat.find(b=>b.k==="Civil Tech");
+ if(ct)ct.start=base;
+
+ return cols;
 }
 
 function generateListsHTML(){
+ const li=(t,n)=>`<li><span class="item-num">${n}</span><span class="item-text">${esc(t)}</span></li>`;
  return buildListBlocks().map(col=>{
   const colHtml = col.map(b=>{
-   const lis = b.items.map((t,i)=>`<li><span class="item-num">${i+1}</span><span class="item-text">${esc(t)}</span></li>`).join("");
-   return `<div class="print-block"><h3>${esc(b.title)}</h3><ol ${b.grid?'class="on-parade-grid"':""}>${lis}</ol></div>`;
+   let body;
+   if(b.grid){
+    const half=Math.ceil(b.items.length/2);
+    const a=b.items.slice(0,half).map((t,i)=>li(t,b.start+i+1)).join("");
+    const c=b.items.slice(half).map((t,i)=>li(t,b.start+half+i+1)).join("");
+    body=`<div class="two-col"><ol>${a}</ol><ol>${c}</ol></div>`;
+   }else{
+    body=`<ol>${b.items.map((t,i)=>li(t,b.start+i+1)).join("")}</ol>`;
+   }
+   return `<div class="print-block"><h3>${esc(b.title)}</h3>${body}</div>`;
   }).join("");
   return `<div class="print-col">${colHtml}</div>`;
  }).join("");
+}
+
+// ---------- shrink the whole sheet a little if it does not fit one A4 page ----------
+const MM_PX=96/25.4;
+function fitSheet(){
+ const root=document.documentElement,el=$("printState");
+ if(!el)return 1;
+ const inner=el.querySelector(".sheet-inner");
+ if(!inner)return 1;
+ const wasHidden=el.classList.contains("hidden");
+ el.classList.remove("hidden");
+ el.classList.add("measuring");
+ const avail=(209-20-15)*MM_PX; // page height minus top and bottom margin
+ let k=1;
+ for(let i=0;i<5;i++){
+  root.style.setProperty("--k",String(k));
+  const h=inner.getBoundingClientRect().height;
+  if(h<=avail)break;
+  k=Math.max(0.5,k*(avail/h)*0.995);
+ }
+ el.classList.remove("measuring");
+ if(wasHidden)el.classList.add("hidden");
+ return k;
 }
 
 function renderPrintState(){
@@ -1318,43 +1328,15 @@ function renderPrintState(){
   $("printCustomNoteDisplay").classList.add("hidden");
  }
 
- const chosenSize = $("fontSizeSelect").value;
- const chosenFont = $("fontFamilySelect").value;
- const chosenWeight = $("fontWeightSelect").value;
- applyTypography(chosenSize, chosenFont, chosenWeight);
+ applyTypography($("fontSizeSelect").value,$("fontFamilySelect").value,$("fontWeightSelect").value);
+ fitSheet();
 }
 
 function applyTypography(sz, fontFamily, fontWeight){
- const wrapper = document.getElementById("screenPreviewWrapper");
- if(wrapper){
-  wrapper.style.fontSize = sz;
-  wrapper.style.fontFamily = fontFamily;
-  wrapper.style.fontWeight = fontWeight;
- }
-
- const printGridEl = document.getElementById("printGrid");
- const previewGridEl = document.getElementById("previewGrid");
- if(printGridEl) printGridEl.style.fontSize = sz;
- if(previewGridEl) previewGridEl.style.fontSize = sz;
-
- let styleTag = document.getElementById("dynamicPrintTypography");
- if(!styleTag){
-  styleTag = document.createElement("style");
-  styleTag.id = "dynamicPrintTypography";
-  document.head.appendChild(styleTag);
- }
- styleTag.innerHTML = `
-  #screenPreviewWrapper, #screenPreviewWrapper * { font-family: ${fontFamily} !important; font-weight: ${fontWeight} !important; }
-  #screenPreviewWrapper .print-grid { font-size: ${sz} !important; }
-  #screenPreviewWrapper .print-block li { font-size: calc(${sz} - 0.5px) !important; }
-  @media print {
-    #printState, #printState * { font-family: ${fontFamily} !important; font-weight: ${fontWeight} !important; color: #000 !important; }
-    .print-grid { font-size: ${sz} !important; border: 1.5px solid #000 !important; empty-cells: show !important; }
-    .print-grid th, .print-grid td { border: 1.5px solid #000 !important; vertical-align: middle !important; }
-    .print-block { border: none !important; }
-    .print-block li { font-size: calc(${sz} - 0.5px) !important; }
-  }
- `;
+ const r=document.documentElement.style;
+ r.setProperty("--fs",sz);
+ r.setProperty("--ff",fontFamily);
+ r.setProperty("--fw",fontWeight);
 }
 
 $("fontSizeSelect").onchange = function(){ renderPrintState(); };
@@ -1379,41 +1361,40 @@ function renderAll(reRoster=true){
 
 function refreshRankSelectors(){const rf=$("rankFilter"),old=rf.value||"All ranks";rf.innerHTML='<option>All ranks</option>'+ranks.map(g=>`<option value="${esc(g.rank)}">${esc(g.rank)}</option>`).join("");rf.value=["All ranks",...ranks.map(g=>g.rank)].includes(old)?old:"All ranks";const ar=$("addRank"),prev=ar.value;ar.innerHTML=ranks.map(g=>`<option value="${esc(g.rank)}">${esc(g.rank)}</option>`).join("")+'<option value="__new__">New rank…</option>';ar.value=ranks.some(g=>g.rank===prev)?prev:(ranks[0]?.rank||"__new__")}
 
-// DIRECT A4 LANDSCAPE PDF EXPORT
+// ===================== PDF (A4 landscape, same margins as print) =====================
 $("savePdfBtn").addEventListener("click", function(e){
  e.preventDefault();
  autoSaveBuffer();
+ renderPrintState();
 
  const printEl = document.getElementById("printState");
  printEl.classList.remove("hidden");
- printEl.style.width = "1050px";
- printEl.style.padding = "10px";
- printEl.style.background = "#fff";
 
  const opt = {
-  margin:       [4, 4, 4, 4],
+  margin:       0,
   filename:     `State_Office_${date()}.pdf`,
   image:        { type: 'jpeg', quality: 0.98 },
-  html2canvas:  { scale: 2, useCORS: true, logging: false, width: 1050 },
-  jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+  html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: "#ffffff", width: 1123, windowWidth: 1123 },
+  jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' },
+  pagebreak:    { mode: ['avoid-all'] }
  };
 
  html2pdf().from(printEl).set(opt).save().then(() => {
   printEl.classList.add("hidden");
-  printEl.style.width = "";
-  printEl.style.padding = "";
-  printEl.style.background = "";
   alert("PDF downloaded successfully in A4 Landscape!");
+ }).catch(err => {
+  printEl.classList.add("hidden");
+  alert("PDF export failed: "+(err&&err.message||err));
  });
 });
 
 // ===================== EXCEL (.xlsx) EXPORT - same data & layout as the preview =====================
 function getTypo(){
  const fam=$("fontFamilySelect").value;
- const px=parseFloat($("fontSizeSelect").value)||7;
- const w=$("fontWeightSelect").value;
- const nameMap={"system-ui, sans-serif":"Arial","Arial, sans-serif":"Arial","Times New Roman, serif":"Times New Roman","Calibri, sans-serif":"Calibri","Segoe UI, sans-serif":"Segoe UI","Courier New, monospace":"Courier New"};
- return {name:nameMap[fam]||"Arial",pt:Math.max(7,Math.round((px+1)*2)/2),bold:w!=="normal"};
+ let name=fam.split(",")[0].replace(/['"]/g,"").trim();
+ if(!name||name==="system-ui")name="Arial";
+ const pt=parseFloat($("fontSizeSelect").value)||10;
+ return {name:name,pt:pt,bold:$("fontWeightSelect").value!=="normal"};
 }
 
 async function buildExcel(){
@@ -1428,12 +1409,12 @@ async function buildExcel(){
  const ws=wb.addWorksheet("State",{
   views:[{showGridLines:false}],
   pageSetup:{paperSize:9,orientation:"landscape",fitToPage:true,fitToWidth:1,fitToHeight:1,horizontalCentered:true,
-   margins:{left:0.2,right:0.2,top:0.25,bottom:0.25,header:0.1,footer:0.1}}
+   margins:{left:1,right:1,top:0.79,bottom:0.59,header:0.2,footer:0.2}}
  });
 
  const BLACK={argb:"FF000000"},thin={style:"thin",color:BLACK};
  const box={top:thin,left:thin,bottom:thin,right:thin};
- const rowH=Math.max(15,T.pt*1.9);
+ const rowH=Math.max(14,T.pt*1.4);
 
  // style + (optional merge) helper: styles EVERY cell in the range, then writes the value
  function put(r1,c1,r2,c2,val,o){
@@ -1442,73 +1423,77 @@ async function buildExcel(){
   for(let r=r1;r<=r2;r++)for(let c=c1;c<=c2;c++){
    const cell=ws.getCell(r,c);
    cell.font={name:T.name,size:o.size||T.pt,bold:o.bold!==undefined?o.bold:T.bold,underline:!!o.underline,color:BLACK};
-   const al={horizontal:o.h||"center",vertical:"middle"};
+   const al={horizontal:o.h||"center",vertical:o.v||"middle"};
    if(o.rot)al.textRotation=o.rot;
    if(o.wrap)al.wrapText=true;
    else if(o.shrink)al.shrinkToFit=true;
    cell.alignment=al;
    if(o.border)cell.border=o.border;
-   if(o.fill)cell.fill={type:"pattern",pattern:"solid",fgColor:{argb:o.fill}};
   }
   if(val!==undefined&&val!==null)ws.getCell(r1,c1).value=val;
  }
 
- // column widths
- ws.getColumn(1).width=Math.max(8,T.pt*1.0);
- for(let c=2;c<=total;c++)ws.getColumn(c).width=Math.max(6.5,T.pt*0.82);
+ // column widths (about 11.5 mm each so the sheet fills the A4 width)
+ ws.getColumn(1).width=6.8;
+ for(let c=2;c<=total;c++)ws.getColumn(c).width=5.7;
 
- // ---- 1) top header: unit | title | date (bold bottom line) ----
+ // ---- 1) two-line title + date ----
  let r=1;
- const leftEnd=Math.max(3,Math.round(total*0.3));
- const rightStart=total-Math.max(3,Math.round(total*0.22))+1;
- const medBottom={bottom:{style:"medium",color:BLACK}};
- put(r,1,r,leftEnd,"AC TAKING & HANDING OVER FLT",{h:"left",border:medBottom,size:T.pt+1});
- put(r,leftEnd+1,r,rightStart-1,"PARADE/ PT/FOD STATE",{underline:true,border:medBottom,size:T.pt+2});
- put(r,rightStart,r,total,"DATE : "+date().split("-").reverse().join("/"),{h:"right",border:medBottom});
- ws.getRow(r).height=Math.max(20,T.pt*2.4);
+ put(r,1,r,total,"PARADE STATE",{underline:true,bold:true,size:T.pt+1});
+ ws.getRow(r).height=Math.max(16,(T.pt+1)*1.5);
+ r++;
+ const dateCols=Math.max(4,Math.round(total*0.2));
+ put(r,1,r,dateCols,null,{});
+ put(r,dateCols+1,r,total-dateCols,"AC TAKING & HANDING OVER FLT (HANGAR)",{underline:true,bold:true,size:T.pt+1});
+ put(r,total-dateCols+1,r,total,"DATE : "+date().split("-").reverse().join("/"),{h:"right"});
+ ws.getRow(r).height=Math.max(16,(T.pt+1)*1.5);
  r++;
 
  // optional custom note
  const note=$("customNoteInput").value.trim();
  if(note){put(r,1,r,total,note,{size:Math.max(6,T.pt-1)});ws.getRow(r).height=14;r++}
- ws.getRow(r).height=5;r++;
+ ws.getRow(r).height=6;r++;
 
- // ---- 2) main grid ----
- put(r,1,r,1,"RANK",{rot:90,wrap:true,border:box,fill:"FFEAEAEA"});
- cols.forEach((c,i)=>put(r,i+2,r,i+2,c[0],{rot:90,wrap:true,border:box,fill:"FFEAEAEA"}));
- ws.getRow(r).height=Math.max(78,T.pt*10);
+ // ---- 2) main grid (no shading, thin black lines, like the printed sheet) ----
+ const hs=Math.max(6,T.pt-1.5);
+ put(r,1,r,1,"RANK",{rot:90,wrap:true,border:box,size:hs,v:"bottom"});
+ cols.forEach((c,i)=>put(r,i+2,r,i+2,c[0],{rot:90,wrap:true,border:box,size:hs,v:"bottom"}));
+ ws.getRow(r).height=92;
  r++;
  rows.forEach(row=>{
-  const fill=row.total?"FFDEDEDE":null;
-  const bold=row.total?true:T.bold;
-  put(r,1,r,1,row.label,{border:box,fill:fill||"FFEAEAEA",bold});
-  row.vals.forEach((n,i)=>put(r,i+2,r,i+2,n!==0?n:null,{border:box,fill,bold}));
+  put(r,1,r,1,row.label,{border:box});
+  row.vals.forEach((n,i)=>{
+   const t=cellText(row,i,n);
+   put(r,i+2,r,i+2,t===""?null:Number(t),{border:box});
+  });
   ws.getRow(r).height=rowH;
   r++;
  });
- ws.getRow(r).height=6;r++;
+ ws.getRow(r).height=8;r++;
 
- // ---- 3) four list columns (same order & split as the preview) ----
+ // ---- 3) five list columns (same order, split and numbering as the preview) ----
  const listStart=r;
- const s1=Math.round(total*1.2/5.6),s2=Math.round(total*1.3/5.6),s4=Math.round(total*1.1/5.6),s3=total-s1-s2-s4;
- const spans=[s1,s2,s3,s4];
- let cs=1;const ends=[];
+ const W5=[1.45,1.2,1.0,1.9,0.95],sumW=W5.reduce((a,b)=>a+b,0);
+ let acc=0,cs=1;const ends=[];
  blocks.forEach((colBlocks,ci)=>{
-  const ce=cs+spans[ci]-1;
+  acc+=W5[ci];
+  let ce=(ci===blocks.length-1)?total:Math.round(acc/sumW*total);
+  ce=Math.min(total,Math.max(cs,ce));
   let rr=listStart;
   colBlocks.forEach(b=>{
-   put(rr,cs,rr,ce,b.title.toUpperCase(),{h:"left",underline:true,bold:true,shrink:true});
+   put(rr,cs,rr,ce,b.title,{h:"left",underline:true,bold:true,shrink:true});
    rr++;
-   const label=(i,t)=>`${i+1}   ${t}`;
+   const label=(n,t)=>`${n}  ${t}`;
    if(b.grid&&(ce-cs+1)>=2){
     const mid=cs+Math.ceil((ce-cs+1)/2)-1;
-    for(let i=0;i<b.items.length;i+=2){
-     put(rr,cs,rr,mid,label(i,b.items[i]),{h:"left",shrink:true});
-     if(i+1<b.items.length)put(rr,mid+1,rr,ce,label(i+1,b.items[i+1]),{h:"left",shrink:true});
+    const half=Math.ceil(b.items.length/2);
+    for(let j=0;j<half;j++){
+     put(rr,cs,rr,mid,label(b.start+j+1,b.items[j]),{h:"left",shrink:true});
+     if(half+j<b.items.length)put(rr,mid+1,rr,ce,label(b.start+half+j+1,b.items[half+j]),{h:"left",shrink:true});
      rr++;
     }
    }else{
-    b.items.forEach((t,i)=>{put(rr,cs,rr,ce,label(i,t),{h:"left",shrink:true});rr++});
+    b.items.forEach((t,i)=>{put(rr,cs,rr,ce,label(b.start+i+1,t),{h:"left",shrink:true});rr++});
    }
    rr++; // gap between blocks
   });
@@ -1516,20 +1501,19 @@ async function buildExcel(){
   cs=ce+1;
  });
  const endRow=Math.max.apply(null,[listStart].concat(ends));
- for(let x=listStart;x<endRow;x++)ws.getRow(x).height=Math.max(12.5,T.pt*1.6);
+ for(let x=listStart;x<endRow;x++)ws.getRow(x).height=Math.max(13,T.pt*1.3);
  r=endRow+1;
 
  // ---- 4) signatures ----
- const a=Math.round(total*1.2/4.2),bw=Math.round(total*1.8/4.2);
- const sp=[[1,a],[a+1,a+bw],[a+bw+1,total]];
- put(r,sp[0][0],r,sp[0][1],"PREPARED BY",{underline:true,bold:true});
+ const a=Math.round(total/3),b2=Math.round(total*2/3);
+ const sp=[[1,a],[a+1,b2],[b2+1,total]];
+ put(r,sp[0][0],r,sp[0][1],"PREPARED BY",{underline:true,bold:true,h:"left"});
  put(r,sp[1][0],r,sp[1][1],"JCOIC",{underline:true,bold:true});
- put(r,sp[2][0],r,sp[2][1],"OIC",{underline:true,bold:true});
+ put(r,sp[2][0],r,sp[2][1],"OIC",{underline:true,bold:true,h:"right"});
  r++;
- ws.getRow(r).height=18;r++;
- put(r,sp[0][0],r,sp[0][1],$("prepName").value.trim()||"PARVEZ",{bold:true});
+ put(r,sp[0][0],r,sp[0][1],$("prepName").value.trim()||"PARVEZ",{bold:true,h:"left"});
  r++;
- put(r,sp[0][0],r,sp[0][1],$("prepRank").value.trim()||"SGT",{bold:true});
+ put(r,sp[0][0],r,sp[0][1],$("prepRank").value.trim()||"SGT",{bold:true,h:"left"});
 
  ws.pageSetup.printArea="A1:"+ws.getColumn(total).letter+r;
 
@@ -1675,6 +1659,7 @@ $("stateDate").onchange=()=>{
 
 $("rankFilter").onchange=renderRoster; $("search").oninput=renderRoster;
 $("printBtn").onclick=()=>{renderPrintState();window.print()};
+window.addEventListener("beforeprint",()=>{renderPrintState()});
 $("togglePreviewBtn").onclick=()=>$("screenPreviewSection").classList.toggle("hidden");
 
 $("assignAllBtn").onclick=()=>{
