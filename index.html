@@ -23,7 +23,7 @@ label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bot
 button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointer;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;position:relative;z-index:2}button.secondary{background:#e8efeb;color:var(--green)}button.danger{background:#fff0f0;color:var(--red);border:1px solid #f0cccc}button.small{padding:4px 6px;font-size:11px;min-height:28px}
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}.metric{background:#f3f7f4;border:1px solid var(--line);border-radius:8px;padding:8px}.metric strong{display:block;font-size:18px;line-height:1.1}.metric span{font-size:11px;color:var(--muted)}
 .tabs{display:flex;gap:5px;overflow-x:auto;padding-bottom:3px}.tab{white-space:nowrap;background:#e8efeb;color:var(--green);padding:6px 8px;font-size:11px;border-radius:6px;flex-shrink:0}.tab.active{background:var(--green);color:#fff}.hint{font-size:11px;color:var(--muted);margin:5px 0 0}
-.rank-block{border:1px solid var(--line);border-radius:8px;margin-top:6px;overflow:hidden}.rank-head{background:#f2f6f3;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:12px}.person{display:flex;gap:6px;align-items:center;padding:8px;border-top:1px solid #edf1ee;flex-wrap:wrap}.person .name{flex:1 1 160px;min-width:0}.person small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.person select{flex:1 1 110px;max-width:100%;padding:6px;font-size:11px}.person-actions{display:flex;gap:4px;flex-shrink:0}
+.rank-block{border:1px solid var(--line);border-radius:8px;margin-top:6px;overflow:hidden}.rank-head{background:#f2f6f3;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:12px}.person{display:flex;gap:6px;align-items:center;padding:8px;border-top:1px solid #edf1ee;flex-wrap:wrap}.person .name{flex:1 1 160px;min-width:0}.person small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.person select{flex:1 1 110px;max-width:100%;padding:6px;font-size:11px}.person-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap}
 .tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f3f7f4;color:#3e5148}.empty{color:var(--muted);padding:8px 0}.foot{font-size:11px;color:var(--muted);text-align:center;padding:8px}.statusnote{padding:6px 8px;border-radius:6px;background:#fff8df;color:#66531c;font-size:11px;margin-top:6px}.hidden{display:none!important}
 .modal-overlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:9999;padding:12px;backdrop-filter:blur(2px)}.modal-card{background:#fff;border-radius:12px;width:100%;max-width:400px;padding:16px;box-shadow:0 10px 25px #0003;animation:popIn .2s ease-out}@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}.modal-card h3{margin:0 0 3px;font-size:16px;color:var(--green)}.modal-card p{margin:0 0 10px;font-size:11px;color:var(--muted)}.modal-form{display:flex;flex-direction:column;gap:10px}.modal-actions{display:flex;gap:6px;margin-top:12px;justify-content:flex-end}
 
@@ -164,6 +164,7 @@ input, select, button { max-width: 100%; }
     </div>
   </div>
   <p class="hint">Edits save permanently in Cloud Realtime Database & local browser memory.</p>
+  <p class="hint"><b>Daily carry-forward:</b> a new date starts exactly like the previous day (everyone keeps the same status). Leave ends after its report date and ED/Course after its finish date. Wrong date entered? Tap <b>Edit entry</b> on that person.</p>
   <p class="hint"><b>Print setup:</b> Paper A4 · Landscape · Margins Default/None · Scale 100% · Headers and footers OFF. Page margins are built in (left/right 25 mm, top 20 mm, bottom 15 mm).</p>
 </section>
 
@@ -223,7 +224,7 @@ input, select, button { max-width: 100%; }
 <div id="leaveModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalPersonName">Leave Details</h3><p>Specify leave type and report date for this person.</p><div class="modal-form"><div><label for="modalLeaveType">TYPE OF LEAVE</label><select id="modalLeaveType"><option value="A/L">A/L (Annual Leave)</option><option value="S/L">S/L (Sick Leave)</option><option value="R/L">R/L (Recreation Leave)</option><option value="C/L">C/L (Casual Leave)</option></select></div><div><label for="modalReportDate">REPORT DATE / TO DATE</label><input type="date" id="modalReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeModalBtn">Cancel</button><button type="button" id="saveLeaveBtn">Save Leave</button></div></div></div>
 
 <!-- DUTY MODAL -->
-<div id="dutyModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalDutyPersonName">Select Duty Type & Shift</h3><p>Choose duty type and shift for this person.</p><div class="modal-form"><div><label for="modalDutyType">DUTY TYPE</label><select id="modalDutyType"></select></div><div><label for="modalDutyShift">DUTY SHIFT</label><select id="modalDutyShift"><option value="A Shift">A Shift</option><option value="B Shift">B Shift</option><option value="PD"> PD </option><option value="C Shift">C Shift</option></select></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeDutyModalBtn">Cancel</button><button type="button" id="saveDutyBtn">Save Duty</button></div></div></div>
+<div id="dutyModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalDutyPersonName">Select Duty Type & Shift</h3><p>Choose duty type and shift for this person.</p><div class="modal-form"><div><label for="modalDutyType">DUTY TYPE</label><select id="modalDutyType"></select></div><div><label for="modalDutyShift">DUTY SHIFT</label><select id="modalDutyShift"><option value="A Shift">A Shift</option><option value="B Shift">B Shift</option><option value="C Shift">C Shift</option><option value="PD">PD</option></select></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeDutyModalBtn">Cancel</button><button type="button" id="saveDutyBtn">Save Duty</button></div></div></div>
 
 <!-- ED COURSE MODAL -->
 <div id="edModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalEdPersonName">ED / Course Details</h3><p>Specify course start date and finish date.</p><div class="modal-form"><div><label for="modalEdStartDate">START DATE / WEF</label><input type="date" id="modalEdStartDate"></div><div><label for="modalEdReportDate">FINISH DATE / TO DATE</label><input type="date" id="modalEdReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeEdModalBtn">Cancel</button><button type="button" id="saveEdBtn">Save ED/Course</button></div></div></div>
@@ -597,6 +598,7 @@ rebuildPeople();
 
 function totalManpower(){return people.length}function militaryCount(){return people.filter(p=>militaryOrder.includes(p.rank)).length}const $=id=>document.getElementById(id);
 let current={},currentLeave={},currentDuty={},currentEd={},activeStatus="Leave",saved={},activeLeavePersonId=null,activeDutyPersonId=null,activeEdPersonId=null,pendingPreviousStatus="On Parade";
+let detailEditMode=false; // true when a modal is opened from "Edit entry" (status stays, only details change)
 let undoStack = [];
 
 const today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
@@ -745,7 +747,7 @@ function initCloudListener(){
   const modalOpen=!!(activeLeavePersonId||activeDutyPersonId||activeEdPersonId);
   if(!modalOpen){
    if(saved[boundDate])applyRecord(saved[boundDate]);
-   else if(rosterChanged){current=blank();currentLeave={};currentDuty={};currentEd={}}
+   else buildNewDay(boundDate);
   }
   cloudLoaded=true;
   setBadge("Cloud Active ✓",true);
@@ -812,38 +814,64 @@ function normalizeRecord(record){
  return out;
 }
 
+// load a day that already has a saved record (exactly as saved - nothing is forced on top)
 function applyRecord(record){
  const normalized=normalizeRecord(record||{});
  current=normalized.statuses;
  currentLeave=normalized.leaveDetails;
  currentDuty=normalized.dutyDetails;
  currentEd=normalized.edDetails;
- checkActiveDateRanges(date());
 }
 
-function checkActiveDateRanges(selectedIsoDate){
- if(!selectedIsoDate) return;
- Object.values(saved).forEach(rec=>{
-  if(!rec) return;
-  const lvDetails = rec.leaveDetails || {};
-  const edDetails = rec.edDetails || {};
+// A day with NO saved record starts as a COPY of the most recent earlier day.
+// Everything stays the same (status + details). Only two things end by date:
+//  - Leave ends after its report date
+//  - ED/Course ends after its finish date  (those people go back to On Parade)
+function buildNewDay(S){
+ current=blank();currentLeave={};currentDuty={};currentEd={};
+ const prev=Object.keys(saved).filter(d=>d<S&&saved[d]).sort();
+ const last=prev[prev.length-1];
+ if(!last)return;
+ const rec=saved[last];
+ people.forEach(p=>{
+  const s=pick(rec.statuses,p);
+  if(!statuses.includes(s))return;
+  if(s==="Leave"){
+   const lv=pick(rec.leaveDetails,p);
+   if(lv&&lv.to&&S>lv.to)return;
+   if(lv)currentLeave[p.id]=Object.assign({},lv);
+  }else if(s==="EDP/PG/ITD C"){
+   const ed=pick(rec.edDetails,p);
+   if(ed&&ed.to&&S>ed.to)return;
+   if(ed)currentEd[p.id]=Object.assign({},ed);
+  }else if(s==="All Duty On"){
+   const du=pick(rec.dutyDetails,p);
+   if(du)currentDuty[p.id]=du;
+  }
+  current[p.id]=s;
+ });
+}
 
-  people.forEach(p=>{
-   const lv = pick(lvDetails,p);
-   if(lv && lv.to){
-    if(selectedIsoDate <= lv.to){
-     current[p.id] = "Leave";
-     currentLeave[p.id] = lv;
-    }
-   }
-   const ed = pick(edDetails,p);
-   if(ed && ed.from && ed.to){
-    if(selectedIsoDate >= ed.from && selectedIsoDate <= ed.to){
-     current[p.id] = "EDP/PG/ITD C";
-     currentEd[p.id] = ed;
-    }
-   }
-  });
+function loadDay(d){
+ boundDate=d;
+ if(saved[d])applyRecord(saved[d]);
+ else buildNewDay(d);
+}
+
+// when an entry is corrected, later days that still carry the OLD entry are corrected too
+function propagateDetail(id,field,status,oldD,newD){
+ if(!oldD||!newD)return;
+ Object.keys(saved).forEach(d=>{
+  if(d<=boundDate)return;
+  const rec=saved[d];
+  if(!rec||!rec.statuses||rec.statuses[id]!==status)return;
+  const det=rec[field]&&rec[field][id];
+  if(!det)return;
+  const same=status==="Leave"?(det.to===oldD.to&&det.type===oldD.type):(det.to===oldD.to&&det.from===oldD.from);
+  if(!same)return;
+  if(d<=newD.to){rec[field][id]=Object.assign({},newD)}
+  else{rec.statuses[id]="On Parade";delete rec[field][id]}
+  pendingDates.add(d);
  });
 }
 
@@ -890,7 +918,8 @@ function renderRoster(){
    } else if(current[p.id]==="TD/Courier"){
     noteText=` · (TD)`;
    }
-   html+=`<div class="person"><div class="name"><b>${esc(p.name)}</b><small>${esc(p.rank)} · Current: ${esc(current[p.id])}${noteText}</small></div><select aria-label="Status for ${esc(p.rank+" "+p.name)}" data-person="${esc(p.id)}" data-previous="${esc(current[p.id])}">${statusOptions(current[p.id])}</select><div class="person-actions"><button class="secondary small" data-edit="${esc(p.id)}" type="button">Edit</button><button class="danger small" data-delete="${esc(p.id)}" type="button">Delete</button></div></div>`;
+   const hasDetails=["Leave","All Duty On","EDP/PG/ITD C"].includes(current[p.id]);
+   html+=`<div class="person"><div class="name"><b>${esc(p.name)}</b><small>${esc(p.rank)} · Current: ${esc(current[p.id])}${noteText}</small></div><select aria-label="Status for ${esc(p.rank+" "+p.name)}" data-person="${esc(p.id)}" data-previous="${esc(current[p.id])}">${statusOptions(current[p.id])}</select><div class="person-actions">${hasDetails?`<button class="secondary small" data-details="${esc(p.id)}" type="button">Edit entry</button>`:""}<button class="secondary small" data-edit="${esc(p.id)}" type="button">Edit</button><button class="danger small" data-delete="${esc(p.id)}" type="button">Delete</button></div></div>`;
   });
   html+="</div>";
  });
@@ -917,28 +946,56 @@ function renderRoster(){
    autoSaveBuffer();
   }
  });
+ $("roster").querySelectorAll("[data-details]").forEach(b=>b.onclick=()=>{
+  const id=b.dataset.details,s=current[id];
+  if(s==="Leave")openLeaveModal(id,true);
+  else if(s==="All Duty On")openDutyModal(id,true);
+  else if(s==="EDP/PG/ITD C")openEdModal(id,true);
+ });
  $("roster").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editPerson(b.dataset.edit));
  $("roster").querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deletePerson(b.dataset.delete));
 }
 
-function openLeaveModal(id){activeLeavePersonId=id;const p=people.find(x=>x.id===id);if(!p)return;$("modalPersonName").textContent=`${p.rank} ${p.name} - Leave Entry`;const lv=currentLeave[id]||{type:"A/L",to:""};$("modalLeaveType").value=lv.type||"A/L";$("modalReportDate").value=lv.to||"";$("leaveModal").classList.remove("hidden")}
-function closeLeaveModal(restoreStatus=true){if(restoreStatus&&activeLeavePersonId){current[activeLeavePersonId]=pendingPreviousStatus;renderAll(false)}$("leaveModal").classList.add("hidden");activeLeavePersonId=null}
+// ---------------- LEAVE ----------------
+function openLeaveModal(id,edit){
+ detailEditMode=!!edit;
+ activeLeavePersonId=id;
+ const p=people.find(x=>x.id===id);
+ if(!p){activeLeavePersonId=null;detailEditMode=false;return}
+ $("modalPersonName").textContent=`${p.rank} ${p.name} - Leave Entry${edit?" (edit)":""}`;
+ const lv=currentLeave[id]||{type:"A/L",to:""};
+ $("modalLeaveType").value=lv.type||"A/L";
+ $("modalReportDate").value=lv.to||"";
+ $("leaveModal").classList.remove("hidden");
+}
+function closeLeaveModal(restoreStatus=true){
+ if(restoreStatus&&!detailEditMode&&activeLeavePersonId){current[activeLeavePersonId]=pendingPreviousStatus;renderAll(false)}
+ $("leaveModal").classList.add("hidden");
+ activeLeavePersonId=null;
+ detailEditMode=false;
+}
 $("closeModalBtn").onclick=closeLeaveModal;
 $("saveLeaveBtn").onclick=()=>{
  if(!activeLeavePersonId)return;
  const to=$("modalReportDate").value;
  if(!to)return alert("Please enter report date.");
- currentLeave[activeLeavePersonId]={type:$("modalLeaveType").value,to:to};
+ const id=activeLeavePersonId,wasEdit=detailEditMode,old=currentLeave[id];
+ if(wasEdit)pushUndo();
+ currentLeave[id]={type:$("modalLeaveType").value,to:to};
+ current[id]="Leave";
  closeLeaveModal(false);
+ if(wasEdit)propagateDetail(id,"leaveDetails","Leave",old,currentLeave[id]);
  renderAll();
  autoSaveBuffer();
 };
 
-function openDutyModal(id){
+// ---------------- DUTY ----------------
+function openDutyModal(id,edit){
+ detailEditMode=!!edit;
  activeDutyPersonId=id;
  const p=people.find(x=>x.id===id);
- if(!p)return;
- $("modalDutyPersonName").textContent=`${p.rank} ${p.name} - Duty Selection`;
+ if(!p){activeDutyPersonId=null;detailEditMode=false;return}
+ $("modalDutyPersonName").textContent=`${p.rank} ${p.name} - Duty Selection${edit?" (edit)":""}`;
  const isCiv = p.rank === "Civilian";
  const dutySel = $("modalDutyType");
  if(isCiv){
@@ -947,40 +1004,61 @@ function openDutyModal(id){
   dutySel.innerHTML='<option value="T/F (Task Force)">T/F (Task Force)</option><option value="Sy Duty">Sy Duty</option><option value="DO">DO</option><option value="Form 108">Form 108</option>';
  }
  const rawDuty = currentDuty[id] || (isCiv ? "Section Night" : "T/F (Task Force)");
- dutySel.value = rawDuty.split(" - ")[0] || rawDuty;
+ const parts = rawDuty.split(" - ");
+ dutySel.value = parts[0] || rawDuty;
+ $("modalDutyShift").value = parts[1] || "A Shift";
  $("dutyModal").classList.remove("hidden");
 }
-function closeDutyModal(restoreStatus=true){if(restoreStatus&&activeDutyPersonId){current[activeDutyPersonId]=pendingPreviousStatus;renderAll(false)}$("dutyModal").classList.add("hidden");activeDutyPersonId=null}
+function closeDutyModal(restoreStatus=true){
+ if(restoreStatus&&!detailEditMode&&activeDutyPersonId){current[activeDutyPersonId]=pendingPreviousStatus;renderAll(false)}
+ $("dutyModal").classList.add("hidden");
+ activeDutyPersonId=null;
+ detailEditMode=false;
+}
 $("closeDutyModalBtn").onclick=closeDutyModal;
 $("saveDutyBtn").onclick=()=>{
  if(!activeDutyPersonId) return;
+ const id=activeDutyPersonId,wasEdit=detailEditMode;
+ if(wasEdit)pushUndo();
  const dutyType = $("modalDutyType").value;
  const shift = $("modalDutyShift").value;
- currentDuty[activeDutyPersonId] = `${dutyType} - ${shift}`;
+ currentDuty[id] = `${dutyType} - ${shift}`;
+ current[id]="All Duty On";
  closeDutyModal(false);
  renderAll();
  autoSaveBuffer();
 };
 
-function openEdModal(id){
+// ---------------- ED / COURSE ----------------
+function openEdModal(id,edit){
+ detailEditMode=!!edit;
  activeEdPersonId=id;
  const p=people.find(x=>x.id===id);
- if(!p)return;
- $("modalEdPersonName").textContent=`${p.rank} ${p.name} - ED / Course Details`;
+ if(!p){activeEdPersonId=null;detailEditMode=false;return}
+ $("modalEdPersonName").textContent=`${p.rank} ${p.name} - ED / Course Details${edit?" (edit)":""}`;
  const ed=currentEd[id]||{from:"",to:""};
  $("modalEdStartDate").value=ed.from||"";
  $("modalEdReportDate").value=ed.to||"";
  $("edModal").classList.remove("hidden");
 }
-function closeEdModal(restoreStatus=true){if(restoreStatus&&activeEdPersonId){current[activeEdPersonId]=pendingPreviousStatus;renderAll(false)}$("edModal").classList.add("hidden");activeEdPersonId=null}
+function closeEdModal(restoreStatus=true){
+ if(restoreStatus&&!detailEditMode&&activeEdPersonId){current[activeEdPersonId]=pendingPreviousStatus;renderAll(false)}
+ $("edModal").classList.add("hidden");
+ activeEdPersonId=null;
+ detailEditMode=false;
+}
 $("closeEdModalBtn").onclick=closeEdModal;
 $("saveEdBtn").onclick=()=>{
  if(!activeEdPersonId) return;
  const from=$("modalEdStartDate").value,to=$("modalEdReportDate").value;
  if(from&&to&&to<from)return alert("Finish date cannot be earlier than start date.");
  if(!from||!to)return alert("Please enter both start and finish dates.");
- currentEd[activeEdPersonId]={from,to};
+ const id=activeEdPersonId,wasEdit=detailEditMode,old=currentEd[id];
+ if(wasEdit)pushUndo();
+ currentEd[id]={from,to};
+ current[id]="EDP/PG/ITD C";
  closeEdModal(false);
+ if(wasEdit)propagateDetail(id,"edDetails","EDP/PG/ITD C",old,currentEd[id]);
  renderAll();
  autoSaveBuffer();
 };
@@ -1349,7 +1427,6 @@ $("prepName").oninput=renderPrintState;$("prepRank").oninput=renderPrintState;
 
 function renderAll(reRoster=true){
  ensureCurrent();
- checkActiveDateRanges(date());
  renderMetrics();
  renderTabs();
  refreshRankSelectors();
@@ -1576,12 +1653,11 @@ function refreshSaved(){
 function loadDate(targetDate){
  const d = targetDate || $("savedSelect").value || $("topRedDateFilter").value;
  if(!d||!saved[d])return alert("Choose a saved date first.");
- autoSaveBuffer();
+ if(saved[boundDate])autoSaveBuffer();
  pushUndo();
  $("stateDate").value=d;
- boundDate=d;
+ loadDay(d);
  $("topRedDateFilter").value=d;
- applyRecord(saved[d]);
  renderAll();
 }
 
@@ -1636,8 +1712,7 @@ $("importFile").onchange=e=>{
    Object.keys(saved).forEach(d=>saved[d]=normalizeRecord(saved[d]));
    const pr=persistRoster();
    persistStore("all");
-   if(saved[boundDate])applyRecord(saved[boundDate]);
-   else{current=blank();currentLeave={};currentDuty={};currentEd={}}
+   loadDay(boundDate);
    refreshSaved(); renderAll();
    pr.then(res=>alert("Backup restored - "+cloudMsg(res)));
   }catch(err){alert("Invalid backup file.")}
@@ -1648,12 +1723,9 @@ $("importFile").onchange=e=>{
 
 $("stateDate").value=today();
 $("stateDate").onchange=()=>{
- // save what is on screen under the OLD date first, then switch
- autoSaveBuffer();
- const d=date();
- boundDate=d;
- if(saved[d]) applyRecord(saved[d]);
- else { current=blank(); currentLeave={}; currentDuty={}; currentEd={}; }
+ // save what is on screen under the OLD date (only if that day was already saved/edited), then switch
+ if(saved[boundDate])autoSaveBuffer();
+ loadDay(date());
  renderAll();
 };
 
@@ -1693,8 +1765,7 @@ $("addPersonBtn").onclick=()=>{
 };
 
 loadStore();
-current=blank();
-if(saved[today()]) applyRecord(saved[today()]);
+loadDay(today());
 refreshSaved();
 renderAll();
 initCloudListener();
