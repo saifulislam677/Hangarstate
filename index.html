@@ -20,10 +20,10 @@
 header{background:var(--green);color:#fff;padding:14px}header .eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--lime);font-weight:800}h1{font-size:20px;line-height:1.15;margin:4px 0}header p{margin:0;color:#d8e5df;font-size:12px}
 main{max-width:1100px;margin:auto;padding:10px;display:grid;gap:10px;position:relative;z-index:1}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;box-shadow:0 2px 8px #123b3208}.card h2{font-size:15px;margin:0 0 8px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1;min-width:130px}
 label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:3px}input,select,button{font:inherit;touch-action:manipulation}input[type=date],input[type=search],input[type=text],select{width:100%;padding:8px 10px;border:1px solid #cbd8d0;border-radius:6px;background:#fff;color:var(--ink);font-size:13px;position:relative;z-index:2}
-button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointer;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;position:relative;z-index:2}button.secondary{background:#e8efeb;color:var(--green)}button.danger{background:#fff0f0;color:var(--red);border:1px solid #f0cccc}button.small{padding:4px 6px;font-size:11px;min-height:28px}
+button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointer;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;position:relative;z-index:2}button.secondary{background:#e8efeb;color:var(--green)}button.danger{background:#fff0f0;color:var(--red);border:1px solid #f0cccc}button.small{padding:4px 6px;font-size:11px;min-height:28px}button:disabled{opacity:.6;cursor:wait}
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}.metric{background:#f3f7f4;border:1px solid var(--line);border-radius:8px;padding:8px}.metric strong{display:block;font-size:18px;line-height:1.1}.metric span{font-size:11px;color:var(--muted)}
 .tabs{display:flex;gap:5px;overflow-x:auto;padding-bottom:3px}.tab{white-space:nowrap;background:#e8efeb;color:var(--green);padding:6px 8px;font-size:11px;border-radius:6px;flex-shrink:0}.tab.active{background:var(--green);color:#fff}.hint{font-size:11px;color:var(--muted);margin:5px 0 0}
-.rank-block{border:1px solid var(--line);border-radius:8px;margin-top:6px;overflow:hidden}.rank-head{background:#f2f6f3;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:12px}.person{display:flex;gap:6px;align-items:center;padding:8px;border-top:1px solid #edf1ee;flex-wrap:wrap}.person .name{flex:1 1 160px;min-width:0}.person small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.person select{flex:1 1 110px;max-width:100%;padding:6px;font-size:11px}.person-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap}
+.rank-block{border:1px solid var(--line);border-radius:8px;margin-top:6px;overflow:hidden}.rank-head{background:#f2f6f3;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:12px}.person{display:flex;gap:6px;align-items:center;padding:8px;border-top:1px solid #edf1ee;flex-wrap:wrap}.person .name{flex:1 1 160px;min-width:0}.person small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.person select{flex:1 1 110px;max-width:100%;padding:6px;font-size:11px}.person input.trade-in{flex:1 1 120px;max-width:100%;padding:6px;font-size:11px}.person-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap}
 .tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f3f7f4;color:#3e5148}.empty{color:var(--muted);padding:8px 0}.foot{font-size:11px;color:var(--muted);text-align:center;padding:8px}.statusnote{padding:6px 8px;border-radius:6px;background:#fff8df;color:#66531c;font-size:11px;margin-top:6px}.hidden{display:none!important}
 .modal-overlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:9999;padding:12px;backdrop-filter:blur(2px)}.modal-card{background:#fff;border-radius:12px;width:100%;max-width:400px;padding:16px;box-shadow:0 10px 25px #0003;animation:popIn .2s ease-out}@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}.modal-card h3{margin:0 0 3px;font-size:16px;color:var(--green)}.modal-card p{margin:0 0 10px;font-size:11px;color:var(--muted)}.modal-form{display:flex;flex-direction:column;gap:10px}.modal-actions{display:flex;gap:6px;margin-top:12px;justify-content:flex-end}
 
@@ -109,7 +109,7 @@ input, select, button { max-width: 100%; }
   .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .metric strong { font-size: 16px; }
   .person { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
-  .person .name, .person select { width: 100%; }
+  .person .name, .person select, .person input.trade-in { width: 100%; }
   .person-actions { justify-content: flex-end; }
   .modal-overlay { padding: 8px; }
   .modal-card { max-height: 90dvh; overflow-y: auto; padding: 12px; }
@@ -154,16 +154,23 @@ input, select, button { max-width: 100%; }
         <option value="">Select Saved Date State…</option>
       </select>
     </div>
-    <div style="display:flex;gap:6px;align-items:end;flex-wrap:wrap;flex:2">
+    <div>
+      <label for="mailTo">MAIL TO (optional)</label>
+      <input id="mailTo" type="text" placeholder="name@example.com">
+    </div>
+  </div>
+  <div style="display:flex;gap:6px;align-items:end;flex-wrap:wrap;margin-top:8px">
+      <button id="saveOnlyBtn" type="button" style="background:#0b5ed7">💾 Save</button>
+      <button id="shareMailBtn" type="button" style="background:#b3261e">📧 Send by Mail (PDF)</button>
       <button id="savePdfBtn" type="button" style="background:#1b4d3e">Save & Download PDF (A4 Landscape)</button>
       <button id="saveExcelBtn" type="button" style="background:#1d6f42">Save & Download Excel (.xlsx)</button>
       <button class="secondary" id="clearAllParadeBtn" type="button" style="background:#fff0f0;color:#a33232;border:1px solid #f0cccc">Clear All to On Parade</button>
       <button class="secondary" id="undoBtn" type="button">Undo Last State</button>
       <button class="secondary" id="togglePreviewBtn" type="button">Toggle Sheet Preview</button>
       <button class="secondary" id="printBtn" type="button">Print A4 Landscape (1 Page)</button>
-    </div>
   </div>
-  <p class="hint">Edits save permanently in Cloud Realtime Database & local browser memory.</p>
+  <p class="hint">Every change is saved automatically. The <b>💾 Save</b> button is only for extra safety (no download).</p>
+  <p class="hint"><b>Trade / Section:</b> type it once in the "Trade" box under each name (e.g. Wg Mech). It then prints beside the name: <i>SWO M. Ali-Wg Mech-A/L(02.11.26)</i>. Leave, Duty On and Duty Off / Night Off entries also print beside the name.</p>
   <p class="hint"><b>Daily carry-forward:</b> a new date starts exactly like the previous day (everyone keeps the same status). Leave ends after its report date and ED/Course after its finish date. Wrong date entered? Tap <b>Edit entry</b> on that person.</p>
   <p class="hint"><b>Print setup:</b> Paper A4 · Landscape · Margins Default/None · Scale 100% · Headers and footers OFF. Page margins are built in (left/right 25 mm, top 20 mm, bottom 15 mm).</p>
 </section>
@@ -213,7 +220,7 @@ input, select, button { max-width: 100%; }
 <section class="card wide no-print"><h2>Manpower overview</h2><div class="metrics" id="metrics"></div><div class="statusnote">Counting rule: each person has one current status only. Total counts are strictly distinct.</div></section>
 
 <section class="card no-print" id="editorArea"><h2>Assign & Manage Personnel</h2><div class="tabs" id="statusTabs"></div><div class="row" style="margin-top:10px"><div><label for="rankFilter">FILTER BY RANK</label><select id="rankFilter"><option>All ranks</option></select></div><div><label for="search">SEARCH NAME</label><input id="search" type="search" placeholder="Type a name or rank"></div></div>
-<div class="card" style="margin:10px 0;background:#f8faf8;box-shadow:none"><h2 style="margin-bottom:8px">Add Manpower (All Ranks, Civilian & Attachment)</h2><div class="row"><div><label for="addRank">RANK / CATEGORY</label><select id="addRank"></select></div><div><label for="newRank">NEW RANK (OPTIONAL)</label><input id="newRank" type="text" placeholder="Select New rank first, then type rank"></div><div><label for="newName">PERSONNEL NAME</label><input id="newName" type="text" placeholder="Enter full name"></div></div><div style="margin-top:8px"><button id="addPersonBtn" type="button">Add Person</button></div></div>
+<div class="card" style="margin:10px 0;background:#f8faf8;box-shadow:none"><h2 style="margin-bottom:8px">Add Manpower (All Ranks, Civilian & Attachment)</h2><div class="row"><div><label for="addRank">RANK / CATEGORY</label><select id="addRank"></select></div><div><label for="newRank">NEW RANK (OPTIONAL)</label><input id="newRank" type="text" placeholder="Select New rank first, then type rank"></div><div><label for="newName">PERSONNEL NAME</label><input id="newName" type="text" placeholder="Enter full name"></div><div><label for="newTrade">TRADE / SECTION (optional)</label><input id="newTrade" type="text" placeholder="e.g. Wg Mech"></div></div><div style="margin-top:8px"><button id="addPersonBtn" type="button">Add Person</button></div></div>
 <div class="card" style="margin:10px 0;background:#f8faf8;box-shadow:none"><h2 style="margin-bottom:8px">Edit "PREPARED BY" Signature</h2><div class="row"><div><label for="prepName">NAME</label><input id="prepName" type="text" value="PARVEZ"></div><div><label for="prepRank">RANK</label><input id="prepRank" type="text" value="SGT"></div></div></div><div id="roster"></div><div class="row" style="margin-top:10px"><button class="secondary" id="assignAllBtn" type="button">Set filtered people to selected status</button><button class="secondary" id="clearFilterBtn" type="button">Clear filters</button></div></section>
 
 <section class="card no-print" id="reportArea"><h2>Final state report & PC Backup</h2><div id="reportSummary"></div><div class="row" style="margin:10px 0"><button class="secondary" id="exportBackup" type="button">Backup to PC File (.JSON)</button><button class="secondary" id="exportHtmlBtn" type="button">Export Updated index.html File</button><button class="secondary" id="importBtn" type="button">Restore from PC File</button><input id="importFile" type="file" accept="application/json" class="hidden"></div><h2 style="margin-top:14px">Rank-wise status count</h2><div class="tablewrap" id="rankTable"></div><h2 style="margin-top:14px">Personnel by status</h2><div id="statusDetails"></div></section>
@@ -223,11 +230,14 @@ input, select, button { max-width: 100%; }
 <!-- LEAVE MODAL -->
 <div id="leaveModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalPersonName">Leave Details</h3><p>Specify leave type and report date for this person.</p><div class="modal-form"><div><label for="modalLeaveType">TYPE OF LEAVE</label><select id="modalLeaveType"><option value="A/L">A/L (Annual Leave)</option><option value="S/L">S/L (Sick Leave)</option><option value="R/L">R/L (Recreation Leave)</option><option value="C/L">C/L (Casual Leave)</option></select></div><div><label for="modalReportDate">REPORT DATE / TO DATE</label><input type="date" id="modalReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeModalBtn">Cancel</button><button type="button" id="saveLeaveBtn">Save Leave</button></div></div></div>
 
-<!-- DUTY MODAL -->
-<div id="dutyModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalDutyPersonName">Select Duty Type & Shift</h3><p>Choose duty type and shift for this person.</p><div class="modal-form"><div><label for="modalDutyType">DUTY TYPE</label><select id="modalDutyType"></select></div><div><label for="modalDutyShift">DUTY SHIFT</label><select id="modalDutyShift"><option value="A Shift">A Shift</option><option value="B Shift">B Shift</option><option value="C Shift">C Shift</option><option value="PD">PD</option></select></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeDutyModalBtn">Cancel</button><button type="button" id="saveDutyBtn">Save Duty</button></div></div></div>
+<!-- DUTY MODAL (All Duty On / All Duty Off - Night Off) -->
+<div id="dutyModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalDutyPersonName">Select Duty Type & Shift</h3><p id="modalDutyHelp">Choose duty type and shift for this person.</p><div class="modal-form"><div><label for="modalDutyType">DUTY TYPE</label><select id="modalDutyType"></select></div><div><label for="modalDutyShift">DUTY SHIFT</label><select id="modalDutyShift"><option value="A Shift">A Shift</option><option value="B Shift">B Shift</option><option value="C Shift">C Shift</option></select></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeDutyModalBtn">Cancel</button><button type="button" id="saveDutyBtn">Save Duty</button></div></div></div>
 
 <!-- ED COURSE MODAL -->
 <div id="edModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalEdPersonName">ED / Course Details</h3><p>Specify course start date and finish date.</p><div class="modal-form"><div><label for="modalEdStartDate">START DATE / WEF</label><input type="date" id="modalEdStartDate"></div><div><label for="modalEdReportDate">FINISH DATE / TO DATE</label><input type="date" id="modalEdReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeEdModalBtn">Cancel</button><button type="button" id="saveEdBtn">Save ED/Course</button></div></div></div>
+
+<!-- SHARE BY MAIL MODAL -->
+<div id="shareModal" class="modal-overlay hidden"><div class="modal-card"><h3>Send state by Mail</h3><p>The PDF is ready (same as the print copy). Tap the button to open your mail app with the PDF attached.</p><div class="modal-actions"><button class="secondary" type="button" id="shareCancelBtn">Cancel</button><button type="button" id="shareGoBtn">📧 Open Mail</button></div></div></div>
 
 <section class="card wide no-print"><h2>Saved daily records</h2><div class="row"><div><label for="savedSelect">OPEN A SAVED DATE</label><select id="savedSelect"><option value="">No saved records yet</option></select></div><button class="secondary" id="loadBtn" type="button">Load date</button><button class="danger" id="deleteBtn" type="button">Delete saved date</button></div></section>
 </main>
@@ -582,6 +592,9 @@ function rebuildPeople(){
  people=[];
  ranks.forEach(g=>{
   if(!Array.isArray(g.names))g.names=[];
+  if(!Array.isArray(g.trades))g.trades=[];
+  while(g.trades.length<g.names.length)g.trades.push("");
+  if(g.trades.length>g.names.length)g.trades.length=g.names.length;
   const seen={};
   g.names.forEach((name,i)=>{
    name=String(name==null?"":name);
@@ -589,7 +602,7 @@ function rebuildPeople(){
    people.push({
     id:"p_"+slugPart(g.rank)+"_"+slugPart(name)+"_"+seen[key],
     oldId:"p_"+slugOld(g.rank)+"_"+slugOld(name)+"_"+seen[key],
-    legacyId:g.rank+"_"+i,rank:g.rank,name
+    legacyId:g.rank+"_"+i,rank:g.rank,name,trade:String(g.trades[i]==null?"":g.trades[i]).trim()
    });
   });
  });
@@ -598,6 +611,7 @@ rebuildPeople();
 
 function totalManpower(){return people.length}function militaryCount(){return people.filter(p=>militaryOrder.includes(p.rank)).length}const $=id=>document.getElementById(id);
 let current={},currentLeave={},currentDuty={},currentEd={},activeStatus="Leave",saved={},activeLeavePersonId=null,activeDutyPersonId=null,activeEdPersonId=null,pendingPreviousStatus="On Parade";
+let dutyFor="All Duty On"; // which status the duty window is for (All Duty On / All Duty Off)
 let detailEditMode=false; // true when a modal is opened from "Edit entry" (status stays, only details change)
 let undoStack = [];
 
@@ -646,7 +660,12 @@ function cleanJSON(o){return JSON.parse(JSON.stringify(o))}
 function normalizeRanks(r){
  if(!r)return null;
  const arr=Array.isArray(r)?r:Object.values(r);
- const out=arr.filter(g=>g&&typeof g.rank==="string").map(g=>({rank:g.rank,names:(Array.isArray(g.names)?g.names:Object.values(g.names||{})).map(n=>String(n))}));
+ const out=arr.filter(g=>g&&typeof g.rank==="string").map(g=>{
+  const names=(Array.isArray(g.names)?g.names:Object.values(g.names||{})).map(n=>String(n));
+  const tr=Array.isArray(g.trades)?g.trades:Object.values(g.trades||{});
+  const trades=names.map((_,i)=>String(tr[i]==null?"":tr[i]));
+  return {rank:g.rank,names,trades};
+ });
  return out.length?out:null;
 }
 function cacheRoster(){
@@ -705,7 +724,7 @@ function initCloudListener(){
   const data=snap.val()||{};
   let rosterChanged=false;
 
-  // ---- ROSTER (names): newest change wins, cloud is shared by all devices ----
+  // ---- ROSTER (names + trades): newest change wins, cloud is shared by all devices ----
   if(!rosterDirty){
    const cloudRanks=normalizeRanks(data.ranks);
    const localRanks=normalizeRanks(ranks)||[];
@@ -844,7 +863,7 @@ function buildNewDay(S){
    const ed=pick(rec.edDetails,p);
    if(ed&&ed.to&&S>ed.to)return;
    if(ed)currentEd[p.id]=Object.assign({},ed);
-  }else if(s==="All Duty On"){
+  }else if(s==="All Duty On"||s==="All Duty Off"){
    const du=pick(rec.dutyDetails,p);
    if(du)currentDuty[p.id]=du;
   }
@@ -899,11 +918,23 @@ function formatDutyText(dutyStr){
  return dutyStr;
 }
 
+// short form used on the printed sheet: "T/F (Task Force) - C Shift" -> "TF-C", Night Off -> "Night Off"
+function shortDuty(d){
+ if(!d)return "";
+ const parts=String(d).split(" - ");
+ let t=(parts[0]||"").trim();
+ const sh=(parts[1]||"").replace(/\s*Shift/i,"").trim();
+ if(/^night off/i.test(t))return "Night Off";
+ if(/^T\/F/i.test(t))t="TF";
+ else if(/^Sy/i.test(t))t="Sy";
+ return sh?`${t}-${sh}`:t;
+}
+
 function renderRoster(){
  const rf=$("rankFilter").value||"All ranks",q=$("search").value.trim().toLowerCase();
  let html="";
  ranks.forEach(g=>{
-  const group=people.filter(p=>p.rank===g.rank&&(rf==="All ranks"||p.rank===rf)&&(!q||(p.name+" "+p.rank).toLowerCase().includes(q)));
+  const group=people.filter(p=>p.rank===g.rank&&(rf==="All ranks"||p.rank===rf)&&(!q||(p.name+" "+p.rank+" "+p.trade).toLowerCase().includes(q)));
   if(!group.length)return;
   html+=`<div class="rank-block"><div class="rank-head"><span>${esc(g.rank)}</span><span>${group.filter(p=>current[p.id]===activeStatus).length}/${group.length} · ${group.length} listed</span></div>`;
   group.forEach(p=>{
@@ -911,15 +942,15 @@ function renderRoster(){
    let noteText="";
    if(current[p.id]==="Leave"&&leave.to){
     noteText=` · (${esc(leave.type)} to ${esc(displayDate(leave.to))})`;
-   } else if(current[p.id]==="All Duty On"&&currentDuty[p.id]){
+   } else if((current[p.id]==="All Duty On"||current[p.id]==="All Duty Off")&&currentDuty[p.id]){
     noteText=` · (${esc(formatDutyText(currentDuty[p.id]))})`;
    } else if(current[p.id]==="EDP/PG/ITD C"&&currentEd[p.id]&&currentEd[p.id].from){
     noteText=` · (wef ${esc(displayDate(currentEd[p.id].from))} to ${esc(displayDate(currentEd[p.id].to))})`;
    } else if(current[p.id]==="TD/Courier"){
     noteText=` · (TD)`;
    }
-   const hasDetails=["Leave","All Duty On","EDP/PG/ITD C"].includes(current[p.id]);
-   html+=`<div class="person"><div class="name"><b>${esc(p.name)}</b><small>${esc(p.rank)} · Current: ${esc(current[p.id])}${noteText}</small></div><select aria-label="Status for ${esc(p.rank+" "+p.name)}" data-person="${esc(p.id)}" data-previous="${esc(current[p.id])}">${statusOptions(current[p.id])}</select><div class="person-actions">${hasDetails?`<button class="secondary small" data-details="${esc(p.id)}" type="button">Edit entry</button>`:""}<button class="secondary small" data-edit="${esc(p.id)}" type="button">Edit</button><button class="danger small" data-delete="${esc(p.id)}" type="button">Delete</button></div></div>`;
+   const hasDetails=["Leave","All Duty On","All Duty Off","EDP/PG/ITD C"].includes(current[p.id]);
+   html+=`<div class="person"><div class="name"><b>${esc(p.name)}</b><small>${esc(p.rank)}${p.trade?" · "+esc(p.trade):""} · Current: ${esc(current[p.id])}${noteText}</small></div><input class="trade-in" type="text" data-trade="${esc(p.id)}" value="${esc(p.trade)}" placeholder="Trade (e.g. Wg Mech)" aria-label="Trade of ${esc(p.rank+" "+p.name)}"><select aria-label="Status for ${esc(p.rank+" "+p.name)}" data-person="${esc(p.id)}" data-previous="${esc(current[p.id])}">${statusOptions(current[p.id])}</select><div class="person-actions">${hasDetails?`<button class="secondary small" data-details="${esc(p.id)}" type="button">Edit entry</button>`:""}<button class="secondary small" data-edit="${esc(p.id)}" type="button">Edit</button><button class="danger small" data-delete="${esc(p.id)}" type="button">Delete</button></div></div>`;
   });
   html+="</div>";
  });
@@ -932,9 +963,9 @@ function renderRoster(){
   if(val==="Leave"){
    pendingPreviousStatus=sel.dataset.previous||"On Parade";
    openLeaveModal(id);
-  } else if(val==="All Duty On"){
+  } else if(val==="All Duty On"||val==="All Duty Off"){
    pendingPreviousStatus=sel.dataset.previous||"On Parade";
-   openDutyModal(id);
+   openDutyModal(id,false,val);
   } else if(val==="EDP/PG/ITD C"){
    pendingPreviousStatus=sel.dataset.previous||"On Parade";
    openEdModal(id);
@@ -946,10 +977,20 @@ function renderRoster(){
    autoSaveBuffer();
   }
  });
+ // Trade / Section box: saves permanently as soon as you leave the box
+ $("roster").querySelectorAll("input[data-trade]").forEach(inp=>inp.onchange=()=>{
+  const p=people.find(x=>x.id===inp.dataset.trade);if(!p)return;
+  const g=ranks.find(x=>x.rank===p.rank),ix=nameIndex(p);
+  if(!g||ix<0)return;
+  g.trades[ix]=inp.value.trim();
+  rebuildPeople();
+  persistRoster();
+  renderAll(false);
+ });
  $("roster").querySelectorAll("[data-details]").forEach(b=>b.onclick=()=>{
   const id=b.dataset.details,s=current[id];
   if(s==="Leave")openLeaveModal(id,true);
-  else if(s==="All Duty On")openDutyModal(id,true);
+  else if(s==="All Duty On"||s==="All Duty Off")openDutyModal(id,true,s);
   else if(s==="EDP/PG/ITD C")openEdModal(id,true);
  });
  $("roster").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editPerson(b.dataset.edit));
@@ -989,23 +1030,28 @@ $("saveLeaveBtn").onclick=()=>{
  autoSaveBuffer();
 };
 
-// ---------------- DUTY ----------------
-function openDutyModal(id,edit){
+// ---------------- DUTY ON / DUTY OFF (Night Off) ----------------
+function openDutyModal(id,edit,forStatus){
  detailEditMode=!!edit;
+ dutyFor=forStatus||current[id]||"All Duty On";
  activeDutyPersonId=id;
  const p=people.find(x=>x.id===id);
  if(!p){activeDutyPersonId=null;detailEditMode=false;return}
- $("modalDutyPersonName").textContent=`${p.rank} ${p.name} - Duty Selection${edit?" (edit)":""}`;
+ const off=dutyFor==="All Duty Off";
+ $("modalDutyPersonName").textContent=`${p.rank} ${p.name} - ${off?"Duty Off / Night Off":"Duty Selection"}${edit?" (edit)":""}`;
+ $("modalDutyHelp").textContent=off?"Choose Night Off, or the duty this person is off from, and the shift.":"Choose duty type and shift for this person.";
  const isCiv = p.rank === "Civilian";
  const dutySel = $("modalDutyType");
  if(isCiv){
-  dutySel.innerHTML='<option value="Section Night">Section Night</option><option value="Form 108">Form 108</option>';
+  dutySel.innerHTML=(off?'<option value="Night Off">Night Off</option>':'')+'<option value="Section Night">Section Night</option><option value="Form 108">Form 108</option>';
  } else {
-  dutySel.innerHTML='<option value="T/F (Task Force)">T/F (Task Force)</option><option value="Sy Duty">Sy Duty</option><option value="DO">DO</option><option value="Form 108">Form 108</option>';
+  dutySel.innerHTML=(off?'<option value="Night Off">Night Off</option>':'')+'<option value="T/F (Task Force)">T/F (Task Force)</option><option value="Sy Duty">Sy Duty</option><option value="DO">DO</option><option value="Form 108">Form 108</option>';
  }
- const rawDuty = currentDuty[id] || (isCiv ? "Section Night" : "T/F (Task Force)");
+ const def=off?"Night Off - A Shift":(isCiv?"Section Night":"T/F (Task Force)");
+ const rawDuty = currentDuty[id] || def;
  const parts = rawDuty.split(" - ");
  dutySel.value = parts[0] || rawDuty;
+ if(dutySel.value!==(parts[0]||rawDuty))dutySel.selectedIndex=0;
  $("modalDutyShift").value = parts[1] || "A Shift";
  $("dutyModal").classList.remove("hidden");
 }
@@ -1023,7 +1069,7 @@ $("saveDutyBtn").onclick=()=>{
  const dutyType = $("modalDutyType").value;
  const shift = $("modalDutyShift").value;
  currentDuty[id] = `${dutyType} - ${shift}`;
- current[id]="All Duty On";
+ current[id]=dutyFor;
  closeDutyModal(false);
  renderAll();
  autoSaveBuffer();
@@ -1082,7 +1128,7 @@ function deletePerson(id){
  const p=people.find(x=>x.id===id);if(!p||!confirm(`Delete ${p.rank} ${p.name}?`))return;
  const g=ranks.find(x=>x.rank===p.rank);
  const ix=nameIndex(p);
- if(g&&ix>=0)g.names.splice(ix,1);
+ if(g&&ix>=0){g.names.splice(ix,1);g.trades.splice(ix,1)}
  delete current[id];delete currentLeave[id];delete currentDuty[id];delete currentEd[id];
  rebuildPeople();
  const pr=persistRoster();
@@ -1097,15 +1143,18 @@ function editPerson(id){
  const newRankIn=prompt("Edit rank:",p.rank);if(!newRankIn||!newRankIn.trim())return;
  const name=newName.trim(),rankIn=newRankIn.trim();
  const idx=nameIndex(p),oldG=ranks.find(x=>x.rank===p.rank);
- const oldId=p.id,oldOldId=p.oldId;
+ const oldId=p.id,oldOldId=p.oldId,trade=p.trade||"";
 
  let ng=ranks.find(x=>x.rank.toLowerCase()===rankIn.toLowerCase());
- if(!ng){ng={rank:rankIn,names:[]};ranks.push(ng)}
+ if(!ng){ng={rank:rankIn,names:[],trades:[]};ranks.push(ng)}
  let pos=-1;
  if(ng===oldG&&idx>=0){oldG.names[idx]=name;pos=idx}
  else{
-  if(oldG&&idx>=0)oldG.names.splice(idx,1);
+  if(oldG&&idx>=0){oldG.names.splice(idx,1);oldG.trades.splice(idx,1)}
   ng.names.push(name);
+  if(!Array.isArray(ng.trades))ng.trades=[];
+  while(ng.trades.length<ng.names.length-1)ng.trades.push("");
+  ng.trades.push(trade);
  }
  rebuildPeople();
  const grp=people.filter(x=>x.rank===ng.rank);
@@ -1152,10 +1201,10 @@ function renderDetails(){
   return `<div class="rank-block"><div class="rank-head"><span>${esc(s)}</span><span>${list.length} personnel</span></div><div style="padding:6px 8px">${list.length?list.map(p=>{
    let tag = "";
    if(s==="Leave"&&currentLeave[p.id]) tag=` (${esc(currentLeave[p.id].type||"A/L")} to ${esc(displayDate(currentLeave[p.id].to))})`;
-   else if(s==="All Duty On"&&currentDuty[p.id]) tag=` (${esc(formatDutyText(currentDuty[p.id]))})`;
+   else if((s==="All Duty On"||s==="All Duty Off")&&currentDuty[p.id]) tag=` (${esc(formatDutyText(currentDuty[p.id]))})`;
    else if(s==="EDP/PG/ITD C"&&currentEd[p.id]) tag=` (wef ${esc(displayDate(currentEd[p.id].from))} to ${esc(displayDate(currentEd[p.id].to))})`;
    else if(s==="TD/Courier") tag=` (TD)`;
-   return `<span style="display:inline-block;margin:2px 4px 2px 0;padding:3px 6px;border:1px solid var(--line);border-radius:6px">${esc(p.rank)} ${esc(p.name)}${tag}</span>`;
+   return `<span style="display:inline-block;margin:2px 4px 2px 0;padding:3px 6px;border:1px solid var(--line);border-radius:6px">${esc(p.rank)} ${esc(p.name)}${p.trade?"-"+esc(p.trade):""}${tag}</span>`;
   }).join(""):'<span class="empty">None assigned</span>'}</div></div>`;
  }).join("");
 }
@@ -1266,6 +1315,7 @@ function generateGridHTML(){
 }
 
 // ONE source of list blocks used by the preview, print, PDF and Excel
+// Every name is printed like the paper sheet:  RANK Name-Trade-Detail   e.g.  SWO M. Ali-Wg Mech-A/L(02.11.26)
 function buildListBlocks(){
  function getList(k){
   if(k==="Civil Tech") return people.filter(p=>p.rank==="Civilian");
@@ -1288,16 +1338,16 @@ function buildListBlocks(){
      t = `${p.rank} ${p.name}`;
    }
 
-   if(k==="All Duty On" && currentDuty[p.id]){
-    t += ` - ${formatDutyText(currentDuty[p.id])}`;
-   } else if(k==="Civil Tech" && currentDuty[p.id]){
-    t += ` - ${formatDutyText(currentDuty[p.id])}`;
+   if(p.trade) t += "-" + p.trade;
+
+   if((k==="All Duty On"||k==="All Duty Off"||k==="Civil Tech") && currentDuty[p.id]){
+    t += "-" + shortDuty(currentDuty[p.id]);
    } else if(k==="EDP/PG/ITD C" && currentEd[p.id]){
     const ed = currentEd[p.id];
     if(ed.from||ed.to) t += ` (wef ${displayDate(ed.from)} to ${displayDate(ed.to)})`;
    } else if(k==="Leave"){
      const lv = currentLeave[p.id]||{};
-     if(lv.to) t+=` (${lv.type||"A/L"} to ${displayDate(lv.to)})`;
+     if(lv.to) t += `-${lv.type||"A/L"}(${displayDate(lv.to)})`;
    }
    return t;
   });
@@ -1439,6 +1489,17 @@ function renderAll(reRoster=true){
 function refreshRankSelectors(){const rf=$("rankFilter"),old=rf.value||"All ranks";rf.innerHTML='<option>All ranks</option>'+ranks.map(g=>`<option value="${esc(g.rank)}">${esc(g.rank)}</option>`).join("");rf.value=["All ranks",...ranks.map(g=>g.rank)].includes(old)?old:"All ranks";const ar=$("addRank"),prev=ar.value;ar.innerHTML=ranks.map(g=>`<option value="${esc(g.rank)}">${esc(g.rank)}</option>`).join("")+'<option value="__new__">New rank…</option>';ar.value=ranks.some(g=>g.rank===prev)?prev:(ranks[0]?.rank||"__new__")}
 
 // ===================== PDF (A4 landscape, same margins as print) =====================
+function pdfOptions(){
+ return {
+  margin:       0,
+  filename:     `State_Office_${date()}.pdf`,
+  image:        { type: 'jpeg', quality: 0.98 },
+  html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: "#ffffff", width: 1123, windowWidth: 1123 },
+  jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' },
+  pagebreak:    { mode: ['avoid-all'] }
+ };
+}
+
 $("savePdfBtn").addEventListener("click", function(e){
  e.preventDefault();
  autoSaveBuffer();
@@ -1447,16 +1508,7 @@ $("savePdfBtn").addEventListener("click", function(e){
  const printEl = document.getElementById("printState");
  printEl.classList.remove("hidden");
 
- const opt = {
-  margin:       0,
-  filename:     `State_Office_${date()}.pdf`,
-  image:        { type: 'jpeg', quality: 0.98 },
-  html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: "#ffffff", width: 1123, windowWidth: 1123 },
-  jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' },
-  pagebreak:    { mode: ['avoid-all'] }
- };
-
- html2pdf().from(printEl).set(opt).save().then(() => {
+ html2pdf().from(printEl).set(pdfOptions()).save().then(() => {
   printEl.classList.add("hidden");
   alert("PDF downloaded successfully in A4 Landscape!");
  }).catch(err => {
@@ -1464,6 +1516,85 @@ $("savePdfBtn").addEventListener("click", function(e){
   alert("PDF export failed: "+(err&&err.message||err));
  });
 });
+
+// builds the PDF (same page as the print copy) and returns it as a Blob
+async function makePdfBlob(){
+ renderPrintState();
+ const printEl=$("printState");
+ printEl.classList.remove("hidden");
+ try{
+  return await html2pdf().set(pdfOptions()).from(printEl).outputPdf("blob");
+ }finally{
+  printEl.classList.add("hidden");
+ }
+}
+
+// ===================== SAVE (no download) =====================
+$("saveOnlyBtn").onclick=function(){
+ const btn=this;btn.disabled=true;
+ autoSaveBuffer().then(r=>{
+  btn.disabled=false;
+  alert(`State of ${displayDate(boundDate)} - `+cloudMsg(r));
+ });
+};
+
+// ===================== SEND BY MAIL (PDF attached) =====================
+let pendingPdf=null;
+try{$("mailTo").value=localStorage.getItem("state-office-mail-to")||""}catch(e){}
+$("mailTo").onchange=()=>{try{localStorage.setItem("state-office-mail-to",$("mailTo").value.trim())}catch(e){}};
+
+function mailSubject(){return "Parade State - AC Taking & Handing Over Flt - "+date().split("-").reverse().join("/")}
+function mailBody(){return "Please find attached the Parade/PT/FOD State of "+date().split("-").reverse().join("/")+".\n\nPrepared by: "+($("prepRank").value.trim()||"SGT")+" "+($("prepName").value.trim()||"PARVEZ")}
+
+// opens the phone / PC share sheet (Gmail, Outlook, Mail...) with the PDF already attached
+async function tryShareFile(){
+ const f=pendingPdf;if(!f)return "none";
+ try{
+  if(!(navigator.canShare&&navigator.canShare({files:[f]})))return "unsupported";
+  await navigator.share({files:[f],title:mailSubject(),text:mailBody()});
+  return "shared";
+ }catch(e){
+  if(e&&e.name==="AbortError")return "cancel";
+  if(e&&e.name==="NotAllowedError")return "needtap";
+  return "unsupported";
+ }
+}
+
+// fallback when the browser cannot attach files: download the PDF and open a ready mail draft
+function fallbackMail(){
+ const f=pendingPdf;if(!f)return;
+ const url=URL.createObjectURL(f);
+ const a=document.createElement("a");a.href=url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),8000);
+ const to=($("mailTo").value||"").trim();
+ setTimeout(()=>{
+  alert("PDF downloaded: "+f.name+"\nYour mail app opens now - please attach that PDF to the mail.");
+  window.location.href="mailto:"+to+"?subject="+encodeURIComponent(mailSubject())+"&body="+encodeURIComponent(mailBody()+"\n\n(Attach the downloaded file: "+f.name+")");
+ },500);
+}
+
+$("shareMailBtn").onclick=async function(){
+ const btn=this,old=btn.textContent;
+ btn.disabled=true;btn.textContent="Preparing PDF…";
+ autoSaveBuffer();
+ try{
+  const blob=await makePdfBlob();
+  pendingPdf=new File([blob],`State_Office_${date()}.pdf`,{type:"application/pdf"});
+ }catch(err){
+  btn.disabled=false;btn.textContent=old;
+  return alert("PDF could not be prepared: "+(err&&err.message||err));
+ }
+ btn.disabled=false;btn.textContent=old;
+ const r=await tryShareFile();
+ if(r==="unsupported")fallbackMail();
+ else if(r==="needtap")$("shareModal").classList.remove("hidden");
+};
+$("shareGoBtn").onclick=async function(){
+ const r=await tryShareFile();
+ if(r==="unsupported"){$("shareModal").classList.add("hidden");fallbackMail()}
+ else if(r!=="needtap")$("shareModal").classList.add("hidden");
+};
+$("shareCancelBtn").onclick=()=>$("shareModal").classList.add("hidden");
 
 // ===================== EXCEL (.xlsx) EXPORT - same data & layout as the preview =====================
 function getTypo(){
@@ -1635,12 +1766,13 @@ $("clearAllParadeBtn").addEventListener("click", function(e){
  clearAllToParade();
 });
 
-// saves the current screen state under the date it BELONGS to (boundDate)
+// saves the current screen state under the date it BELONGS to (boundDate); returns a Promise with the cloud result
 function autoSaveBuffer(){
  const d=boundDate;
  saved[d]={statuses:{...current},leaveDetails:{...currentLeave},dutyDetails:{...currentDuty},edDetails:{...currentEd},savedAt:new Date().toISOString()};
- persistStore(d);
+ const pr=persistStore(d);
  refreshSaved();
+ return pr;
 }
 
 function refreshSaved(){
@@ -1735,7 +1867,7 @@ window.addEventListener("beforeprint",()=>{renderPrintState()});
 $("togglePreviewBtn").onclick=()=>$("screenPreviewSection").classList.toggle("hidden");
 
 $("assignAllBtn").onclick=()=>{
- const rf=$("rankFilter").value||"All ranks",q=$("search").value.trim().toLowerCase(),ps=people.filter(p=>(rf==="All ranks"||p.rank===rf)&&(!q||(p.name+" "+p.rank).toLowerCase().includes(q)));
+ const rf=$("rankFilter").value||"All ranks",q=$("search").value.trim().toLowerCase(),ps=people.filter(p=>(rf==="All ranks"||p.rank===rf)&&(!q||(p.name+" "+p.rank+" "+p.trade).toLowerCase().includes(q)));
  if(!ps.length)return alert("No personnel match filters.");
  if(!confirm(`Set ${ps.length} personnel to "${activeStatus}"?`))return;
  pushUndo();
@@ -1748,17 +1880,20 @@ $("clearFilterBtn").onclick=()=>{$("rankFilter").value="All ranks";$("search").v
 $("loadBtn").onclick=()=>loadDate();
 
 $("addPersonBtn").onclick=()=>{
- const name=$("newName").value.trim(),selected=$("addRank").value,custom=$("newRank").value.trim();
+ const name=$("newName").value.trim(),selected=$("addRank").value,custom=$("newRank").value.trim(),trade=$("newTrade").value.trim();
  if(!name)return alert("Enter personnel name.");
  let rank = selected==="__new__" ? custom : selected;
  if(!rank)return alert("Choose a rank or category.");
  let g=ranks.find(x=>x.rank.toLowerCase()===rank.toLowerCase());
- if(!g){g={rank,names:[]};ranks.push(g)}
+ if(!g){g={rank,names:[],trades:[]};ranks.push(g)}
+ if(!Array.isArray(g.trades))g.trades=[];
+ while(g.trades.length<g.names.length)g.trades.push("");
  g.names.push(name);
+ g.trades.push(trade);
  rebuildPeople();
  ensureCurrent();
  const pr=persistRoster();
- $("newName").value=""; $("newRank").value="";
+ $("newName").value=""; $("newRank").value=""; $("newTrade").value="";
  renderAll();
  autoSaveBuffer();
  pr.then(r=>alert("Manpower added - "+cloudMsg(r)));
