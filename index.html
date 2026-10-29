@@ -1252,6 +1252,7 @@ function generateGridHTML(){
 function buildListBlocks(){
  function getList(k){
   if(k==="Civil Tech") return people.filter(p=>p.rank==="Civilian"||(p.rank!=="Attachment"&&current[p.id]==="Civil Tech"));
+  if(k==="Leave") return people.filter(p=>p.rank!=="Attachment"&&current[p.id]==="Leave");
   return people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]===k);
  }
 
