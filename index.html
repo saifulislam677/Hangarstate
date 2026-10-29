@@ -23,7 +23,7 @@ label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bot
 button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointer;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;position:relative;z-index:2}button.secondary{background:#e8efeb;color:var(--green)}button.danger{background:#fff0f0;color:var(--red);border:1px solid #f0cccc}button.small{padding:4px 6px;font-size:11px;min-height:28px}button:disabled{opacity:.6;cursor:wait}
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}.metric{background:#f3f7f4;border:1px solid var(--line);border-radius:8px;padding:8px}.metric strong{display:block;font-size:18px;line-height:1.1}.metric span{font-size:11px;color:var(--muted)}
 .tabs{display:flex;gap:5px;overflow-x:auto;padding-bottom:3px}.tab{white-space:nowrap;background:#e8efeb;color:var(--green);padding:6px 8px;font-size:11px;border-radius:6px;flex-shrink:0}.tab.active{background:var(--green);color:#fff}.hint{font-size:11px;color:var(--muted);margin:5px 0 0}
-.rank-block{border:1px solid var(--line);border-radius:8px;margin-top:6px;overflow:hidden}.rank-head{background:#f2f6f3;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:12px}.person{display:flex;gap:6px;align-items:center;padding:8px;border-top:1px solid #edf1ee;flex-wrap:wrap}.person .name{flex:1 1 160px;min-width:0}.person small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.person select{flex:1 1 110px;max-width:100%;padding:6px;font-size:11px}.person input.trade-in{flex:1 1 120px;max-width:100%;padding:6px;font-size:11px}.person-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap}
+.rank-block{border:1px solid var(--line);border-radius:8px;margin-top:6px;overflow:hidden}.rank-head{background:#f2f6f3;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:12px}.person{display:flex;gap:6px;align-items:center;padding:8px;border-top:1px solid #edf1ee;flex-wrap:wrap}.person .name{flex:1 1 160px;min-width:0}.person small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.person select{flex:1 1 110px;max-width:100%;padding:6px;font-size:11px}.person-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap}
 .tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f3f7f4;color:#3e5148}.empty{color:var(--muted);padding:8px 0}.foot{font-size:11px;color:var(--muted);text-align:center;padding:8px}.statusnote{padding:6px 8px;border-radius:6px;background:#fff8df;color:#66531c;font-size:11px;margin-top:6px}.hidden{display:none!important}
 .modal-overlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:9999;padding:12px;backdrop-filter:blur(2px)}.modal-card{background:#fff;border-radius:12px;width:100%;max-width:400px;padding:16px;box-shadow:0 10px 25px #0003;animation:popIn .2s ease-out}@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}.modal-card h3{margin:0 0 3px;font-size:16px;color:var(--green)}.modal-card p{margin:0 0 10px;font-size:11px;color:var(--muted)}.modal-form{display:flex;flex-direction:column;gap:10px}.modal-actions{display:flex;gap:6px;margin-top:12px;justify-content:flex-end}
 
@@ -109,7 +109,7 @@ input, select, button { max-width: 100%; }
   .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .metric strong { font-size: 16px; }
   .person { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
-  .person .name, .person select, .person input.trade-in { width: 100%; }
+  .person .name, .person select { width: 100%; }
   .person-actions { justify-content: flex-end; }
   .modal-overlay { padding: 8px; }
   .modal-card { max-height: 90dvh; overflow-y: auto; padding: 12px; }
@@ -170,7 +170,7 @@ input, select, button { max-width: 100%; }
       <button class="secondary" id="printBtn" type="button">Print A4 Landscape (1 Page)</button>
   </div>
   <p class="hint">Every change is saved automatically. The <b>💾 Save</b> button is only for extra safety (no download).</p>
-  <p class="hint"><b>Trade / Section:</b> type it once in the "Trade" box under each name (e.g. Wg Mech). It then prints beside the name: <i>SWO M. Ali-Wg Mech-A/L(02.11.26)</i>. Every status you assign (Leave, Duty On / Off, Milk Duty, Mess, ED, etc.) gets its own list on the sheet.</p>
+  <p class="hint">Every status you assign (Leave, Duty On / Off, Milk Duty, Mess, ED, etc.) gets its own list on the sheet.</p>
   <p class="hint"><b>Daily carry-forward:</b> a new date starts exactly like the previous day (everyone keeps the same status). Leave ends after its report date and ED/Course after its finish date. Wrong date entered? Tap <b>Edit entry</b> on that person.</p>
   <p class="hint"><b>Print setup:</b> Paper A4 · Landscape · Margins Default/None · Scale 100% · Headers and footers OFF. Page margins are built in (left/right 25 mm, top 20 mm, bottom 15 mm).</p>
 </section>
@@ -220,7 +220,7 @@ input, select, button { max-width: 100%; }
 <section class="card wide no-print"><h2>Manpower overview</h2><div class="metrics" id="metrics"></div><div class="statusnote">Counting rule: each person has one current status only. Total counts are strictly distinct.</div></section>
 
 <section class="card no-print" id="editorArea"><h2>Assign & Manage Personnel</h2><div class="tabs" id="statusTabs"></div><div class="row" style="margin-top:10px"><div><label for="rankFilter">FILTER BY RANK</label><select id="rankFilter"><option>All ranks</option></select></div><div><label for="search">SEARCH NAME</label><input id="search" type="search" placeholder="Type a name or rank"></div></div>
-<div class="card" style="margin:10px 0;background:#f8faf8;box-shadow:none"><h2 style="margin-bottom:8px">Add Manpower (All Ranks, Civilian & Attachment)</h2><div class="row"><div><label for="addRank">RANK / CATEGORY</label><select id="addRank"></select></div><div><label for="newRank">NEW RANK (OPTIONAL)</label><input id="newRank" type="text" placeholder="Select New rank first, then type rank"></div><div><label for="newName">PERSONNEL NAME</label><input id="newName" type="text" placeholder="Enter full name"></div><div><label for="newTrade">TRADE / SECTION (optional)</label><input id="newTrade" type="text" placeholder="e.g. Wg Mech"></div></div><div style="margin-top:8px"><button id="addPersonBtn" type="button">Add Person</button></div></div>
+<div class="card" style="margin:10px 0;background:#f8faf8;box-shadow:none"><h2 style="margin-bottom:8px">Add Manpower (All Ranks, Civilian & Attachment)</h2><div class="row"><div><label for="addRank">RANK / CATEGORY</label><select id="addRank"></select></div><div><label for="newRank">NEW RANK (OPTIONAL)</label><input id="newRank" type="text" placeholder="Select New rank first, then type rank"></div><div><label for="newName">PERSONNEL NAME</label><input id="newName" type="text" placeholder="Enter full name"></div></div><div style="margin-top:8px"><button id="addPersonBtn" type="button">Add Person</button></div></div>
 <div class="card" style="margin:10px 0;background:#f8faf8;box-shadow:none"><h2 style="margin-bottom:8px">Edit "PREPARED BY" Signature</h2><div class="row"><div><label for="prepName">NAME</label><input id="prepName" type="text" value="PARVEZ"></div><div><label for="prepRank">RANK</label><input id="prepRank" type="text" value="SGT"></div></div></div><div id="roster"></div><div class="row" style="margin-top:10px"><button class="secondary" id="assignAllBtn" type="button">Set filtered people to selected status</button><button class="secondary" id="clearFilterBtn" type="button">Clear filters</button></div></section>
 
 <section class="card no-print" id="reportArea"><h2>Final state report & PC Backup</h2><div id="reportSummary"></div><div class="row" style="margin:10px 0"><button class="secondary" id="exportBackup" type="button">Backup to PC File (.JSON)</button><button class="secondary" id="exportHtmlBtn" type="button">Export Updated index.html File</button><button class="secondary" id="importBtn" type="button">Restore from PC File</button><input id="importFile" type="file" accept="application/json" class="hidden"></div><h2 style="margin-top:14px">Rank-wise status count</h2><div class="tablewrap" id="rankTable"></div><h2 style="margin-top:14px">Personnel by status</h2><div id="statusDetails"></div></section>
@@ -262,7 +262,6 @@ input, select, button { max-width: 100%; }
  }
  resize();window.addEventListener('resize',resize);
 
- // OPTIONAL: put a transparent side-view PNG named jet.png (nose pointing RIGHT) next to index.html
  const jetImg=new Image();let jetImgOK=false;
  jetImg.onload=()=>{jetImgOK=jetImg.naturalWidth>0};
  jetImg.src='jet.png';
@@ -279,17 +278,13 @@ input, select, button { max-width: 100%; }
   let b=0;
   for(let i=0;i<len;i++){const w=Math.random()*2-1;b=(b+0.02*w)/1.02;d[i]=Math.max(-1,Math.min(1,w*0.55+b*3));}
   const noise=()=>{const s=ac.createBufferSource();s.buffer=buf;s.loop=true;s.start();return s};
-  // deep roar
   const n1=noise(),lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=250;lp.Q.value=1.2;
   const g1=ac.createGain();g1.gain.value=0;n1.connect(lp);lp.connect(g1);g1.connect(master);
-  // turbine whine
   const n2=noise(),bp=ac.createBiquadFilter();bp.type='bandpass';bp.frequency.value=1800;bp.Q.value=2;
   const g2=ac.createGain();g2.gain.value=0;n2.connect(bp);bp.connect(g2);g2.connect(master);
-  // low rumble
   const o=ac.createOscillator();o.type='sawtooth';o.frequency.value=50;
   const olp=ac.createBiquadFilter();olp.type='lowpass';olp.frequency.value=200;
   const g3=ac.createGain();g3.gain.value=0;o.connect(olp);olp.connect(g3);g3.connect(master);o.start();
-  // afterburner crackle
   const n3=noise(),hp=ac.createBiquadFilter();hp.type='highpass';hp.frequency.value=500;
   const lp2=ac.createBiquadFilter();lp2.type='lowpass';lp2.frequency.value=5500;
   const crack=ac.createGain();crack.gain.value=0.6;
@@ -325,7 +320,6 @@ input, select, button { max-width: 100%; }
   N.gAB.gain.setTargetAtTime(1.2*ab,now,0.1);
  }
 
- // ---------- JETS ----------
  const jets=[];
  for(let i=0;i<6;i++)jets.push({i,x0:0.05+0.08*(i%3),ts:2.3+i*0.28,rot:2.0+(i%2)*0.25,sc:0.55+0.08*i});
  const stars=[];for(let i=0;i<70;i++)stars.push([Math.random(),Math.random()*0.5,Math.random()*1.5+0.4]);
@@ -354,15 +348,12 @@ input, select, button { max-width: 100%; }
   cx.globalCompositeOperation='source-over';
  }
 
- // F-7 / MiG-21 style fighter, nose pointing RIGHT (+x), centre line at y=0
  function body(gear){
   const dark='#5b6770',mid='#929ea8',lite='#c9d1d7';
   let g;
-
-  // ----- landing gear (retracts after rotation) -----
   if(gear>0.02){
-   const my=14+(G-14-6)*gear;       // main wheel centre
-   const ny=11+(G-11-4.5)*gear;     // nose wheel centre
+   const my=14+(G-14-6)*gear;
+   const ny=11+(G-11-4.5)*gear;
    cx.strokeStyle='#2a3238';cx.lineWidth=3;cx.lineCap='round';
    cx.beginPath();cx.moveTo(-14,13);cx.lineTo(-14,my);cx.stroke();
    cx.beginPath();cx.moveTo(78,12);cx.lineTo(78,ny);cx.stroke();
@@ -374,30 +365,24 @@ input, select, button { max-width: 100%; }
    cx.beginPath();cx.arc(78,ny,1.8,0,6.3);cx.fill();
   }
 
-  // ----- optional real photo sprite (jet.png) -----
   if(jetImgOK){
    const iw=270,ih=iw*jetImg.naturalHeight/jetImg.naturalWidth;
    cx.drawImage(jetImg,-135,-ih/2,iw,ih);
    return;
   }
 
-  // ----- tail fin + rudder -----
   cx.fillStyle=mid;cx.beginPath();
   cx.moveTo(-56,-14);cx.lineTo(-95,-54);cx.lineTo(-111,-54);cx.lineTo(-108,-10);cx.closePath();cx.fill();
   cx.strokeStyle='rgba(20,28,34,.6)';cx.lineWidth=0.8;
   cx.beginPath();cx.moveTo(-100,-52);cx.lineTo(-103,-11);cx.stroke();
-  // fin tip antenna light
   cx.fillStyle='#d9e0e5';cx.fillRect(-112,-57,16,3);
 
-  // ----- ventral fin -----
   cx.fillStyle=dark;cx.beginPath();
   cx.moveTo(-76,11);cx.lineTo(-94,27);cx.lineTo(-106,27);cx.lineTo(-104,10);cx.closePath();cx.fill();
 
-  // ----- all-moving stabilator -----
   cx.fillStyle=dark;cx.beginPath();
   cx.moveTo(-90,7);cx.lineTo(-122,19);cx.lineTo(-133,19);cx.lineTo(-112,5);cx.closePath();cx.fill();
 
-  // ----- fuselage -----
   g=cx.createLinearGradient(0,-22,0,16);
   g.addColorStop(0,lite);g.addColorStop(0.5,mid);g.addColorStop(1,dark);
   cx.fillStyle=g;cx.beginPath();
@@ -405,26 +390,22 @@ input, select, button { max-width: 100%; }
   cx.lineTo(-114,-7);cx.lineTo(-114,8);cx.lineTo(-100,11);cx.lineTo(-40,14);cx.lineTo(30,15);
   cx.lineTo(80,13);cx.lineTo(104,10);cx.closePath();cx.fill();
 
-  // ----- dorsal spine -----
   cx.fillStyle='#b1bbc3';cx.beginPath();
   cx.moveTo(14,-15);cx.quadraticCurveTo(-4,-24,-50,-21);cx.lineTo(-100,-13);cx.lineTo(-100,-11);
   cx.lineTo(-60,-15);cx.closePath();cx.fill();
 
-  // ----- panel lines -----
   cx.strokeStyle='rgba(20,28,34,.35)';cx.lineWidth=0.7;
   [[44,-13,44,13],[-8,-15,-8,14],[-36,-15,-36,13],[-82,-13,-82,11]].forEach(l=>{
    cx.beginPath();cx.moveTo(l[0],l[1]);cx.lineTo(l[2],l[3]);cx.stroke();
   });
   cx.beginPath();cx.moveTo(100,-1);cx.lineTo(-100,2);cx.stroke();
 
-  // ----- delta wing -----
   g=cx.createLinearGradient(0,8,0,30);
   g.addColorStop(0,'#a2adb6');g.addColorStop(1,'#6c7882');
   cx.fillStyle=g;cx.beginPath();
   cx.moveTo(34,10);cx.lineTo(-30,29);cx.lineTo(-72,29);cx.lineTo(-62,10);cx.closePath();cx.fill();
   cx.strokeStyle='rgba(15,22,28,.55)';cx.lineWidth=0.8;cx.stroke();
 
-  // ----- under-wing drop tank -----
   cx.fillStyle='#4a555d';cx.fillRect(-18,29,4,4);
   g=cx.createLinearGradient(0,30,0,41);
   g.addColorStop(0,'#c0c9cf');g.addColorStop(1,'#68737c');
@@ -432,7 +413,6 @@ input, select, button { max-width: 100%; }
   cx.fillStyle='#4a555d';cx.beginPath();
   cx.moveTo(-46,36);cx.lineTo(-52,31);cx.lineTo(-44,34);cx.closePath();cx.fill();
 
-  // ----- canopy -----
   g=cx.createLinearGradient(0,-31,0,-12);
   g.addColorStop(0,'rgba(200,236,255,.95)');g.addColorStop(1,'rgba(40,90,130,.92)');
   cx.fillStyle=g;cx.beginPath();
@@ -442,7 +422,6 @@ input, select, button { max-width: 100%; }
   cx.fillStyle='rgba(255,255,255,.55)';
   cx.beginPath();cx.ellipse(52,-21,6,2,-0.5,0,6.3);cx.fill();
 
-  // ----- nose intake + shock cone + pitot -----
   cx.fillStyle='#0e1317';cx.beginPath();cx.ellipse(103,0.5,4.5,10.5,0,0,6.3);cx.fill();
   g=cx.createLinearGradient(0,-8,0,9);
   g.addColorStop(0,'#dde3e8');g.addColorStop(1,'#7c8892');
@@ -451,12 +430,10 @@ input, select, button { max-width: 100%; }
   cx.strokeStyle='#4b565e';cx.lineWidth=1.2;
   cx.beginPath();cx.moveTo(136,1.5);cx.lineTo(154,1);cx.stroke();
 
-  // ----- engine nozzle -----
   cx.fillStyle='#2b2522';cx.fillRect(-119,-8,13,17);
   cx.strokeStyle='rgba(255,255,255,.18)';cx.lineWidth=0.8;
   for(let i=0;i<4;i++){cx.beginPath();cx.moveTo(-117+i*3.4,-8);cx.lineTo(-117+i*3.4,9);cx.stroke();}
 
-  // ----- national roundels -----
   cx.fillStyle='#00694c';cx.beginPath();cx.arc(-58,-2,6.2,0,6.3);cx.fill();
   cx.fillStyle='#e03c31';cx.beginPath();cx.arc(-59,-2,3.3,0,6.3);cx.fill();
   cx.fillStyle='#00694c';cx.beginPath();cx.arc(-93,-36,3.6,0,6.3);cx.fill();
@@ -473,10 +450,8 @@ input, select, button { max-width: 100%; }
   const thr=0.12+0.88*sm(j.ts-0.3,j.ts+0.7,t),ab=sm(j.ts-0.1,j.ts+1.4,t);
   let y=base-G*sc-alt;
   if(p>0&&alt===0)y+=(Math.random()-.5)*1.6;
-  // shadow
   cx.fillStyle='rgba(0,0,0,'+(0.35*Math.max(0,1-alt/(260*k)))+')';
   cx.beginPath();cx.ellipse(x,base+3*sc,120*sc,7*sc,0,0,6.3);cx.fill();
-  // ground glow from afterburner
   if(ab>0.05&&alt<150*k){
    const gl=cx.createRadialGradient(x-130*sc,base,0,x-130*sc,base,150*sc*ab+10);
    gl.addColorStop(0,'rgba(255,170,80,'+(0.3*ab)+')');gl.addColorStop(1,'rgba(255,120,40,0)');
@@ -485,7 +460,6 @@ input, select, button { max-width: 100%; }
   }
   cx.save();
   cx.translate(x,y);cx.scale(sc,sc);
-  // rotate nose-up around the main wheels
   cx.translate(-14,G);cx.rotate(-pitch);cx.translate(14,-G);
   flame(ab,thr);body(gear);
   cx.restore();
@@ -500,7 +474,6 @@ input, select, button { max-width: 100%; }
   cx.fillStyle=g;cx.fillRect(0,0,W,gy+2);
   cx.fillStyle='rgba(255,255,255,.7)';
   stars.forEach(s=>cx.fillRect(s[0]*W,s[1]*H,s[2],s[2]));
-  // distant hangars
   cx.fillStyle='#0b1518';
   const pw=420,off=(scroll*0.15)%pw;
   for(let b=-pw;b<W+pw;b+=pw){
@@ -510,7 +483,6 @@ input, select, button { max-width: 100%; }
   g=cx.createLinearGradient(0,gy,0,H);
   g.addColorStop(0,'#0c1a14');g.addColorStop(0.06,'#23282a');g.addColorStop(1,'#101315');
   cx.fillStyle=g;cx.fillRect(0,gy,W,H-gy);
-  // lights + center dashes
   const blink=0.6+0.4*Math.sin(t*6);
   for(let x=-(scroll%90);x<W;x+=90){
    cx.fillStyle='rgba(255,190,90,'+(0.55+0.4*blink)+')';
@@ -520,13 +492,11 @@ input, select, button { max-width: 100%; }
   }
   cx.fillStyle='rgba(235,235,225,.65)';
   [0.73,0.84].forEach(r=>{for(let x=-(scroll%110);x<W;x+=110)cx.fillRect(x,H*r,60*k+10,3*k+1);});
-  // jets (back to front) with shake
   cx.save();
   const sh=2.4*sm(3,8,t)*(1-sm(8.6,10,t));
   cx.translate((Math.random()-.5)*sh,(Math.random()-.5)*sh);
   jets.forEach(j=>drawJet(j,t,k));
   cx.restore();
-  // fade in from black
   cx.fillStyle='rgba(0,0,0,'+(1-sm(0,0.9,t))+')';cx.fillRect(0,0,W,H);
  }
 
@@ -585,16 +555,12 @@ const statuses=["All Duty On","All Duty Off","Leave","QRF Duty","CMH","Form 295"
 const statusShort={"All Duty On":"Duty On","All Duty Off":"Duty Off","Leave":"Leave","QRF Duty":"QRF Duty","CMH":"CMH","Form 295":"Form 295","On Parade":"On Parade","ON PT":"ON PT","ON FOD":"ON FOD","Civil Tech":"Civil Tech","TD/Courier":"TD/Courier","Mess/Canteen":"Mess/Canteen","CMH SR/FMLY SR":"CMH SR/FMLY SR","CMH / M Room Admit":"CMH / M Room Admit","Milk Duty":"Milk Duty","EDP/PG/ITD C":"EDP/PG/ITD C","BASAE Out/Exam":"BASAE Out/Exam","Under Clearance":"Under Clearance","GST/GH":"GST/GH","Afternoon":"Afternoon","Parade":"Parade","Out of Parade":"Out of Parade","Attachment":"Attachment"};
 const militaryOrder=["MWO","SWO","WO","SGT","CPL","LAC","AC"];let people=[];
 
-// Firebase keys may NOT contain "." -> new ids escape it. oldId keeps the previous format so old records still load.
 function slugOld(v){return encodeURIComponent(String(v==null?"":v).trim().toLowerCase())||"person"}
 function slugPart(v){return slugOld(v).replace(/\./g,"%2E")}
 function rebuildPeople(){
  people=[];
  ranks.forEach(g=>{
   if(!Array.isArray(g.names))g.names=[];
-  if(!Array.isArray(g.trades))g.trades=[];
-  while(g.trades.length<g.names.length)g.trades.push("");
-  if(g.trades.length>g.names.length)g.trades.length=g.names.length;
   const seen={};
   g.names.forEach((name,i)=>{
    name=String(name==null?"":name);
@@ -602,7 +568,7 @@ function rebuildPeople(){
    people.push({
     id:"p_"+slugPart(g.rank)+"_"+slugPart(name)+"_"+seen[key],
     oldId:"p_"+slugOld(g.rank)+"_"+slugOld(name)+"_"+seen[key],
-    legacyId:g.rank+"_"+i,rank:g.rank,name,trade:String(g.trades[i]==null?"":g.trades[i]).trim()
+    legacyId:g.rank+"_"+i,rank:g.rank,name
    });
   });
  });
@@ -611,12 +577,12 @@ rebuildPeople();
 
 function totalManpower(){return people.length}function militaryCount(){return people.filter(p=>militaryOrder.includes(p.rank)).length}const $=id=>document.getElementById(id);
 let current={},currentLeave={},currentDuty={},currentEd={},activeStatus="Leave",saved={},activeLeavePersonId=null,activeDutyPersonId=null,activeEdPersonId=null,pendingPreviousStatus="On Parade";
-let dutyFor="All Duty On"; // which status the duty window is for (All Duty On / All Duty Off)
-let detailEditMode=false; // true when a modal is opened from "Edit entry" (status stays, only details change)
+let dutyFor="All Duty On"; 
+let detailEditMode=false; 
 let undoStack = [];
 
 const today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
-let boundDate=today(); // the date that "current" belongs to
+let boundDate=today(); 
 function date(){return $("stateDate").value||today()}
 
 function pushUndo(){
@@ -652,7 +618,6 @@ function key(){return "state-office-manpower-v1"}function rosterKey(){return "st
 function rosterTsKey(){return "state-office-roster-ts-v1"}
 function syncFlagKey(){return "state-office-cloud-synced-v1"}
 
-// ---------- cloud sync state ----------
 let rosterTs=0,rosterDirty=false,cloudLoaded=false,migrating=false,flushing=false,flushWaiters=[];
 const pendingDates=new Set();
 
@@ -662,9 +627,7 @@ function normalizeRanks(r){
  const arr=Array.isArray(r)?r:Object.values(r);
  const out=arr.filter(g=>g&&typeof g.rank==="string").map(g=>{
   const names=(Array.isArray(g.names)?g.names:Object.values(g.names||{})).map(n=>String(n));
-  const tr=Array.isArray(g.trades)?g.trades:Object.values(g.trades||{});
-  const trades=names.map((_,i)=>String(tr[i]==null?"":tr[i]));
-  return {rank:g.rank,names,trades};
+  return {rank:g.rank,names};
  });
  return out.length?out:null;
 }
@@ -678,7 +641,6 @@ function cloudMsg(r){
  return "saved on this device";
 }
 
-// Sends everything pending (roster + changed dates) to Firebase in ONE update.
 function flushCloud(){
  if(!isCloudEnabled||!dbRef)return Promise.resolve("local");
  if(!cloudLoaded)return Promise.resolve("wait");
@@ -724,7 +686,6 @@ function initCloudListener(){
   const data=snap.val()||{};
   let rosterChanged=false;
 
-  // ---- ROSTER (names + trades): newest change wins, cloud is shared by all devices ----
   if(!rosterDirty){
    const cloudRanks=normalizeRanks(data.ranks);
    const localRanks=normalizeRanks(ranks)||[];
@@ -742,7 +703,6 @@ function initCloudListener(){
    }
   }
 
-  // ---- DAILY RECORDS ----
   const cloudSaved=(data.saved&&typeof data.saved==="object")?data.saved:{};
   let synced=false;
   try{synced=!!localStorage.getItem(syncFlagKey())}catch(e){}
@@ -795,7 +755,6 @@ function loadStore(){
 function persistLocalStore(){
  try{localStorage.setItem(key(),JSON.stringify(saved));return true}catch(e){return false}
 }
-// arg: a date string, or "all"
 function persistStore(arg){
  persistLocalStore();
  if(arg==="all")Object.keys(saved).forEach(d=>pendingDates.add(d));
@@ -833,7 +792,6 @@ function normalizeRecord(record){
  return out;
 }
 
-// load a day that already has a saved record (exactly as saved - nothing is forced on top)
 function applyRecord(record){
  const normalized=normalizeRecord(record||{});
  current=normalized.statuses;
@@ -842,10 +800,6 @@ function applyRecord(record){
  currentEd=normalized.edDetails;
 }
 
-// A day with NO saved record starts as a COPY of the most recent earlier day.
-// Everything stays the same (status + details). Only two things end by date:
-//  - Leave ends after its report date
-//  - ED/Course ends after its finish date  (those people go back to On Parade)
 function buildNewDay(S){
  current=blank();currentLeave={};currentDuty={};currentEd={};
  const prev=Object.keys(saved).filter(d=>d<S&&saved[d]).sort();
@@ -877,7 +831,6 @@ function loadDay(d){
  else buildNewDay(d);
 }
 
-// when an entry is corrected, later days that still carry the OLD entry are corrected too
 function propagateDetail(id,field,status,oldD,newD){
  if(!oldD||!newD)return;
  Object.keys(saved).forEach(d=>{
@@ -918,7 +871,6 @@ function formatDutyText(dutyStr){
  return dutyStr;
 }
 
-// short form used on the printed sheet: "T/F (Task Force) - C Shift" -> "TF-C", Night Off -> "Night Off"
 function shortDuty(d){
  if(!d)return "";
  const parts=String(d).split(" - ");
@@ -934,7 +886,7 @@ function renderRoster(){
  const rf=$("rankFilter").value||"All ranks",q=$("search").value.trim().toLowerCase();
  let html="";
  ranks.forEach(g=>{
-  const group=people.filter(p=>p.rank===g.rank&&(rf==="All ranks"||p.rank===rf)&&(!q||(p.name+" "+p.rank+" "+p.trade).toLowerCase().includes(q)));
+  const group=people.filter(p=>p.rank===g.rank&&(rf==="All ranks"||p.rank===rf)&&(!q||(p.name+" "+p.rank).toLowerCase().includes(q)));
   if(!group.length)return;
   html+=`<div class="rank-block"><div class="rank-head"><span>${esc(g.rank)}</span><span>${group.filter(p=>current[p.id]===activeStatus).length}/${group.length} · ${group.length} listed</span></div>`;
   group.forEach(p=>{
@@ -950,7 +902,7 @@ function renderRoster(){
     noteText=` · (TD)`;
    }
    const hasDetails=["Leave","All Duty On","All Duty Off","EDP/PG/ITD C"].includes(current[p.id]);
-   html+=`<div class="person"><div class="name"><b>${esc(p.name)}</b><small>${esc(p.rank)}${p.trade?" · "+esc(p.trade):""} · Current: ${esc(current[p.id])}${noteText}</small></div><input class="trade-in" type="text" data-trade="${esc(p.id)}" value="${esc(p.trade)}" placeholder="Trade (e.g. Wg Mech)" aria-label="Trade of ${esc(p.rank+" "+p.name)}"><select aria-label="Status for ${esc(p.rank+" "+p.name)}" data-person="${esc(p.id)}" data-previous="${esc(current[p.id])}">${statusOptions(current[p.id])}</select><div class="person-actions">${hasDetails?`<button class="secondary small" data-details="${esc(p.id)}" type="button">Edit entry</button>`:""}<button class="secondary small" data-edit="${esc(p.id)}" type="button">Edit</button><button class="danger small" data-delete="${esc(p.id)}" type="button">Delete</button></div></div>`;
+   html+=`<div class="person"><div class="name"><b>${esc(p.name)}</b><small>${esc(p.rank)} · Current: ${esc(current[p.id])}${noteText}</small></div><select aria-label="Status for ${esc(p.rank+" "+p.name)}" data-person="${esc(p.id)}" data-previous="${esc(current[p.id])}">${statusOptions(current[p.id])}</select><div class="person-actions">${hasDetails?`<button class="secondary small" data-details="${esc(p.id)}" type="button">Edit entry</button>`:""}<button class="secondary small" data-edit="${esc(p.id)}" type="button">Edit</button><button class="danger small" data-delete="${esc(p.id)}" type="button">Delete</button></div></div>`;
   });
   html+="</div>";
  });
@@ -976,16 +928,6 @@ function renderRoster(){
    renderAll(false);
    autoSaveBuffer();
   }
- });
- // Trade / Section box: saves permanently as soon as you leave the box
- $("roster").querySelectorAll("input[data-trade]").forEach(inp=>inp.onchange=()=>{
-  const p=people.find(x=>x.id===inp.dataset.trade);if(!p)return;
-  const g=ranks.find(x=>x.rank===p.rank),ix=nameIndex(p);
-  if(!g||ix<0)return;
-  g.trades[ix]=inp.value.trim();
-  rebuildPeople();
-  persistRoster();
-  renderAll(false);
  });
  $("roster").querySelectorAll("[data-details]").forEach(b=>b.onclick=()=>{
   const id=b.dataset.details,s=current[id];
@@ -1111,7 +1053,6 @@ $("saveEdBtn").onclick=()=>{
 
 function displayDate(iso){if(!iso)return "";const a=iso.split("-");return a.length===3?`${a[2]}.${a[1]}.${a[0].slice(-2)}`:iso}
 
-// index of this person's name inside ranks[rank].names
 function nameIndex(p){
  const g=ranks.find(x=>x.rank===p.rank);
  if(!g)return -1;
@@ -1128,7 +1069,7 @@ function deletePerson(id){
  const p=people.find(x=>x.id===id);if(!p||!confirm(`Delete ${p.rank} ${p.name}?`))return;
  const g=ranks.find(x=>x.rank===p.rank);
  const ix=nameIndex(p);
- if(g&&ix>=0){g.names.splice(ix,1);g.trades.splice(ix,1)}
+ if(g&&ix>=0){g.names.splice(ix,1);}
  delete current[id];delete currentLeave[id];delete currentDuty[id];delete currentEd[id];
  rebuildPeople();
  const pr=persistRoster();
@@ -1143,18 +1084,15 @@ function editPerson(id){
  const newRankIn=prompt("Edit rank:",p.rank);if(!newRankIn||!newRankIn.trim())return;
  const name=newName.trim(),rankIn=newRankIn.trim();
  const idx=nameIndex(p),oldG=ranks.find(x=>x.rank===p.rank);
- const oldId=p.id,oldOldId=p.oldId,trade=p.trade||"";
+ const oldId=p.id,oldOldId=p.oldId;
 
  let ng=ranks.find(x=>x.rank.toLowerCase()===rankIn.toLowerCase());
- if(!ng){ng={rank:rankIn,names:[],trades:[]};ranks.push(ng)}
+ if(!ng){ng={rank:rankIn,names:[]};ranks.push(ng)}
  let pos=-1;
  if(ng===oldG&&idx>=0){oldG.names[idx]=name;pos=idx}
  else{
-  if(oldG&&idx>=0){oldG.names.splice(idx,1);oldG.trades.splice(idx,1)}
+  if(oldG&&idx>=0){oldG.names.splice(idx,1);}
   ng.names.push(name);
-  if(!Array.isArray(ng.trades))ng.trades=[];
-  while(ng.trades.length<ng.names.length-1)ng.trades.push("");
-  ng.trades.push(trade);
  }
  rebuildPeople();
  const grp=people.filter(x=>x.rank===ng.rank);
@@ -1162,7 +1100,6 @@ function editPerson(id){
 
  if(np&&np.id!==oldId){
   const nid=np.id;
-  // move this person's data to the new id (today + every saved day)
   [current,currentLeave,currentDuty,currentEd].forEach(m=>{
    if(m[oldId]!==undefined){m[nid]=m[oldId];delete m[oldId]}
   });
@@ -1204,7 +1141,7 @@ function renderDetails(){
    else if((s==="All Duty On"||s==="All Duty Off")&&currentDuty[p.id]) tag=` (${esc(formatDutyText(currentDuty[p.id]))})`;
    else if(s==="EDP/PG/ITD C"&&currentEd[p.id]) tag=` (wef ${esc(displayDate(currentEd[p.id].from))} to ${esc(displayDate(currentEd[p.id].to))})`;
    else if(s==="TD/Courier") tag=` (TD)`;
-   return `<span style="display:inline-block;margin:2px 4px 2px 0;padding:3px 6px;border:1px solid var(--line);border-radius:6px">${esc(p.rank)} ${esc(p.name)}${p.trade?"-"+esc(p.trade):""}${tag}</span>`;
+   return `<span style="display:inline-block;margin:2px 4px 2px 0;padding:3px 6px;border:1px solid var(--line);border-radius:6px">${esc(p.rank)} ${esc(p.name)}${tag}</span>`;
   }).join(""):'<span class="empty">None assigned</span>'}</div></div>`;
  }).join("");
 }
@@ -1259,7 +1196,6 @@ function getActiveColumns(){
  return cols;
 }
 
-// ONE source of numbers used by the preview, print, PDF and Excel
 function computeGridData(){
  const cols = getActiveColumns();
  const rows = [];
@@ -1296,7 +1232,6 @@ function computeGridData(){
  return {cols,rows};
 }
 
-// like the printed sheet: TOTAL row shows every number (also 0); rank rows leave 0 blank except EFFECTIVE STRG
 function cellText(row,i,n){
  if(row.total)return String(n);
  if(n!==0)return String(n);
@@ -1314,9 +1249,6 @@ function generateGridHTML(){
  return h+"</tbody>";
 }
 
-// ONE source of list blocks used by the preview, print, PDF and Excel
-// Every name is printed like the paper sheet:  RANK Name-Trade-Detail   e.g.  SWO M. Ali-Wg Mech-A/L(02.11.26)
-// EVERY status has its own list (a list only prints when at least one person is in it)
 function buildListBlocks(){
  function getList(k){
   if(k==="Civil Tech") return people.filter(p=>p.rank==="Civilian"||(p.rank!=="Attachment"&&current[p.id]==="Civil Tech"));
@@ -1324,7 +1256,7 @@ function buildListBlocks(){
  }
 
  function block(k,title){
-  let list = k==="ATTACHMENT" ? people.filter(p=>p.rank==="Attachment"||current[p.id]==="Attachment") : getList(k);
+  let list = k==="ATTACHMENT" ? people.filter(p=>p.rank==="Attachment"||current[p.id]==="ATTACHMENT") : getList(k);
   if(!list.length) return null;
   if(k==="On Parade"||k==="ON PT"||k==="ON FOD") list = list.slice().sort((a,b)=>militaryOrder.indexOf(a.rank)-militaryOrder.indexOf(b.rank));
 
@@ -1339,10 +1271,7 @@ function buildListBlocks(){
      t = `${p.rank} ${p.name}`;
    }
 
-   if(p.trade) t += "-" + p.trade;
-
    if(k==="ATTACHMENT"){
-    // attached people: show their duty / leave beside the name too
     const s=current[p.id];
     if(s==="Leave"){
      const lv=currentLeave[p.id]||{};
@@ -1387,7 +1316,6 @@ function buildListBlocks(){
 
  const cols = layout.map(g=>g.map(([k,t])=>block(k,t)).filter(Boolean));
 
- // continuous numbering like the printed sheet: ON PARADE 1..n, ATTACHMENT n+1.., Civil Tech after that
  const flat=[].concat.apply([],cols);
  let base=0;
  flat.filter(b=>["On Parade","ON PT","ON FOD"].includes(b.k)).forEach(b=>{b.start=base;base+=b.items.length});
@@ -1418,7 +1346,6 @@ function generateListsHTML(){
  }).join("");
 }
 
-// ---------- shrink the whole sheet a little if it does not fit one A4 page ----------
 const MM_PX=96/25.4;
 function fitSheet(){
  const root=document.documentElement,el=$("printState");
@@ -1428,7 +1355,7 @@ function fitSheet(){
  const wasHidden=el.classList.contains("hidden");
  el.classList.remove("hidden");
  el.classList.add("measuring");
- const avail=(209-20-15)*MM_PX; // page height minus top and bottom margin
+ const avail=(209-20-15)*MM_PX;
  let k=1;
  for(let i=0;i<5;i++){
   root.style.setProperty("--k",String(k));
@@ -1500,7 +1427,7 @@ function renderAll(reRoster=true){
 
 function refreshRankSelectors(){const rf=$("rankFilter"),old=rf.value||"All ranks";rf.innerHTML='<option>All ranks</option>'+ranks.map(g=>`<option value="${esc(g.rank)}">${esc(g.rank)}</option>`).join("");rf.value=["All ranks",...ranks.map(g=>g.rank)].includes(old)?old:"All ranks";const ar=$("addRank"),prev=ar.value;ar.innerHTML=ranks.map(g=>`<option value="${esc(g.rank)}">${esc(g.rank)}</option>`).join("")+'<option value="__new__">New rank…</option>';ar.value=ranks.some(g=>g.rank===prev)?prev:(ranks[0]?.rank||"__new__")}
 
-// ===================== PDF (A4 landscape, same margins as print) =====================
+// ===================== PDF (A4 landscape) =====================
 function pdfOptions(){
  return {
   margin:       0,
@@ -1529,7 +1456,6 @@ $("savePdfBtn").addEventListener("click", function(e){
  });
 });
 
-// builds the PDF (same page as the print copy) and returns it as a Blob
 async function makePdfBlob(){
  renderPrintState();
  const printEl=$("printState");
@@ -1541,7 +1467,7 @@ async function makePdfBlob(){
  }
 }
 
-// ===================== SAVE (no download) =====================
+// ===================== SAVE =====================
 $("saveOnlyBtn").onclick=function(){
  const btn=this;btn.disabled=true;
  autoSaveBuffer().then(r=>{
@@ -1550,7 +1476,7 @@ $("saveOnlyBtn").onclick=function(){
  });
 };
 
-// ===================== SEND BY MAIL (PDF attached) =====================
+// ===================== SEND BY MAIL =====================
 let pendingPdf=null;
 try{$("mailTo").value=localStorage.getItem("state-office-mail-to")||""}catch(e){}
 $("mailTo").onchange=()=>{try{localStorage.setItem("state-office-mail-to",$("mailTo").value.trim())}catch(e){}};
@@ -1558,7 +1484,6 @@ $("mailTo").onchange=()=>{try{localStorage.setItem("state-office-mail-to",$("mai
 function mailSubject(){return "Parade State - AC Taking & Handing Over Flt - "+date().split("-").reverse().join("/")}
 function mailBody(){return "Please find attached the Parade/PT/FOD State of "+date().split("-").reverse().join("/")+".\n\nPrepared by: "+($("prepRank").value.trim()||"SGT")+" "+($("prepName").value.trim()||"PARVEZ")}
 
-// opens the phone / PC share sheet (Gmail, Outlook, Mail...) with the PDF already attached
 async function tryShareFile(){
  const f=pendingPdf;if(!f)return "none";
  try{
@@ -1572,7 +1497,6 @@ async function tryShareFile(){
  }
 }
 
-// fallback when the browser cannot attach files: download the PDF and open a ready mail draft
 function fallbackMail(){
  const f=pendingPdf;if(!f)return;
  const url=URL.createObjectURL(f);
@@ -1608,7 +1532,7 @@ $("shareGoBtn").onclick=async function(){
 };
 $("shareCancelBtn").onclick=()=>$("shareModal").classList.add("hidden");
 
-// ===================== EXCEL (.xlsx) EXPORT - same data & layout as the preview =====================
+// ===================== EXCEL (.xlsx) EXPORT =====================
 function getTypo(){
  const fam=$("fontFamilySelect").value;
  let name=fam.split(",")[0].replace(/['"]/g,"").trim();
@@ -1636,7 +1560,6 @@ async function buildExcel(){
  const box={top:thin,left:thin,bottom:thin,right:thin};
  const rowH=Math.max(14,T.pt*1.4);
 
- // style + (optional merge) helper: styles EVERY cell in the range, then writes the value
  function put(r1,c1,r2,c2,val,o){
   o=o||{};
   if(r1!==r2||c1!==c2)ws.mergeCells(r1,c1,r2,c2);
@@ -1653,11 +1576,9 @@ async function buildExcel(){
   if(val!==undefined&&val!==null)ws.getCell(r1,c1).value=val;
  }
 
- // column widths (about 11.5 mm each so the sheet fills the A4 width)
  ws.getColumn(1).width=6.8;
  for(let c=2;c<=total;c++)ws.getColumn(c).width=5.7;
 
- // ---- 1) two-line title + date ----
  let r=1;
  put(r,1,r,total,"PARADE STATE",{underline:true,bold:true,size:T.pt+1});
  ws.getRow(r).height=Math.max(16,(T.pt+1)*1.5);
@@ -1669,12 +1590,10 @@ async function buildExcel(){
  ws.getRow(r).height=Math.max(16,(T.pt+1)*1.5);
  r++;
 
- // optional custom note
  const note=$("customNoteInput").value.trim();
  if(note){put(r,1,r,total,note,{size:Math.max(6,T.pt-1)});ws.getRow(r).height=14;r++}
  ws.getRow(r).height=6;r++;
 
- // ---- 2) main grid (no shading, thin black lines, like the printed sheet) ----
  const hs=Math.max(6,T.pt-1.5);
  put(r,1,r,1,"RANK",{rot:90,wrap:true,border:box,size:hs,v:"bottom"});
  cols.forEach((c,i)=>put(r,i+2,r,i+2,c[0],{rot:90,wrap:true,border:box,size:hs,v:"bottom"}));
@@ -1691,7 +1610,6 @@ async function buildExcel(){
  });
  ws.getRow(r).height=8;r++;
 
- // ---- 3) five list columns (same order, split and numbering as the preview) ----
  const listStart=r;
  const W5=[1.45,1.2,1.0,1.9,0.95],sumW=W5.reduce((a,b)=>a+b,0);
  let acc=0,cs=1;const ends=[];
@@ -1715,7 +1633,7 @@ async function buildExcel(){
    }else{
     b.items.forEach((t,i)=>{put(rr,cs,rr,ce,label(b.start+i+1,t),{h:"left",shrink:true});rr++});
    }
-   rr++; // gap between blocks
+   rr++;
   });
   ends.push(rr);
   cs=ce+1;
@@ -1724,7 +1642,6 @@ async function buildExcel(){
  for(let x=listStart;x<endRow;x++)ws.getRow(x).height=Math.max(13,T.pt*1.3);
  r=endRow+1;
 
- // ---- 4) signatures ----
  const a=Math.round(total/3),b2=Math.round(total*2/3);
  const sp=[[1,a],[a+1,b2],[b2+1,total]];
  put(r,sp[0][0],r,sp[0][1],"PREPARED BY",{underline:true,bold:true,h:"left"});
@@ -1778,7 +1695,6 @@ $("clearAllParadeBtn").addEventListener("click", function(e){
  clearAllToParade();
 });
 
-// saves the current screen state under the date it BELONGS to (boundDate); returns a Promise with the cloud result
 function autoSaveBuffer(){
  const d=boundDate;
  saved[d]={statuses:{...current},leaveDetails:{...currentLeave},dutyDetails:{...currentDuty},edDetails:{...currentEd},savedAt:new Date().toISOString()};
@@ -1867,7 +1783,6 @@ $("importFile").onchange=e=>{
 
 $("stateDate").value=today();
 $("stateDate").onchange=()=>{
- // save what is on screen under the OLD date (only if that day was already saved/edited), then switch
  if(saved[boundDate])autoSaveBuffer();
  loadDay(date());
  renderAll();
@@ -1879,7 +1794,7 @@ window.addEventListener("beforeprint",()=>{renderPrintState()});
 $("togglePreviewBtn").onclick=()=>$("screenPreviewSection").classList.toggle("hidden");
 
 $("assignAllBtn").onclick=()=>{
- const rf=$("rankFilter").value||"All ranks",q=$("search").value.trim().toLowerCase(),ps=people.filter(p=>(rf==="All ranks"||p.rank===rf)&&(!q||(p.name+" "+p.rank+" "+p.trade).toLowerCase().includes(q)));
+ const rf=$("rankFilter").value||"All ranks",q=$("search").value.trim().toLowerCase(),ps=people.filter(p=>(rf==="All ranks"||p.rank===rf)&&(!q||(p.name).toLowerCase().includes(q)));
  if(!ps.length)return alert("No personnel match filters.");
  if(!confirm(`Set ${ps.length} personnel to "${activeStatus}"?`))return;
  pushUndo();
@@ -1892,20 +1807,17 @@ $("clearFilterBtn").onclick=()=>{$("rankFilter").value="All ranks";$("search").v
 $("loadBtn").onclick=()=>loadDate();
 
 $("addPersonBtn").onclick=()=>{
- const name=$("newName").value.trim(),selected=$("addRank").value,custom=$("newRank").value.trim(),trade=$("newTrade").value.trim();
+ const name=$("newName").value.trim(),selected=$("addRank").value,custom=$("newRank").value.trim();
  if(!name)return alert("Enter personnel name.");
  let rank = selected==="__new__" ? custom : selected;
  if(!rank)return alert("Choose a rank or category.");
  let g=ranks.find(x=>x.rank.toLowerCase()===rank.toLowerCase());
- if(!g){g={rank,names:[],trades:[]};ranks.push(g)}
- if(!Array.isArray(g.trades))g.trades=[];
- while(g.trades.length<g.names.length)g.trades.push("");
+ if(!g){g={rank,names:[]};ranks.push(g)}
  g.names.push(name);
- g.trades.push(trade);
  rebuildPeople();
  ensureCurrent();
  const pr=persistRoster();
- $("newName").value=""; $("newRank").value=""; $("newTrade").value="";
+ $("newName").value=""; $("newRank").value="";
  renderAll();
  autoSaveBuffer();
  pr.then(r=>alert("Manpower added - "+cloudMsg(r)));
