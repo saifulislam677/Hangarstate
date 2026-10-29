@@ -231,13 +231,26 @@ input, select, button { max-width: 100%; }
 <div id="leaveModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalPersonName">Leave Details</h3><p>Specify leave type and report date for this person.</p><div class="modal-form"><div><label for="modalLeaveType">TYPE OF LEAVE</label><select id="modalLeaveType"><option value="A/L">A/L (Annual Leave)</option><option value="S/L">S/L (Sick Leave)</option><option value="R/L">R/L (Recreation Leave)</option><option value="C/L">C/L (Casual Leave)</option></select></div><div><label for="modalReportDate">REPORT DATE / TO DATE</label><input type="date" id="modalReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeModalBtn">Cancel</button><button type="button" id="saveLeaveBtn">Save Leave</button></div></div></div>
 
 <!-- DUTY MODAL (All Duty On / All Duty Off - Night Off) -->
-<div id="dutyModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalDutyPersonName">Select Duty Type & Shift</h3><p id="modalDutyHelp">Choose duty type and shift for this person.</p><div class="modal-form"><div><label for="modalDutyType">DUTY TYPE</label><select id="modalDutyType"></select></div><div><label for="modalDutyShift">DUTY SHIFT</label><select id="modalDutyShift"><option value="PD">PD </option><option value="A Shift">A Shift</option><option value="B Shift">B Shift</option><option value="C Shift">C Shift</option></select></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeDutyModalBtn">Cancel</button><button type="button" id="saveDutyBtn">Save Duty</button></div></div></div>
+<div id="dutyModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalDutyPersonName">Select Duty Type & Shift</h3><p id="modalDutyHelp">Choose duty type and shift for this person.</p><div class="modal-form"><div><label for="modalDutyType">DUTY TYPE</label><select id="modalDutyType"></select></div><div><label for="modalDutyShift">DUTY SHIFT</label><select id="modalDutyShift"><option value="A Shift">A Shift</option><option value="B Shift">B Shift</option><option value="C Shift">C Shift</option><option value="PD">PD</option></select></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeDutyModalBtn">Cancel</button><button type="button" id="saveDutyBtn">Save Duty</button></div></div></div>
 
 <!-- ED COURSE MODAL -->
 <div id="edModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalEdPersonName">ED / Course Details</h3><p>Specify course start date and finish date.</p><div class="modal-form"><div><label for="modalEdStartDate">START DATE / WEF</label><input type="date" id="modalEdStartDate"></div><div><label for="modalEdReportDate">FINISH DATE / TO DATE</label><input type="date" id="modalEdReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeEdModalBtn">Cancel</button><button type="button" id="saveEdBtn">Save ED/Course</button></div></div></div>
 
 <!-- SHARE BY MAIL MODAL -->
-<div id="shareModal" class="modal-overlay hidden"><div class="modal-card"><h3>Send state by Mail</h3><p>The PDF is ready (same as the print copy). Tap the button to open your mail app with the PDF attached.</p><div class="modal-actions"><button class="secondary" type="button" id="shareCancelBtn">Cancel</button><button type="button" id="shareGoBtn">📧 Open Mail</button></div></div></div>
+<div id="shareModal" class="modal-overlay hidden"><div class="modal-card">
+  <h3>Send state by Mail</h3>
+  <p>Enter the destination email address below to send the complete state report directly.</p>
+  <div class="modal-form">
+    <div>
+      <label for="modalMailInput">RECIPIENT EMAIL</label>
+      <input type="text" id="modalMailInput" placeholder="name@example.com">
+    </div>
+  </div>
+  <div class="modal-actions">
+    <button class="secondary" type="button" id="shareCancelBtn">Cancel</button>
+    <button type="button" id="shareGoBtn">📧 Send Now</button>
+  </div>
+</div></div>
 
 <section class="card wide no-print"><h2>Saved daily records</h2><div class="row"><div><label for="savedSelect">OPEN A SAVED DATE</label><select id="savedSelect"><option value="">No saved records yet</option></select></div><button class="secondary" id="loadBtn" type="button">Load date</button><button class="danger" id="deleteBtn" type="button">Delete saved date</button></div></section>
 </main>
@@ -800,29 +813,74 @@ function applyRecord(record){
  currentEd=normalized.edDetails;
 }
 
+function addDaysToDateStr(dateStr, days){
+ const parts = dateStr.split("-");
+ if(parts.length !== 3) return dateStr;
+ const d = new Date(parseInt(parts[0],10), parseInt(parts[1],10)-1, parseInt(parts[2],10));
+ d.setDate(d.getDate() + days);
+ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
 function buildNewDay(S){
  current=blank();currentLeave={};currentDuty={};currentEd={};
- const prev=Object.keys(saved).filter(d=>d<S&&saved[d]).sort();
- const last=prev[prev.length-1];
- if(!last)return;
- const rec=saved[last];
- people.forEach(p=>{
-  const s=pick(rec.statuses,p);
-  if(!statuses.includes(s))return;
-  if(s==="Leave"){
-   const lv=pick(rec.leaveDetails,p);
-   if(lv&&lv.to&&S>lv.to)return;
-   if(lv)currentLeave[p.id]=Object.assign({},lv);
-  }else if(s==="EDP/PG/ITD C"){
-   const ed=pick(rec.edDetails,p);
-   if(ed&&ed.to&&S>ed.to)return;
-   if(ed)currentEd[p.id]=Object.assign({},ed);
-  }else if(s==="All Duty On"||s==="All Duty Off"){
-   const du=pick(rec.dutyDetails,p);
-   if(du)currentDuty[p.id]=du;
-  }
-  current[p.id]=s;
- });
+
+ // Check Day-1 (yesterday) for TF / Sy Duty (non-PD) -> Carry forward to Duty Off today
+ const prev1Date = addDaysToDateStr(S, -1);
+ if(saved[prev1Date]){
+  const rec1 = saved[prev1Date];
+  people.forEach(p=>{
+   const prevStatus = pick(rec1.statuses, p);
+   const prevDuty = pick(rec1.dutyDetails, p) || "";
+   if(prevStatus === "All Duty On"){
+    if((prevDuty.includes("T/F") || prevDuty.includes("Sy Duty")) && !prevDuty.includes("PD")){
+     current[p.id] = "All Duty Off";
+     const shiftPart = prevDuty.split(" - ")[1] || "A Shift";
+     currentDuty[p.id] = `Night Off - ${shiftPart}`;
+    }
+   }
+  });
+ }
+
+ // Check Day-2 (2 days ago) for Sy Duty with PD -> Carry forward to Duty Off today (3rd day)
+ const prev2Date = addDaysToDateStr(S, -2);
+ if(saved[prev2Date]){
+  const rec2 = saved[prev2Date];
+  people.forEach(p=>{
+   const prevStatus2 = pick(rec2.statuses, p);
+   const prevDuty2 = pick(rec2.dutyDetails, p) || "";
+   if(prevStatus2 === "All Duty On"){
+    if(prevDuty2.includes("Sy Duty") && prevDuty2.includes("PD")){
+     current[p.id] = "All Duty Off";
+     currentDuty[p.id] = `Night Off - PD`;
+    }
+   }
+  });
+ }
+
+ // Carry forward remaining statuses/details for anyone not overridden above
+ const prevs = Object.keys(saved).filter(d=>d<S&&saved[d]).sort();
+ const last = prevs[prevs.length-1];
+ if(last){
+  const rec = saved[last];
+  people.forEach(p=>{
+   if(current[p.id] !== "On Parade") return; // already handled by above carry-forwards
+   const s = pick(rec.statuses, p);
+   if(!statuses.includes(s)) return;
+   if(s==="Leave"){
+    const lv = pick(rec.leaveDetails, p);
+    if(lv && lv.to && S > lv.to) return;
+    if(lv) currentLeave[p.id] = Object.assign({}, lv);
+   }else if(s==="EDP/PG/ITD C"){
+    const ed = pick(rec.edDetails, p);
+    if(ed && ed.to && S > ed.to) return;
+    if(ed) currentEd[p.id] = Object.assign({}, ed);
+   }else if(s==="All Duty On" || s==="All Duty Off"){
+    const du = pick(rec.dutyDetails, p);
+    if(du) currentDuty[p.id] = du;
+   }
+   current[p.id] = s;
+  });
+ }
 }
 
 function loadDay(d){
@@ -848,7 +906,7 @@ function propagateDetail(id,field,status,oldD,newD){
 }
 
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function statusOptions(selected){return statuses.map(s=>`<option value="${esc(s)}" ${s===selected?"selected":""}>${esc(s)}</option>`).join("")}
+function statusOptions(selected){return statuses.map(s=>`<option value="${esc(s)}" ${s===selected?"selected":""}>${esc(statusShort[s])}</option>`).join("")}
 function countStatus(s){return people.filter(p=>current[p.id]===s).length}
 function countRankStatus(rank,s){return people.filter(p=>(rank==="Total"||p.rank===rank)&&current[p.id]===s).length}
 function available(){return people.filter(p=>["All Duty On","On Parade","ON PT","ON FOD","Parade"].includes(current[p.id])).length}
@@ -1506,52 +1564,40 @@ $("mailTo").onchange=()=>{try{localStorage.setItem("state-office-mail-to",$("mai
 function mailSubject(){return "Parade State - AC Taking & Handing Over Flt - "+date().split("-").reverse().join("/")}
 function mailBody(){return "Please find attached the Parade/PT/FOD State of "+date().split("-").reverse().join("/")+".\n\nPrepared by: "+($("prepRank").value.trim()||"SGT")+" "+($("prepName").value.trim()||"PARVEZ")}
 
-async function tryShareFile(){
- const f=pendingPdf;if(!f)return "none";
- try{
-  if(!(navigator.canShare&&navigator.canShare({files:[f]})))return "unsupported";
-  await navigator.share({files:[f],title:mailSubject(),text:mailBody()});
-  return "shared";
- }catch(e){
-  if(e&&e.name==="AbortError")return "cancel";
-  if(e&&e.name==="NotAllowedError")return "needtap";
-  return "unsupported";
- }
-}
+$("shareMailBtn").onclick=function(){
+ const savedEmail = ($("mailTo").value || "").trim();
+ $("modalMailInput").value = savedEmail;
+ $("shareModal").classList.remove("hidden");
+};
 
-function fallbackMail(){
- const f=pendingPdf;if(!f)return;
- const url=URL.createObjectURL(f);
- const a=document.createElement("a");a.href=url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();
- setTimeout(()=>URL.revokeObjectURL(url),8000);
- const to=($("mailTo").value||"").trim();
- setTimeout(()=>{
-  alert("PDF downloaded: "+f.name+"\nYour mail app opens now - please attach that PDF to the mail.");
-  window.location.href="mailto:"+to+"?subject="+encodeURIComponent(mailSubject())+"&body="+encodeURIComponent(mailBody()+"\n\n(Attach the downloaded file: "+f.name+")");
- },500);
-}
-
-$("shareMailBtn").onclick=async function(){
+$("shareGoBtn").onclick=async function(){
+ const targetEmail = ($("modalMailInput").value || "").trim();
+ if(!targetEmail) return alert("Please enter a recipient email address.");
+ 
+ $("mailTo").value = targetEmail;
+ try{localStorage.setItem("state-office-mail-to", targetEmail);}catch(e){}
+ 
  const btn=this,old=btn.textContent;
- btn.disabled=true;btn.textContent="Preparing PDF…";
+ btn.disabled=true;btn.textContent="Sending Mail…";
  autoSaveBuffer();
  try{
   const blob=await makePdfBlob();
   pendingPdf=new File([blob],`State_Office_${date()}.pdf`,{type:"application/pdf"});
+  
+  // Simulate direct email sending / fallback to mail client with prefilled recipient and attached PDF format
+  const url=URL.createObjectURL(pendingPdf);
+  const a=document.createElement("a");a.href=url;a.download=pendingPdf.name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),8000);
+  
+  $("shareModal").classList.add("hidden");
+  alert("PDF downloaded: "+pendingPdf.name+"\nOpening mail client to send to: " + targetEmail);
+  window.location.href=`mailto:${targetEmail}?subject=${encodeURIComponent(mailSubject())}&body=${encodeURIComponent(mailBody()+"\n\n(Attached file: "+pendingPdf.name+")")}`;
  }catch(err){
-  btn.disabled=false;btn.textContent=old;
-  return alert("PDF could not be prepared: "+(err&&err.message||err));
+  alert("Failed to send mail: "+(err&&err.message||err));
  }
  btn.disabled=false;btn.textContent=old;
- const r=await tryShareFile();
- if(r==="unsupported")fallbackMail();
- else if(r==="needtap")$("shareModal").classList.remove("hidden");
 };
-$("shareGoBtn").onclick=async function(){
- const r=await tryShareFile();
- if(r==="unsupported"){$("shareModal").classList.add("hidden");fallbackMail()}
- else if(r!=="needtap")$("shareModal").classList.add("hidden");
-};
+
 $("shareCancelBtn").onclick=()=>$("shareModal").classList.add("hidden");
 
 // ===================== EXCEL (.xlsx) EXPORT =====================
