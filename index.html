@@ -231,7 +231,7 @@ input, select, button { max-width: 100%; }
 <div id="leaveModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalPersonName">Leave Details</h3><p>Specify leave type and report date for this person.</p><div class="modal-form"><div><label for="modalLeaveType">TYPE OF LEAVE</label><select id="modalLeaveType"><option value="A/L">A/L (Annual Leave)</option><option value="S/L">S/L (Sick Leave)</option><option value="R/L">R/L (Recreation Leave)</option><option value="C/L">C/L (Casual Leave)</option></select></div><div><label for="modalReportDate">REPORT DATE / TO DATE</label><input type="date" id="modalReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeModalBtn">Cancel</button><button type="button" id="saveLeaveBtn">Save Leave</button></div></div></div>
 
 <!-- DUTY MODAL (All Duty On / All Duty Off - Night Off) -->
-<div id="dutyModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalDutyPersonName">Select Duty Type & Shift</h3><p id="modalDutyHelp">Choose duty type and shift for this person.</p><div class="modal-form"><div><label for="modalDutyType">DUTY TYPE</label><select id="modalDutyType"></select></div><div><label for="modalDutyShift">DUTY SHIFT</label><select id="modalDutyShift"><option value="PD">PD</option><option value="A Shift">A Shift</option><option value="B Shift">B Shift</option><option value="C Shift">C Shift</option></select></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeDutyModalBtn">Cancel</button><button type="button" id="saveDutyBtn">Save Duty</button></div></div></div>
+<div id="dutyModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalDutyPersonName">Select Duty Type & Shift</h3><p id="modalDutyHelp">Choose duty type and shift for this person.</p><div class="modal-form"><div><label for="modalDutyType">DUTY TYPE</label><select id="modalDutyType"></select></div><div><label for="modalDutyShift">DUTY SHIFT</label><select id="modalDutyShift"><option value="PD">PD </option><option value="A Shift">A Shift</option><option value="B Shift">B Shift</option><option value="C Shift">C Shift</option></select></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeDutyModalBtn">Cancel</button><button type="button" id="saveDutyBtn">Save Duty</button></div></div></div>
 
 <!-- ED COURSE MODAL -->
 <div id="edModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalEdPersonName">ED / Course Details</h3><p>Specify course start date and finish date.</p><div class="modal-form"><div><label for="modalEdStartDate">START DATE / WEF</label><input type="date" id="modalEdStartDate"></div><div><label for="modalEdReportDate">FINISH DATE / TO DATE</label><input type="date" id="modalEdReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeEdModalBtn">Cancel</button><button type="button" id="saveEdBtn">Save ED/Course</button></div></div></div>
@@ -504,7 +504,7 @@ input, select, button { max-width: 100%; }
   if(done)return;done=true;
   try{if(N&&ac)N.master.gain.setTargetAtTime(0,ac.currentTime,0.12)}catch(e){}
   overlay.classList.add('fade-out');
-  setTimeout(()=>{overlay.remove();try{ac&&ac.close()}catch(eهه)},900);
+  setTimeout(()=>{overlay.remove();try{ac&&ac.close()}catch(e){}},900);
  }
  document.getElementById('introSkip').addEventListener('click',finish);
 
@@ -1249,6 +1249,25 @@ function generateGridHTML(){
  return h+"</tbody>";
 }
 
+function getCivilianTag(p){
+ const s = current[p.id];
+ if(!s || s === "On Parade" || s === "ON PT" || s === "ON FOD") return "";
+ if(s === "Leave"){
+  const lv = currentLeave[p.id] || {};
+  return lv.to ? `${lv.type || "A/L"}(${displayDate(lv.to)})` : (lv.type || "Leave");
+ }
+ if(s === "All Duty On" || s === "All Duty Off"){
+  const d = currentDuty[p.id];
+  return d ? shortDuty(d) : statusShort[s] || s;
+ }
+ if(s === "EDP/PG/ITD C"){
+  const ed = currentEd[p.id];
+  return ed && (ed.from || ed.to) ? `ED(wef ${displayDate(ed.from)} to ${displayDate(ed.to)})` : "ED";
+ }
+ if(s === "TD/Courier") return "TD";
+ return statusShort[s] || s;
+}
+
 function buildListBlocks(){
  function getList(k){
   if(k==="Civil Tech") return people.filter(p=>p.rank==="Civilian"||(p.rank!=="Attachment"&&current[p.id]==="Civil Tech"));
@@ -1266,7 +1285,8 @@ function buildListBlocks(){
      let cleanName = p.name.replace(/^(MWO|SWO|WO|SGT|CPL|LAC|AC)\s+/i, "");
      t = `${actualRank(p)} ${cleanName}`;
    } else if(p.rank==="Civilian"){
-     t = p.name;
+     const civTag = getCivilianTag(p);
+     t = civTag ? `${p.name} ${civTag}` : p.name;
    } else {
      t = `${p.rank} ${p.name}`;
    }
@@ -1281,14 +1301,16 @@ function buildListBlocks(){
     }else if(s&&s!=="On Parade"&&s!=="Attachment"){
      t+="-"+(statusShort[s]||s);
     }
-   } else if((k==="All Duty On"||k==="All Duty Off"||k==="Civil Tech") && currentDuty[p.id]){
-    t += "-" + shortDuty(currentDuty[p.id]);
-   } else if(k==="EDP/PG/ITD C" && currentEd[p.id]){
-    const ed = currentEd[p.id];
-    if(ed.from||ed.to) t += ` (wef ${displayDate(ed.from)} to ${displayDate(ed.to)})`;
-   } else if(k==="Leave"){
-     const lv = currentLeave[p.id]||{};
-     if(lv.to) t += `-${lv.type||"A/L"}(${displayDate(lv.to)})`;
+   } else if(p.rank!=="Civilian"){
+    if((k==="All Duty On"||k==="All Duty Off"||k==="Civil Tech") && currentDuty[p.id]){
+     t += "-" + shortDuty(currentDuty[p.id]);
+    } else if(k==="EDP/PG/ITD C" && currentEd[p.id]){
+     const ed = currentEd[p.id];
+     if(ed.from||ed.to) t += ` (wef ${displayDate(ed.from)} to ${displayDate(ed.to)})`;
+    } else if(k==="Leave"){
+      const lv = currentLeave[p.id]||{};
+      if(lv.to) t += `-${lv.type||"A/L"}(${displayDate(lv.to)})`;
+    }
    }
    return t;
   });
