@@ -19,13 +19,17 @@
 
 header{background:var(--green);color:#fff;padding:14px}header .eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--lime);font-weight:800}h1{font-size:20px;line-height:1.15;margin:4px 0}header p{margin:0;color:#d8e5df;font-size:12px}
 main{max-width:1100px;margin:auto;padding:10px;display:grid;gap:10px;position:relative;z-index:1}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;box-shadow:0 2px 8px #123b3208}.card h2{font-size:15px;margin:0 0 8px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1;min-width:130px}
-label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:3px}input,select,button{font:inherit;touch-action:manipulation}input[type=date],input[type=search],input[type=text],select{width:100%;padding:8px 10px;border:1px solid #cbd8d0;border-radius:6px;background:#fff;color:var(--ink);font-size:13px;position:relative;z-index:2}
+label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:3px}input,select,button{font:inherit;touch-action:manipulation}input[type=date],input[type=search],input[type=text],input[type=email],select{width:100%;padding:8px 10px;border:1px solid #cbd8d0;border-radius:6px;background:#fff;color:var(--ink);font-size:13px;position:relative;z-index:2}
 button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointer;background:var(--green);color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;position:relative;z-index:2}button.secondary{background:#e8efeb;color:var(--green)}button.danger{background:#fff0f0;color:var(--red);border:1px solid #f0cccc}button.small{padding:4px 6px;font-size:11px;min-height:28px}button:disabled{opacity:.6;cursor:wait}
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:6px}.metric{background:#f3f7f4;border:1px solid var(--line);border-radius:8px;padding:8px}.metric strong{display:block;font-size:18px;line-height:1.1}.metric span{font-size:11px;color:var(--muted)}
 .tabs{display:flex;gap:5px;overflow-x:auto;padding-bottom:3px}.tab{white-space:nowrap;background:#e8efeb;color:var(--green);padding:6px 8px;font-size:11px;border-radius:6px;flex-shrink:0}.tab.active{background:var(--green);color:#fff}.hint{font-size:11px;color:var(--muted);margin:5px 0 0}
 .rank-block{border:1px solid var(--line);border-radius:8px;margin-top:6px;overflow:hidden}.rank-head{background:#f2f6f3;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:12px}.person{display:flex;gap:6px;align-items:center;padding:8px;border-top:1px solid #edf1ee;flex-wrap:wrap}.person .name{flex:1 1 160px;min-width:0}.person small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.person select{flex:1 1 110px;max-width:100%;padding:6px;font-size:11px}.person-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap}
 .tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f3f7f4;color:#3e5148}.empty{color:var(--muted);padding:8px 0}.foot{font-size:11px;color:var(--muted);text-align:center;padding:8px}.statusnote{padding:6px 8px;border-radius:6px;background:#fff8df;color:#66531c;font-size:11px;margin-top:6px}.hidden{display:none!important}
-.modal-overlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:9999;padding:12px;backdrop-filter:blur(2px)}.modal-card{background:#fff;border-radius:12px;width:100%;max-width:400px;padding:16px;box-shadow:0 10px 25px #0003;animation:popIn .2s ease-out}@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}.modal-card h3{margin:0 0 3px;font-size:16px;color:var(--green)}.modal-card p{margin:0 0 10px;font-size:11px;color:var(--muted)}.modal-form{display:flex;flex-direction:column;gap:10px}.modal-actions{display:flex;gap:6px;margin-top:12px;justify-content:flex-end}
+.modal-overlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:9999;padding:12px;backdrop-filter:blur(2px)}.modal-card{background:#fff;border-radius:12px;width:100%;max-width:400px;padding:16px;box-shadow:0 10px 25px #0003;animation:popIn .2s ease-out}@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}.modal-card h3{margin:0 0 3px;font-size:16px;color:var(--green)}.modal-card p{margin:0 0 10px;font-size:11px;color:var(--muted)}.modal-form{display:flex;flex-direction:column;gap:10px}.modal-actions{display:flex;gap:6px;margin-top:12px;justify-content:flex-end;flex-wrap:wrap}
+.mail-status{margin-top:10px;padding:8px 10px;border-radius:6px;font-size:12px;line-height:1.4}
+.mail-status.ok{background:#e8f5e9;color:#1b5e20}
+.mail-status.err{background:#fdecea;color:#b3261e}
+.mail-status.wait{background:#fff8df;color:#66531c}
 
 #screenPreviewWrapper{background:#fff;border:2px solid var(--green);border-radius:8px;padding:12px;margin-top:10px;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 
@@ -48,7 +52,8 @@ button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointe
 .print-grid .vwrap{position:relative;width:100%;height:calc(32mm*var(--k))}
 .print-grid .rot-text{position:absolute;left:50%;top:50%;width:calc(30mm*var(--k));transform:translate(-50%,-50%) rotate(-90deg);transform-origin:center center;text-align:left;white-space:normal;word-break:break-word;line-height:1.1;font-size:calc((var(--fs) - 1.5pt)*var(--k));font-weight:var(--fw)}
 
-.print-layout-container{display:grid;grid-template-columns:1.45fr 1.2fr 1fr 1.9fr .95fr;gap:0 calc(3mm*var(--k));margin-top:calc(4mm*var(--k));align-items:start}
+/* gap between the numbers table and the lists (LEAVE / other disposal) */
+.print-layout-container{display:grid;grid-template-columns:1.45fr 1.2fr 1fr 1.9fr .95fr;gap:0 calc(3mm*var(--k));margin-top:calc(9mm*var(--k));align-items:start}
 .print-col{display:flex;flex-direction:column;gap:calc(2.5mm*var(--k));min-width:0}
 .print-block{break-inside:avoid;border:none;padding:0;background:#fff;min-width:0}
 .print-block h3{font-size:inherit;font-weight:700;text-decoration:underline;margin:0 0 calc(.8mm*var(--k));text-align:left;padding:0;background:transparent}
@@ -58,12 +63,13 @@ button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointe
 .print-block li .item-text{flex:1;min-width:0;word-break:break-word}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:0 calc(3mm*var(--k))}
 
-.signatures-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:calc(6mm*var(--k));min-height:calc(24mm*var(--k));align-items:start}
-.signatures-bottom b{display:block;font-weight:700;text-decoration:underline}
+/* signatures: PREPARED BY / JCOIC / OIC are on ONE line, gap above them, no hidden empty space below */
+.signatures-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:calc(12mm*var(--k));align-items:start}
+.signatures-bottom b{display:block;font-weight:700;text-decoration:underline;line-height:1.2;margin:0;padding:0}
 .signatures-bottom .sg-l{text-align:left;padding-left:calc(8mm*var(--k))}
 .signatures-bottom .sg-c{text-align:center}
 .signatures-bottom .sg-r{text-align:right;padding-right:calc(8mm*var(--k))}
-.signatures-bottom .sg-name{font-weight:700;margin-top:calc(1.5mm*var(--k))}
+.signatures-bottom .sg-name{font-weight:700;margin-top:calc(7mm*var(--k));line-height:1.2}
 
 /* page box used for print + PDF (hidden on screen) */
 #printState{width:297mm;height:209mm;padding:20mm 25mm 15mm 25mm;box-sizing:border-box;background:#fff;overflow:hidden}
@@ -161,7 +167,7 @@ input, select, button { max-width: 100%; }
   </div>
   <div style="display:flex;gap:6px;align-items:end;flex-wrap:wrap;margin-top:8px">
       <button id="saveOnlyBtn" type="button" style="background:#0b5ed7">💾 Save</button>
-      <button id="shareMailBtn" type="button" style="background:#b3261e">📧 Send by Mail (PDF)</button>
+      <button id="shareMailBtn" type="button" style="background:#b3261e">📧 Send by Email (PDF)</button>
       <button id="savePdfBtn" type="button" style="background:#1b4d3e">Save & Download PDF (A4 Landscape)</button>
       <button id="saveExcelBtn" type="button" style="background:#1d6f42">Save & Download Excel (.xlsx)</button>
       <button class="secondary" id="clearAllParadeBtn" type="button" style="background:#fff0f0;color:#a33232;border:1px solid #f0cccc">Clear All to On Parade</button>
@@ -171,6 +177,7 @@ input, select, button { max-width: 100%; }
   </div>
   <p class="hint">Every change is saved automatically. The <b>💾 Save</b> button is only for extra safety (no download).</p>
   <p class="hint">Every status you assign (Leave, Duty On / Off, Milk Duty, Mess, ED, etc.) gets its own list on the sheet.</p>
+  <p class="hint"><b>Prepared By:</b> the name is saved with each day's state. An old date always shows the name that was used on that date; a new date starts with the latest name.</p>
   <p class="hint"><b>Daily carry-forward:</b> a new date starts exactly like the previous day (everyone keeps the same status). Leave ends after its report date and ED/Course after its finish date. Wrong date entered? Tap <b>Edit entry</b> on that person.</p>
   <p class="hint"><b>Print setup:</b> Paper A4 · Landscape · Margins Default/None · Scale 100% · Headers and footers OFF. Page margins are built in (left/right 25 mm, top 20 mm, bottom 15 mm).</p>
 </section>
@@ -236,19 +243,21 @@ input, select, button { max-width: 100%; }
 <!-- ED COURSE MODAL -->
 <div id="edModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalEdPersonName">ED / Course Details</h3><p>Specify course start date and finish date.</p><div class="modal-form"><div><label for="modalEdStartDate">START DATE / WEF</label><input type="date" id="modalEdStartDate"></div><div><label for="modalEdReportDate">FINISH DATE / TO DATE</label><input type="date" id="modalEdReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeEdModalBtn">Cancel</button><button type="button" id="saveEdBtn">Save ED/Course</button></div></div></div>
 
-<!-- SHARE BY MAIL MODAL -->
+<!-- SEND BY EMAIL MODAL -->
 <div id="shareModal" class="modal-overlay hidden"><div class="modal-card">
-  <h3>Send state by Mail</h3>
-  <p>Enter the destination email address below to send the complete state report directly.</p>
+  <h3>Send state by Email</h3>
+  <p>Type the email address and press <b>Send</b>. The PDF (same as the print copy) is attached automatically.</p>
   <div class="modal-form">
     <div>
       <label for="modalMailInput">RECIPIENT EMAIL</label>
-      <input type="text" id="modalMailInput" placeholder="name@example.com">
+      <input type="email" id="modalMailInput" placeholder="name@example.com" autocomplete="email">
     </div>
   </div>
+  <div id="mailStatus" class="mail-status hidden"></div>
   <div class="modal-actions">
-    <button class="secondary" type="button" id="shareCancelBtn">Cancel</button>
-    <button type="button" id="shareGoBtn">📧 Send Now</button>
+    <button class="secondary" type="button" id="shareCancelBtn">Close</button>
+    <button class="secondary hidden" type="button" id="shareFallbackBtn">Open in my mail app instead</button>
+    <button type="button" id="shareGoBtn">📧 Send</button>
   </div>
 </div></div>
 
@@ -740,6 +749,7 @@ function initCloudListener(){
   if(!modalOpen){
    if(saved[boundDate])applyRecord(saved[boundDate]);
    else buildNewDay(boundDate);
+   applyPrep(boundDate);
   }
   cloudLoaded=true;
   setBadge("Cloud Active ✓",true);
@@ -789,7 +799,8 @@ function pick(o,p){
 }
 
 function normalizeRecord(record){
- const out={statuses:{},leaveDetails:{},dutyDetails:{},edDetails:{},savedAt:record&&record.savedAt||new Date().toISOString()};
+ const out={statuses:{},leaveDetails:{},dutyDetails:{},edDetails:{},savedAt:record&&record.savedAt||new Date().toISOString(),
+  prepName:String(record&&record.prepName||""),prepRank:String(record&&record.prepRank||"")};
  const st=record&&record.statuses&&typeof record.statuses==="object"?record.statuses:{};
  const lv=record&&record.leaveDetails&&typeof record.leaveDetails==="object"?record.leaveDetails:{};
  const dt=record&&record.dutyDetails&&typeof record.dutyDetails==="object"?record.dutyDetails:{};
@@ -811,6 +822,30 @@ function applyRecord(record){
  currentLeave=normalized.leaveDetails;
  currentDuty=normalized.dutyDetails;
  currentEd=normalized.edDetails;
+}
+
+// ---------- PREPARED BY (saved with every day's state) ----------
+// a saved day shows the name used on THAT day; an old day without a name, or a new day, uses the latest earlier name
+function resolvePrep(d){
+ const rec=saved[d];
+ if(rec&&rec.prepName)return {name:rec.prepName,rank:rec.prepRank||""};
+ const ks=Object.keys(saved).filter(k=>k<d&&saved[k]&&saved[k].prepName).sort();
+ if(ks.length){const r=saved[ks[ks.length-1]];return {name:r.prepName,rank:r.prepRank||""}}
+ let g=null;try{g=JSON.parse(localStorage.getItem("state-office-prep-v1")||"null")}catch(e){}
+ if(g&&g.name)return {name:g.name,rank:g.rank||""};
+ return {name:"PARVEZ",rank:"SGT"};
+}
+function applyPrep(d){
+ const ae=document.activeElement;
+ if(ae&&(ae.id==="prepName"||ae.id==="prepRank"))return;
+ const pp=resolvePrep(d);
+ $("prepName").value=pp.name;
+ $("prepRank").value=pp.rank;
+}
+function onPrepChange(){
+ try{localStorage.setItem("state-office-prep-v1",JSON.stringify({name:$("prepName").value.trim(),rank:$("prepRank").value.trim()}))}catch(e){}
+ renderPrintState();
+ autoSaveBuffer();
 }
 
 function addDaysToDateStr(dateStr, days){
@@ -887,6 +922,7 @@ function loadDay(d){
  boundDate=d;
  if(saved[d])applyRecord(saved[d]);
  else buildNewDay(d);
+ applyPrep(d);
 }
 
 function propagateDetail(id,field,status,oldD,newD){
@@ -1492,7 +1528,9 @@ $("fontWeightSelect").onchange = function(){ renderPrintState(); };
 $("customNoteInput").oninput = renderPrintState;
 $("editNotesBtn").onclick = function(){ $("customNoteInput").parentNode.classList.toggle("hidden"); };
 
+// Prepared By: live preview while typing, saved with the day's state when you leave the box
 $("prepName").oninput=renderPrintState;$("prepRank").oninput=renderPrintState;
+$("prepName").onchange=onPrepChange;$("prepRank").onchange=onPrepChange;
 
 function renderAll(reRoster=true){
  ensureCurrent();
@@ -1556,7 +1594,8 @@ $("saveOnlyBtn").onclick=function(){
  });
 };
 
-// ===================== SEND BY MAIL =====================
+// ===================== SEND BY EMAIL (direct, PDF attached) =====================
+// Uses the free FormSubmit.co mail relay: the browser posts the PDF and FormSubmit emails it to the address you type.
 let pendingPdf=null;
 try{$("mailTo").value=localStorage.getItem("state-office-mail-to")||""}catch(e){}
 $("mailTo").onchange=()=>{try{localStorage.setItem("state-office-mail-to",$("mailTo").value.trim())}catch(e){}};
@@ -1564,40 +1603,96 @@ $("mailTo").onchange=()=>{try{localStorage.setItem("state-office-mail-to",$("mai
 function mailSubject(){return "Parade State - AC Taking & Handing Over Flt - "+date().split("-").reverse().join("/")}
 function mailBody(){return "Please find attached the Parade/PT/FOD State of "+date().split("-").reverse().join("/")+".\n\nPrepared by: "+($("prepRank").value.trim()||"SGT")+" "+($("prepName").value.trim()||"PARVEZ")}
 
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function setMailStatus(kind,html){
+ const el=$("mailStatus");
+ el.className="mail-status "+kind;
+ el.innerHTML=html;
+}
+function nowTime(){return new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}
+
+// backup way: download the PDF and open the mail app with the address filled in
+function fallbackMail(to){
+ const f=pendingPdf;if(!f)return;
+ const url=URL.createObjectURL(f);
+ const a=document.createElement("a");a.href=url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),8000);
+ setTimeout(()=>{
+  alert("PDF downloaded: "+f.name+"\nYour mail app opens now - please attach that PDF to the mail.");
+  window.location.href="mailto:"+to+"?subject="+encodeURIComponent(mailSubject())+"&body="+encodeURIComponent(mailBody()+"\n\n(Attach the downloaded file: "+f.name+")");
+ },400);
+}
+
 $("shareMailBtn").onclick=function(){
- const savedEmail = ($("mailTo").value || "").trim();
- $("modalMailInput").value = savedEmail;
+ $("modalMailInput").value=($("mailTo").value||"").trim();
+ $("mailStatus").className="mail-status hidden";
+ $("shareFallbackBtn").classList.add("hidden");
  $("shareModal").classList.remove("hidden");
+ setTimeout(()=>$("modalMailInput").focus(),50);
 };
 
-$("shareGoBtn").onclick=async function(){
- const targetEmail = ($("modalMailInput").value || "").trim();
- if(!targetEmail) return alert("Please enter a recipient email address.");
- 
- $("mailTo").value = targetEmail;
- try{localStorage.setItem("state-office-mail-to", targetEmail);}catch(e){}
- 
- const btn=this,old=btn.textContent;
- btn.disabled=true;btn.textContent="Sending Mail…";
+async function doSendEmail(){
+ const to=($("modalMailInput").value||"").trim();
+ if(!EMAIL_RE.test(to)){
+  setMailStatus("err","Please type a valid email address (example: name@example.com).");
+  return;
+ }
+ $("mailTo").value=to;
+ try{localStorage.setItem("state-office-mail-to",to)}catch(e){}
+
+ const btn=$("shareGoBtn"),old=btn.textContent;
+ btn.disabled=true;btn.textContent="Sending…";
+ $("shareFallbackBtn").classList.add("hidden");
+ setMailStatus("wait","Preparing the PDF and sending to <b>"+esc(to)+"</b> …");
  autoSaveBuffer();
+
  try{
   const blob=await makePdfBlob();
-  pendingPdf=new File([blob],`State_Office_${date()}.pdf`,{type:"application/pdf"});
-  
-  // Simulate direct email sending / fallback to mail client with prefilled recipient and attached PDF format
-  const url=URL.createObjectURL(pendingPdf);
-  const a=document.createElement("a");a.href=url;a.download=pendingPdf.name;document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),8000);
-  
-  $("shareModal").classList.add("hidden");
-  alert("PDF downloaded: "+pendingPdf.name+"\nOpening mail client to send to: " + targetEmail);
-  window.location.href=`mailto:${targetEmail}?subject=${encodeURIComponent(mailSubject())}&body=${encodeURIComponent(mailBody()+"\n\n(Attached file: "+pendingPdf.name+")")}`;
+  const file=new File([blob],`State_Office_${date()}.pdf`,{type:"application/pdf"});
+  pendingPdf=file;
+
+  const fd=new FormData();
+  fd.append("attachment",file,file.name);
+  fd.append("_subject",mailSubject());
+  fd.append("_captcha","false");
+  fd.append("_template","table");
+  fd.append("Message",mailBody());
+  fd.append("State date",date().split("-").reverse().join("/"));
+
+  const res=await fetch("https://formsubmit.co/ajax/"+to,{method:"POST",headers:{"Accept":"application/json"},body:fd});
+  let j=null;try{j=await res.json()}catch(e){}
+  j=j||{};
+  const msg=String(j.message||"");
+  const okFlag=res.ok&&(j.success===true||j.success==="true");
+  const kb=Math.round(file.size/1024);
+
+  if(/activat/i.test(msg)){
+   setMailStatus("wait","⏳ <b>Almost done - first time for this address.</b><br>The mail service sent an <b>activation mail</b> to <b>"+esc(to)+"</b>. Open that inbox (check Spam too) and click the activation link. This state is held and delivered right after you activate. Next time it goes straight through.");
+  }else if(okFlag){
+   setMailStatus("ok","✔ <b>Sent at "+nowTime()+"</b> to <b>"+esc(to)+"</b><br>PDF <b>"+esc(file.name)+"</b> ("+kb+" KB, A4 landscape - same as the print copy) was accepted by the mail service. Please check that inbox (and Spam) to be sure it arrived.");
+  }else{
+   setMailStatus("err","✖ <b>Not sent.</b> "+esc(msg||("Mail service answered with error "+res.status+"."))+"<br>You can send it with your own mail app instead.");
+   $("shareFallbackBtn").classList.remove("hidden");
+  }
  }catch(err){
-  alert("Failed to send mail: "+(err&&err.message||err));
+  console.error(err);
+  setMailStatus("err","✖ <b>Not sent.</b> Could not reach the mail service (internet problem, or it is blocked on this network).<br>You can send it with your own mail app instead.");
+  $("shareFallbackBtn").classList.remove("hidden");
  }
  btn.disabled=false;btn.textContent=old;
-};
+}
 
+$("shareGoBtn").onclick=doSendEmail;
+$("modalMailInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();doSendEmail()}});
+$("shareFallbackBtn").onclick=async function(){
+ const to=($("modalMailInput").value||"").trim();
+ if(!EMAIL_RE.test(to))return setMailStatus("err","Please type a valid email address first.");
+ if(!pendingPdf){
+  try{const blob=await makePdfBlob();pendingPdf=new File([blob],`State_Office_${date()}.pdf`,{type:"application/pdf"})}
+  catch(err){return setMailStatus("err","PDF could not be prepared: "+esc(err&&err.message||err))}
+ }
+ fallbackMail(to);
+};
 $("shareCancelBtn").onclick=()=>$("shareModal").classList.add("hidden");
 
 // ===================== EXCEL (.xlsx) EXPORT =====================
@@ -1676,7 +1771,7 @@ async function buildExcel(){
   ws.getRow(r).height=rowH;
   r++;
  });
- ws.getRow(r).height=8;r++;
+ ws.getRow(r).height=20;r++; // gap between the table and the lists
 
  const listStart=r;
  const W5=[1.45,1.2,1.0,1.9,0.95],sumW=W5.reduce((a,b)=>a+b,0);
@@ -1708,14 +1803,17 @@ async function buildExcel(){
  });
  const endRow=Math.max.apply(null,[listStart].concat(ends));
  for(let x=listStart;x<endRow;x++)ws.getRow(x).height=Math.max(13,T.pt*1.3);
+ ws.getRow(endRow).height=18; // gap above the signatures
  r=endRow+1;
 
+ // signatures: PREPARED BY / JCOIC / OIC on one row, name + rank under PREPARED BY
  const a=Math.round(total/3),b2=Math.round(total*2/3);
  const sp=[[1,a],[a+1,b2],[b2+1,total]];
  put(r,sp[0][0],r,sp[0][1],"PREPARED BY",{underline:true,bold:true,h:"left"});
  put(r,sp[1][0],r,sp[1][1],"JCOIC",{underline:true,bold:true});
  put(r,sp[2][0],r,sp[2][1],"OIC",{underline:true,bold:true,h:"right"});
  r++;
+ ws.getRow(r).height=20;r++; // signature space
  put(r,sp[0][0],r,sp[0][1],$("prepName").value.trim()||"PARVEZ",{bold:true,h:"left"});
  r++;
  put(r,sp[0][0],r,sp[0][1],$("prepRank").value.trim()||"SGT",{bold:true,h:"left"});
@@ -1763,9 +1861,11 @@ $("clearAllParadeBtn").addEventListener("click", function(e){
  clearAllToParade();
 });
 
+// saves the current screen state (and the Prepared By name) under the date it BELONGS to
 function autoSaveBuffer(){
  const d=boundDate;
- saved[d]={statuses:{...current},leaveDetails:{...currentLeave},dutyDetails:{...currentDuty},edDetails:{...currentEd},savedAt:new Date().toISOString()};
+ saved[d]={statuses:{...current},leaveDetails:{...currentLeave},dutyDetails:{...currentDuty},edDetails:{...currentEd},savedAt:new Date().toISOString(),
+  prepName:$("prepName").value.trim(),prepRank:$("prepRank").value.trim()};
  const pr=persistStore(d);
  refreshSaved();
  return pr;
