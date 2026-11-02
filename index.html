@@ -5,18 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#123b32">
 <title>AC Taking & Handing over Flt - Parade/ PT/FOD state</title>
-<!-- Firebase SDK Scripts -->
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-<!-- html2pdf Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<!-- ExcelJS Library (real .xlsx with formatting) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 <style>
 :root{--green:#123b32;--lime:#d6f07a;--bg:#f3f6f4;--card:#fff;--ink:#182521;--muted:#687771;--line:#dce5df;--red:#a33232;
---fs:10pt;--ff:Arial,Helvetica,"Liberation Sans",sans-serif;--fw:normal;--k:1}
+--fs:10pt;--ff:Arial,Helvetica,"Liberation Sans",sans-serif;--fw:normal;--k:1;--g:1;--mt:12mm;--mb:10mm;--ml:12mm;--mr:12mm}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);font:13px/1.3 system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--ink);-webkit-tap-highlight-color:transparent;overflow-x:hidden}
-
 header{background:var(--green);color:#fff;padding:14px}header .eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--lime);font-weight:800}h1{font-size:20px;line-height:1.15;margin:4px 0}header p{margin:0;color:#d8e5df;font-size:12px}
 main{max-width:1100px;margin:auto;padding:10px;display:grid;gap:10px;position:relative;z-index:1}.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;box-shadow:0 2px 8px #123b3208}.card h2{font-size:15px;margin:0 0 8px}.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row>*{flex:1;min-width:130px}
 label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin-bottom:3px}input,select,button{font:inherit;touch-action:manipulation}input[type=date],input[type=search],input[type=text],input[type=email],select{width:100%;padding:8px 10px;border:1px solid #cbd8d0;border-radius:6px;background:#fff;color:var(--ink);font-size:13px;position:relative;z-index:2}
@@ -26,67 +22,50 @@ button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointe
 .rank-block{border:1px solid var(--line);border-radius:8px;margin-top:6px;overflow:hidden}.rank-head{background:#f2f6f3;padding:6px 8px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:12px}.person{display:flex;gap:6px;align-items:center;padding:8px;border-top:1px solid #edf1ee;flex-wrap:wrap}.person .name{flex:1 1 160px;min-width:0}.person small{display:block;color:var(--muted);font-size:11px;margin-top:1px}.person select{flex:1 1 110px;max-width:100%;padding:6px;font-size:11px}.person-actions{display:flex;gap:4px;flex-shrink:0;flex-wrap:wrap}
 .tablewrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{background:#f3f7f4;color:#3e5148}.empty{color:var(--muted);padding:8px 0}.foot{font-size:11px;color:var(--muted);text-align:center;padding:8px}.statusnote{padding:6px 8px;border-radius:6px;background:#fff8df;color:#66531c;font-size:11px;margin-top:6px}.hidden{display:none!important}
 .modal-overlay{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;z-index:9999;padding:12px;backdrop-filter:blur(2px)}.modal-card{background:#fff;border-radius:12px;width:100%;max-width:400px;padding:16px;box-shadow:0 10px 25px #0003;animation:popIn .2s ease-out}@keyframes popIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}.modal-card h3{margin:0 0 3px;font-size:16px;color:var(--green)}.modal-card p{margin:0 0 10px;font-size:11px;color:var(--muted)}.modal-form{display:flex;flex-direction:column;gap:10px}.modal-actions{display:flex;gap:6px;margin-top:12px;justify-content:flex-end;flex-wrap:wrap}
-.mail-status{margin-top:10px;padding:8px 10px;border-radius:6px;font-size:12px;line-height:1.4}
-.mail-status.ok{background:#e8f5e9;color:#1b5e20}
-.mail-status.err{background:#fdecea;color:#b3261e}
-.mail-status.wait{background:#fff8df;color:#66531c}
-
+.mail-status{margin-top:10px;padding:8px 10px;border-radius:6px;font-size:12px;line-height:1.4}.mail-status.ok{background:#e8f5e9;color:#1b5e20}.mail-status.err{background:#fdecea;color:#b3261e}.mail-status.wait{background:#fff8df;color:#66531c}
 #screenPreviewWrapper{background:#fff;border:2px solid var(--green);border-radius:8px;padding:12px;margin-top:10px;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 
-/* =====================================================================
-   PARADE STATE SHEET  (preview + print + PDF all use these rules)
-   Page: A4 landscape. Margins: left/right 25mm, top 20mm, bottom 15mm.
-   Font: Arial. All sizes shrink together with --k if the page is too full.
-   ===================================================================== */
-.sheet-inner{width:247mm;background:#fff;color:#000;font-family:var(--ff);font-size:calc(var(--fs)*var(--k));font-weight:var(--fw);line-height:1.15;text-align:left}
+/* PARADE STATE SHEET (preview + print + PDF). --k = text scale (only shrinks), --g = row/gap stretch (only grows) */
+.sheet-inner{width:calc(297mm - var(--ml) - var(--mr));background:#fff;color:#000;font-family:var(--ff);font-size:calc(var(--fs)*var(--k));font-weight:var(--fw);line-height:1.15;text-align:left}
 .sheet-inner *{font-family:inherit}
-.sh-head{position:relative;text-align:center;margin:0 0 calc(3mm*var(--k))}
+.sh-head{position:relative;text-align:center;margin:0 0 calc(3mm*var(--k)*var(--g))}
 .sh-head .t1,.sh-head .t2{display:block;font-weight:700;text-decoration:underline;font-size:calc((var(--fs) + 1pt)*var(--k));line-height:1.3}
-.sh-head .sh-date{position:absolute;right:0;bottom:0;white-space:nowrap;font-weight:var(--fw);font-size:calc(var(--fs)*var(--k))}
+.sh-head .sh-date{position:absolute;right:0;bottom:0;white-space:nowrap;font-weight:700;font-size:calc(var(--fs)*var(--k))}
 .sheet-note{text-align:center;margin:0 0 calc(1.5mm*var(--k));font-size:calc((var(--fs) - 1pt)*var(--k))}
-
 .print-grid{width:100%;border-collapse:collapse;table-layout:fixed;empty-cells:show;border:.35mm solid #000;font-size:calc(var(--fs)*var(--k))}
-.print-grid th,.print-grid td{border:.35mm solid #000!important;padding:0 .6mm!important;text-align:center;vertical-align:middle;white-space:nowrap;overflow:hidden;height:calc(4.7mm*var(--k));background:#fff!important;color:#000!important;font-weight:var(--fw)}
-.print-grid .rankcol{font-size:inherit}
-.print-grid th.vertical{height:calc(32mm*var(--k));padding:0!important;overflow:hidden}
-.print-grid .vwrap{position:relative;width:100%;height:calc(32mm*var(--k))}
-.print-grid .rot-text{position:absolute;left:50%;top:50%;width:calc(30mm*var(--k));transform:translate(-50%,-50%) rotate(-90deg);transform-origin:center center;text-align:left;white-space:normal;word-break:break-word;line-height:1.1;font-size:calc((var(--fs) - 1.5pt)*var(--k));font-weight:var(--fw)}
-
-/* gap between the numbers table and the lists (LEAVE / other disposal) */
-.print-layout-container{display:grid;grid-template-columns:1.45fr 1.2fr 1fr 1.9fr .95fr;gap:0 calc(3mm*var(--k));margin-top:calc(9mm*var(--k));align-items:start}
-.print-col{display:flex;flex-direction:column;gap:calc(2.5mm*var(--k));min-width:0}
-.print-block{break-inside:avoid;border:none;padding:0;background:#fff;min-width:0}
-.print-block h3{font-size:inherit;font-weight:700;text-decoration:underline;margin:0 0 calc(.8mm*var(--k));text-align:left;padding:0;background:transparent}
+.print-grid th,.print-grid td{border:.35mm solid #000!important;padding:0 .6mm!important;text-align:center;vertical-align:middle;white-space:nowrap;overflow:hidden;height:calc(4.7mm*var(--k)*var(--g));background:#fff!important;color:#000!important;font-weight:var(--fw)}
+.print-grid th.vertical{height:calc(30mm*var(--k));padding:0!important}
+.print-grid .vwrap{position:relative;width:100%;height:calc(30mm*var(--k))}
+.print-grid .rot-text{position:absolute;left:50%;top:50%;width:calc(28mm*var(--k));transform:translate(-50%,-50%) rotate(-90deg);text-align:left;white-space:normal;word-break:break-word;line-height:1.1;font-size:calc((var(--fs) - 1pt)*var(--k));font-weight:var(--fw)}
+.print-layout-container{display:grid;grid-template-columns:1.3fr 1.15fr 2.6fr 1.05fr;gap:0 calc(3mm*var(--k));margin-top:calc(7mm*var(--k)*var(--g));align-items:start}
+.print-col{display:flex;flex-direction:column;gap:calc(2.5mm*var(--k)*var(--g));min-width:0}
+.print-block{break-inside:avoid;padding:0;background:#fff;min-width:0}
+.print-block h3{font-size:inherit;font-weight:700;text-decoration:underline;margin:0 0 calc(.8mm*var(--k));text-align:left;padding:0}
 .print-block ol{margin:0;padding:0;list-style:none}
-.print-block li{display:flex;gap:calc(1.6mm*var(--k));line-height:1.18;margin:0;padding:0;break-inside:avoid}
+.print-block li{display:flex;gap:calc(1.6mm*var(--k));line-height:1.18;margin:0 0 calc(.35mm*(var(--g) - 1));padding:0;break-inside:avoid}
 .print-block li .item-num{width:calc(5mm*var(--k));text-align:right;flex-shrink:0}
 .print-block li .item-text{flex:1;min-width:0;word-break:break-word}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:0 calc(3mm*var(--k))}
-
-/* signatures: PREPARED BY / JCOIC / OIC are on ONE line, gap above them, no hidden empty space below */
-.signatures-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:calc(12mm*var(--k));align-items:start}
+.signatures-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;margin-top:calc(10mm*var(--k)*var(--g));align-items:start}
 .signatures-bottom b{display:block;font-weight:700;text-decoration:underline;line-height:1.2;margin:0;padding:0}
 .signatures-bottom .sg-l{text-align:left;padding-left:calc(8mm*var(--k))}
 .signatures-bottom .sg-c{text-align:center}
 .signatures-bottom .sg-r{text-align:right;padding-right:calc(8mm*var(--k))}
-.signatures-bottom .sg-name{font-weight:700;margin-top:calc(7mm*var(--k));line-height:1.2}
-
-/* page box used for print + PDF (hidden on screen) */
-#printState{width:297mm;height:209mm;padding:20mm 25mm 15mm 25mm;box-sizing:border-box;background:#fff;overflow:hidden}
+.signatures-bottom .sg-name{font-weight:700;margin-top:calc(7mm*var(--k)*var(--g));line-height:1.2}
+#printState{width:297mm;height:209mm;padding:var(--mt) var(--mr) var(--mb) var(--ml);box-sizing:border-box;background:#fff;overflow:hidden}
 #printState.measuring{display:block!important;position:absolute!important;left:-99999px!important;top:0!important;visibility:hidden!important;height:auto!important;overflow:visible!important}
 
 .red-date-filter{background:#a33232;color:#fff;border:1.5px solid #782222;font-weight:800;border-radius:6px;padding:6px 10px;font-size:12px;cursor:pointer}
 .red-date-filter option{background:#fff;color:#182521;font-weight:600}
 .cloud-badge{font-size:10px;font-weight:800;color:#2e7d32;background:#e8f5e9;padding:3px 6px;border-radius:5px;display:inline-block;margin-left:6px}
 
-/* WELCOME + FIGHTER JET INTRO */
 #introOverlay{position:fixed;inset:0;background:#050d18;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;z-index:99999;text-align:center;padding:6vh 16px 0;transition:opacity .8s ease,visibility .8s ease;overflow:hidden}
 #introOverlay.fade-out{opacity:0;visibility:hidden}
 #jetCanvas{position:absolute;inset:0;width:100%;height:100%;display:block}
 .intro-content{position:relative;z-index:2;max-width:600px;animation:introFloat 1.2s ease-out;text-shadow:0 2px 14px #000,0 0 30px #000}
 .intro-content h2{font-size:24px;color:var(--lime);margin:0 0 10px;letter-spacing:1px;font-weight:800}
 .intro-content p{font-size:15px;color:#d8e5df;margin:0 0 20px;font-style:italic;line-height:1.4}
-.intro-content .dev-tag{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#fff;opacity:0.85;border-top:1px solid rgba(214,240,122,0.3);padding-top:12px;display:inline-block}
+.intro-content .dev-tag{font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#fff;opacity:.85;border-top:1px solid rgba(214,240,122,.3);padding-top:12px;display:inline-block}
 #introSkip,#soundHint{position:absolute!important;z-index:5!important;background:rgba(0,0,0,.45)!important;color:#fff!important;border:1px solid rgba(214,240,122,.5)!important;font-size:12px;min-height:30px;padding:5px 12px}
 #introSkip{right:12px;top:12px}
 #soundHint{left:50%;bottom:16px;transform:translateX(-50%);display:none;animation:pulseHint 1.2s infinite}
@@ -94,47 +73,23 @@ button{border:0;border-radius:6px;padding:8px 12px;font-weight:750;cursor:pointe
 @keyframes introFloat{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
 
 @media(min-width:780px){main{grid-template-columns:1fr 1fr;align-items:start}.wide{grid-column:1/-1}}
+body,main,.card,.row,.row>*,.person,.person .name{min-width:0}
+main{width:100%;padding:8px;gap:8px}.card{padding:10px}.row{gap:6px}.row>*{flex:1 1 140px;min-width:0}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+input,select,button{max-width:100%}.person{align-items:flex-start}.person select{min-width:0}.tablewrap{max-width:100%;overflow-x:auto}
+@media(max-width:600px){header{padding:10px}h1{font-size:18px}main{padding:6px}.card{padding:8px}.row>*{flex:1 1 100%;width:100%}.row button{width:100%}.metric strong{font-size:16px}.person{display:grid;grid-template-columns:minmax(0,1fr);gap:6px}.person .name,.person select{width:100%}.person-actions{justify-content:flex-end}.modal-overlay{padding:8px}.modal-card{max-height:90dvh;overflow-y:auto;padding:12px}}
 
-body, main, .card, .row, .row > *, .person, .person .name { min-width: 0; }
-main { width: 100%; padding: 8px; gap: 8px; }
-.card { padding: 10px; }
-.row { gap: 6px; }
-.row > * { flex: 1 1 140px; min-width: 0; }
-.metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-input, select, button { max-width: 100%; }
-.person { align-items: flex-start; }
-.person select { min-width: 0; }
-.tablewrap { max-width: 100%; overflow-x: auto; }
-@media (max-width: 600px) {
-  header { padding: 10px; }
-  h1 { font-size: 18px; }
-  main { padding: 6px; }
-  .card { padding: 8px; }
-  .row > * { flex: 1 1 100%; width: 100%; }
-  .row button { width: 100%; }
-  .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .metric strong { font-size: 16px; }
-  .person { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; }
-  .person .name, .person select { width: 100%; }
-  .person-actions { justify-content: flex-end; }
-  .modal-overlay { padding: 8px; }
-  .modal-card { max-height: 90dvh; overflow-y: auto; padding: 12px; }
-}
-
-/* ===================== PRINT ===================== */
 @page{size:A4 landscape;margin:0}
 @media print{
-  html,body{width:297mm;height:209mm;margin:0!important;padding:0!important;background:#fff!important;overflow:hidden!important}
-  header,.no-print,.foot,#reportArea,#editorArea,.screen-only,.hint,.statusnote,.modal-overlay,#introOverlay{display:none!important}
-  main{display:block!important;max-width:none!important;width:auto!important;padding:0!important;margin:0!important;gap:0}
-  .card{box-shadow:none;border:0;padding:0;margin:0;background:#fff}
-  #printState{display:block!important;position:static!important;margin:0;page-break-inside:avoid;break-inside:avoid}
-  .sheet-inner,.sheet-inner *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ html,body{width:297mm;height:209mm;margin:0!important;padding:0!important;background:#fff!important;overflow:hidden!important}
+ header,.no-print,.foot,#reportArea,#editorArea,.screen-only,.hint,.statusnote,.modal-overlay,#introOverlay{display:none!important}
+ main{display:block!important;max-width:none!important;width:auto!important;padding:0!important;margin:0!important;gap:0}
+ .card{box-shadow:none;border:0;padding:0;margin:0;background:#fff}
+ #printState{display:block!important;position:static!important;margin:0;page-break-inside:avoid;break-inside:avoid}
+ .sheet-inner,.sheet-inner *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
 <body>
-<!-- WELCOME + FIGHTER JET INTRO -->
 <div id="introOverlay">
   <canvas id="jetCanvas"></canvas>
   <div class="intro-content">
@@ -150,70 +105,31 @@ input, select, button { max-width: 100%; }
 <main>
 <section class="card wide no-print">
   <div class="row">
-    <div>
-      <label for="stateDate">STATE DATE</label>
-      <input id="stateDate" type="date">
-    </div>
-    <div>
-      <label for="topRedDateFilter" style="color:#a33232;font-weight:800">FILTER STATE BY DATE</label>
-      <select id="topRedDateFilter" class="red-date-filter">
-        <option value="">Select Saved Date State…</option>
-      </select>
-    </div>
-    <div>
-      <label for="mailTo">MAIL TO (optional)</label>
-      <input id="mailTo" type="text" placeholder="name@example.com">
-    </div>
+    <div><label for="stateDate">STATE DATE</label><input id="stateDate" type="date"></div>
+    <div><label for="topRedDateFilter" style="color:#a33232;font-weight:800">FILTER STATE BY DATE</label><select id="topRedDateFilter" class="red-date-filter"><option value="">Select Saved Date State…</option></select></div>
+    <div><label for="mailTo">MAIL TO (optional)</label><input id="mailTo" type="text" placeholder="name@example.com"></div>
   </div>
   <div style="display:flex;gap:6px;align-items:end;flex-wrap:wrap;margin-top:8px">
-      <button id="saveOnlyBtn" type="button" style="background:#0b5ed7">💾 Save</button>
-      <button id="shareMailBtn" type="button" style="background:#b3261e">📧 Send by Email (PDF)</button>
-      <button id="savePdfBtn" type="button" style="background:#1b4d3e">Save & Download PDF (A4 Landscape)</button>
-      <button id="saveExcelBtn" type="button" style="background:#1d6f42">Save & Download Excel (.xlsx)</button>
-      <button class="secondary" id="clearAllParadeBtn" type="button" style="background:#fff0f0;color:#a33232;border:1px solid #f0cccc">Clear All to On Parade</button>
-      <button class="secondary" id="undoBtn" type="button">Undo Last State</button>
-      <button class="secondary" id="togglePreviewBtn" type="button">Toggle Sheet Preview</button>
-      <button class="secondary" id="printBtn" type="button">Print A4 Landscape (1 Page)</button>
+    <button id="saveOnlyBtn" type="button" style="background:#0b5ed7">💾 Save</button>
+    <button id="shareMailBtn" type="button" style="background:#b3261e">📧 Send by Email (PDF)</button>
+    <button id="savePdfBtn" type="button" style="background:#1b4d3e">Save & Download PDF (A4 Landscape)</button>
+    <button id="saveExcelBtn" type="button" style="background:#1d6f42">Save & Download Excel (.xlsx)</button>
+    <button class="secondary" id="clearAllParadeBtn" type="button" style="background:#fff0f0;color:#a33232;border:1px solid #f0cccc">Clear All to On Parade</button>
+    <button class="secondary" id="undoBtn" type="button">Undo Last State</button>
+    <button class="secondary" id="togglePreviewBtn" type="button">Toggle Sheet Preview</button>
+    <button class="secondary" id="printBtn" type="button">Print A4 Landscape (1 Page)</button>
   </div>
-  <p class="hint">Every change is saved automatically. The <b>💾 Save</b> button is only for extra safety (no download).</p>
-  <p class="hint">Every status you assign (Leave, Duty On / Off, Milk Duty, Mess, ED, etc.) gets its own list on the sheet.</p>
-  <p class="hint"><b>Prepared By:</b> the name is saved with each day's state. An old date always shows the name that was used on that date; a new date starts with the latest name.</p>
-  <p class="hint"><b>Daily carry-forward:</b> a new date starts exactly like the previous day (everyone keeps the same status). Leave ends after its report date and ED/Course after its finish date. Wrong date entered? Tap <b>Edit entry</b> on that person.</p>
-  <p class="hint"><b>Print setup:</b> Paper A4 · Landscape · Margins Default/None · Scale 100% · Headers and footers OFF. Page margins are built in (left/right 25 mm, top 20 mm, bottom 15 mm).</p>
+  <p class="hint">Every change saves automatically; <b>💾 Save</b> is extra safety (no download). Prepared By is saved with each day's state. A new date starts like the previous day (Leave ends on its report date, ED/Course on its finish date). Wrong date? Tap <b>Edit entry</b>.</p>
+  <p class="hint"><b>Print:</b> A4 · Landscape · Margins None/Default · Scale 100% · Headers/footers OFF. The sheet fits one page automatically (text size <b id="fitInfo">100%</b>, row stretch <b id="fitGap">1.0x</b>). Page margins are in the first lines of the CSS (--mt, --mb, --ml, --mr).</p>
 </section>
 
 <section class="card wide no-print" id="screenPreviewSection">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
     <h2 style="margin:0">Live Print Sheet Preview & Custom Typography</h2>
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <div>
-        <label for="fontFamilySelect" style="margin:0;font-size:10px">Font Family:</label>
-        <select id="fontFamilySelect" style="width:130px;padding:3px;font-size:11px">
-          <option value='Arial, Helvetica, "Liberation Sans", sans-serif' selected>Arial (like sheet)</option>
-          <option value="'Times New Roman', Times, serif">Times New Roman</option>
-          <option value="Calibri, Carlito, sans-serif">Calibri</option>
-          <option value="'Segoe UI', sans-serif">Segoe UI</option>
-          <option value="'Courier New', monospace">Courier New</option>
-        </select>
-      </div>
-      <div>
-        <label for="fontSizeSelect" style="margin:0;font-size:10px">Font Size (pt):</label>
-        <select id="fontSizeSelect" style="width:90px;padding:3px;font-size:11px">
-          <option value="7pt">7 pt</option>
-          <option value="8pt">8 pt</option>
-          <option value="9pt">9 pt</option>
-          <option value="10pt" selected>10 pt (Std)</option>
-          <option value="11pt">11 pt</option>
-          <option value="12pt">12 pt</option>
-        </select>
-      </div>
-      <div>
-        <label for="fontWeightSelect" style="margin:0;font-size:10px">Font Weight:</label>
-        <select id="fontWeightSelect" style="width:85px;padding:3px;font-size:11px">
-          <option value="normal" selected>Normal</option>
-          <option value="bold">Bold</option>
-        </select>
-      </div>
+      <div><label for="fontFamilySelect" style="margin:0;font-size:10px">Font Family:</label><select id="fontFamilySelect" style="width:130px;padding:3px;font-size:11px"><option value='Arial, Helvetica, "Liberation Sans", sans-serif' selected>Arial (like sheet)</option><option value="'Times New Roman', Times, serif">Times New Roman</option><option value="Calibri, Carlito, sans-serif">Calibri</option><option value="'Segoe UI', sans-serif">Segoe UI</option><option value="'Courier New', monospace">Courier New</option></select></div>
+      <div><label for="fontSizeSelect" style="margin:0;font-size:10px">Font Size (pt):</label><select id="fontSizeSelect" style="width:90px;padding:3px;font-size:11px"><option value="7pt">7 pt</option><option value="8pt">8 pt</option><option value="9pt">9 pt</option><option value="10pt" selected>10 pt (Std)</option><option value="11pt">11 pt</option><option value="12pt">12 pt</option></select></div>
+      <div><label for="fontWeightSelect" style="margin:0;font-size:10px">Font Weight:</label><select id="fontWeightSelect" style="width:85px;padding:3px;font-size:11px"><option value="normal" selected>Normal</option><option value="bold">Bold</option></select></div>
       <button class="secondary small" id="editNotesBtn" type="button">Edit Custom Note</button>
     </div>
   </div>
@@ -221,7 +137,7 @@ input, select, button { max-width: 100%; }
     <label for="customNoteInput" style="font-size:10px">Custom Subtitle / Note (Optional):</label>
     <input type="text" id="customNoteInput" placeholder="Type any special note or adjustment here before printing...">
   </div>
-  <div id="screenPreviewWrapper"><div class="sheet-inner" id="previewSheet"><div class="sh-head"><span class="t1">PARADE STATE</span><span class="t2">AC TAKING & HANDING OVER FLT (HANGAR)</span><div class="sh-date">DATE : <span id="previewDate"></span></div></div><div id="customNoteDisplay" class="sheet-note hidden"></div><table class="print-grid" id="previewGrid"></table><div class="print-layout-container" id="previewListsContainer"></div><div class="signatures-bottom"><div class="sg-l"><b>PREPARED BY</b><div class="sg-name" id="previewPreparedBy">PARVEZ<br>SGT</div></div><div class="sg-c"><b>JCOIC</b></div><div class="sg-r"><b>OIC</b></div></div></div></div>
+  <div id="screenPreviewWrapper"><div class="sheet-inner" id="previewSheet"></div></div>
 </section>
 
 <section class="card wide no-print"><h2>Manpower overview</h2><div class="metrics" id="metrics"></div><div class="statusnote">Counting rule: each person has one current status only. Total counts are strictly distinct.</div></section>
@@ -232,33 +148,20 @@ input, select, button { max-width: 100%; }
 
 <section class="card no-print" id="reportArea"><h2>Final state report & PC Backup</h2><div id="reportSummary"></div><div class="row" style="margin:10px 0"><button class="secondary" id="exportBackup" type="button">Backup to PC File (.JSON)</button><button class="secondary" id="exportHtmlBtn" type="button">Export Updated index.html File</button><button class="secondary" id="importBtn" type="button">Restore from PC File</button><input id="importFile" type="file" accept="application/json" class="hidden"></div><h2 style="margin-top:14px">Rank-wise status count</h2><div class="tablewrap" id="rankTable"></div><h2 style="margin-top:14px">Personnel by status</h2><div id="statusDetails"></div></section>
 
-<section id="printState" class="hidden"><div class="sheet-inner"><div class="sh-head"><span class="t1">PARADE STATE</span><span class="t2">AC TAKING & HANDING OVER FLT (HANGAR)</span><div class="sh-date">DATE : <span id="printDate"></span></div></div><div id="printCustomNoteDisplay" class="sheet-note hidden"></div><table class="print-grid" id="printGrid"></table><div class="print-layout-container" id="printListsContainer"></div><div class="signatures-bottom"><div class="sg-l"><b>PREPARED BY</b><div class="sg-name" id="printPreparedBy">PARVEZ<br>SGT</div></div><div class="sg-c"><b>JCOIC</b></div><div class="sg-r"><b>OIC</b></div></div></div></section>
+<section id="printState" class="hidden"><div class="sheet-inner" id="printSheet"></div></section>
 
-<!-- LEAVE MODAL -->
 <div id="leaveModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalPersonName">Leave Details</h3><p>Specify leave type and report date for this person.</p><div class="modal-form"><div><label for="modalLeaveType">TYPE OF LEAVE</label><select id="modalLeaveType"><option value="A/L">A/L (Annual Leave)</option><option value="S/L">S/L (Sick Leave)</option><option value="R/L">R/L (Recreation Leave)</option><option value="C/L">C/L (Casual Leave)</option></select></div><div><label for="modalReportDate">REPORT DATE / TO DATE</label><input type="date" id="modalReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeModalBtn">Cancel</button><button type="button" id="saveLeaveBtn">Save Leave</button></div></div></div>
 
-<!-- DUTY MODAL (All Duty On / All Duty Off - Night Off) -->
 <div id="dutyModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalDutyPersonName">Select Duty Type & Shift</h3><p id="modalDutyHelp">Choose duty type and shift for this person.</p><div class="modal-form"><div><label for="modalDutyType">DUTY TYPE</label><select id="modalDutyType"></select></div><div><label for="modalDutyShift">DUTY SHIFT</label><select id="modalDutyShift"><option value="A Shift">A Shift</option><option value="B Shift">B Shift</option><option value="C Shift">C Shift</option><option value="PD">PD</option></select></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeDutyModalBtn">Cancel</button><button type="button" id="saveDutyBtn">Save Duty</button></div></div></div>
 
-<!-- ED COURSE MODAL -->
 <div id="edModal" class="modal-overlay hidden"><div class="modal-card"><h3 id="modalEdPersonName">ED / Course Details</h3><p>Specify course start date and finish date.</p><div class="modal-form"><div><label for="modalEdStartDate">START DATE / WEF</label><input type="date" id="modalEdStartDate"></div><div><label for="modalEdReportDate">FINISH DATE / TO DATE</label><input type="date" id="modalEdReportDate"></div></div><div class="modal-actions"><button class="secondary" type="button" id="closeEdModalBtn">Cancel</button><button type="button" id="saveEdBtn">Save ED/Course</button></div></div></div>
 
-<!-- SEND BY EMAIL MODAL -->
 <div id="shareModal" class="modal-overlay hidden"><div class="modal-card">
   <h3>Send state by Email</h3>
   <p>Type the email address and press <b>Send</b>. The PDF (same as the print copy) is attached automatically.</p>
-  <div class="modal-form">
-    <div>
-      <label for="modalMailInput">RECIPIENT EMAIL</label>
-      <input type="email" id="modalMailInput" placeholder="name@example.com" autocomplete="email">
-    </div>
-  </div>
+  <div class="modal-form"><div><label for="modalMailInput">RECIPIENT EMAIL</label><input type="email" id="modalMailInput" placeholder="name@example.com" autocomplete="email"></div></div>
   <div id="mailStatus" class="mail-status hidden"></div>
-  <div class="modal-actions">
-    <button class="secondary" type="button" id="shareCancelBtn">Close</button>
-    <button class="secondary hidden" type="button" id="shareFallbackBtn">Open in my mail app instead</button>
-    <button type="button" id="shareGoBtn">📧 Send</button>
-  </div>
+  <div class="modal-actions"><button class="secondary" type="button" id="shareCancelBtn">Close</button><button class="secondary hidden" type="button" id="shareFallbackBtn">Open in my mail app instead</button><button type="button" id="shareGoBtn">📧 Send</button></div>
 </div></div>
 
 <section class="card wide no-print"><h2>Saved daily records</h2><div class="row"><div><label for="savedSelect">OPEN A SAVED DATE</label><select id="savedSelect"><option value="">No saved records yet</option></select></div><button class="secondary" id="loadBtn" type="button">Load date</button><button class="danger" id="deleteBtn" type="button">Delete saved date</button></div></section>
@@ -266,29 +169,13 @@ input, select, button { max-width: 100%; }
 <div class="foot no-print">State Office Manpower · Cloud Sync Edition</div>
 
 <script>
-// ===== 10s FIGHTER JET INTRO (animation + synthesized jet sound) =====
+// ===== 10s FIGHTER JET INTRO =====
 (function(){
- const overlay=document.getElementById('introOverlay');
- const cv=document.getElementById('jetCanvas');
- const cx=cv.getContext('2d');
- const hint=document.getElementById('soundHint');
- const DURATION=10;
- const G=46; // distance from jet centre line down to the ground (wheel contact)
- let W=0,H=0,start=null,last=0,done=false,scroll=0;
-
- function sm(a,b,x){x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)}
- function resize(){
-  const dpr=Math.min(window.devicePixelRatio||1,2);
-  W=cv.clientWidth;H=cv.clientHeight;
-  cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
- }
+ const overlay=document.getElementById('introOverlay'),cv=document.getElementById('jetCanvas'),cx=cv.getContext('2d'),hint=document.getElementById('soundHint');
+ const DURATION=10,G=46;let W=0,H=0,start=null,last=0,done=false,scroll=0;
+ const sm=(a,b,x)=>{x=Math.min(1,Math.max(0,(x-a)/(b-a)));return x*x*(3-2*x)};
+ function resize(){const dpr=Math.min(window.devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0)}
  resize();window.addEventListener('resize',resize);
-
- const jetImg=new Image();let jetImgOK=false;
- jetImg.onload=()=>{jetImgOK=jetImg.naturalWidth>0};
- jetImg.src='jet.png';
-
- // ---------- SOUND ----------
  let ac=null,N=null;
  function buildAudio(){
   const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
@@ -296,9 +183,8 @@ input, select, button { max-width: 100%; }
   const master=ac.createGain();master.gain.value=0;
   const comp=ac.createDynamicsCompressor();comp.threshold.value=-12;comp.ratio.value=8;
   master.connect(comp);comp.connect(ac.destination);
-  const len=ac.sampleRate*2,buf=ac.createBuffer(1,len,ac.sampleRate),d=buf.getChannelData(0);
-  let b=0;
-  for(let i=0;i<len;i++){const w=Math.random()*2-1;b=(b+0.02*w)/1.02;d[i]=Math.max(-1,Math.min(1,w*0.55+b*3));}
+  const len=ac.sampleRate*2,buf=ac.createBuffer(1,len,ac.sampleRate),d=buf.getChannelData(0);let b=0;
+  for(let i=0;i<len;i++){const w=Math.random()*2-1;b=(b+0.02*w)/1.02;d[i]=Math.max(-1,Math.min(1,w*0.55+b*3))}
   const noise=()=>{const s=ac.createBufferSource();s.buffer=buf;s.loop=true;s.start();return s};
   const n1=noise(),lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=250;lp.Q.value=1.2;
   const g1=ac.createGain();g1.gain.value=0;n1.connect(lp);lp.connect(g1);g1.connect(master);
@@ -316,265 +202,139 @@ input, select, button { max-width: 100%; }
   n3.connect(hp);hp.connect(lp2);lp2.connect(crack);crack.connect(gAB);gAB.connect(master);
   N={master,lp,g1,bp,g2,o,g3,gAB};
  }
- function refreshHint(){hint.style.display=(ac&&ac.state==='running')?'none':'block'}
- function tryAudio(){
-  try{
-   if(!ac)buildAudio();
-   if(ac&&ac.state!=='running'){ac.resume().then(refreshHint).catch(()=>{});}
-  }catch(e){}
-  refreshHint();
- }
+ const refreshHint=()=>{hint.style.display=(ac&&ac.state==='running')?'none':'block'};
+ function tryAudio(){try{if(!ac)buildAudio();if(ac&&ac.state!=='running')ac.resume().then(refreshHint).catch(()=>{})}catch(e){}refreshHint()}
  tryAudio();setTimeout(refreshHint,500);
  ['click','touchend','pointerup','keydown'].forEach(ev=>window.addEventListener(ev,()=>{if(!done)tryAudio()},{passive:true}));
-
- function throttle(t){return (0.12+0.88*sm(2.2,4.6,t))*(1-0.7*sm(8.4,10,t))}
+ const throttle=t=>(0.12+0.88*sm(2.2,4.6,t))*(1-0.7*sm(8.4,10,t));
  function updateAudio(t){
   if(!ac||ac.state!=='running'||!N)return;
-  const now=ac.currentTime,th=throttle(t);
-  const ab=sm(2.6,4.6,t)*(1-sm(8.2,9.9,t)),fade=1-sm(8.8,10,t);
-  N.master.gain.setTargetAtTime(1.0*fade,now,0.1);
-  N.lp.frequency.setTargetAtTime(220+2600*th,now,0.1);
-  N.g1.gain.setTargetAtTime(0.35+0.95*th,now,0.1);
-  N.bp.frequency.setTargetAtTime(1500+3500*th,now,0.1);
-  N.g2.gain.setTargetAtTime(0.02+0.28*th,now,0.1);
-  N.o.frequency.setTargetAtTime(48+70*th,now,0.1);
-  N.g3.gain.setTargetAtTime(0.25+0.55*th,now,0.1);
-  N.gAB.gain.setTargetAtTime(1.2*ab,now,0.1);
+  const now=ac.currentTime,th=throttle(t),ab=sm(2.6,4.6,t)*(1-sm(8.2,9.9,t)),fade=1-sm(8.8,10,t);
+  N.master.gain.setTargetAtTime(fade,now,0.1);N.lp.frequency.setTargetAtTime(220+2600*th,now,0.1);
+  N.g1.gain.setTargetAtTime(0.35+0.95*th,now,0.1);N.bp.frequency.setTargetAtTime(1500+3500*th,now,0.1);
+  N.g2.gain.setTargetAtTime(0.02+0.28*th,now,0.1);N.o.frequency.setTargetAtTime(48+70*th,now,0.1);
+  N.g3.gain.setTargetAtTime(0.25+0.55*th,now,0.1);N.gAB.gain.setTargetAtTime(1.2*ab,now,0.1);
  }
-
- const jets=[];
- for(let i=0;i<6;i++)jets.push({i,x0:0.05+0.08*(i%3),ts:2.3+i*0.28,rot:2.0+(i%2)*0.25,sc:0.55+0.08*i});
+ const jets=[];for(let i=0;i<6;i++)jets.push({i,x0:0.05+0.08*(i%3),ts:2.3+i*0.28,rot:2.0+(i%2)*0.25,sc:0.55+0.08*i});
  const stars=[];for(let i=0;i<70;i++)stars.push([Math.random(),Math.random()*0.5,Math.random()*1.5+0.4]);
-
  function flame(ab,thr){
   const fl=0.86+Math.random()*0.28,len=(10+26*thr+150*ab)*fl,h=4+9*ab;
   cx.globalCompositeOperation='lighter';
   let g=cx.createRadialGradient(-112,0,0,-112,0,40+110*ab);
   g.addColorStop(0,'rgba(255,170,70,'+(0.25+0.4*ab)+')');g.addColorStop(1,'rgba(255,100,20,0)');
-  cx.fillStyle=g;cx.fillRect(-112-160,-160,320,320);
+  cx.fillStyle=g;cx.fillRect(-272,-160,320,320);
   g=cx.createLinearGradient(-112,0,-112-len,0);
-  g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(0.25,'rgba(255,190,80,.9)');
-  g.addColorStop(0.7,'rgba(255,90,20,.45)');g.addColorStop(1,'rgba(255,60,0,0)');
-  cx.fillStyle=g;cx.beginPath();cx.moveTo(-110,-h);
-  cx.quadraticCurveTo(-112-len*0.5,-h*1.3,-112-len,0);
-  cx.quadraticCurveTo(-112-len*0.5,h*1.3,-110,h);cx.closePath();cx.fill();
+  g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(0.25,'rgba(255,190,80,.9)');g.addColorStop(0.7,'rgba(255,90,20,.45)');g.addColorStop(1,'rgba(255,60,0,0)');
+  cx.fillStyle=g;cx.beginPath();cx.moveTo(-110,-h);cx.quadraticCurveTo(-112-len*0.5,-h*1.3,-112-len,0);cx.quadraticCurveTo(-112-len*0.5,h*1.3,-110,h);cx.closePath();cx.fill();
   g=cx.createLinearGradient(-112,0,-112-len*0.55,0);
   g.addColorStop(0,'rgba(200,225,255,.95)');g.addColorStop(1,'rgba(120,170,255,0)');
-  cx.fillStyle=g;cx.beginPath();cx.moveTo(-110,-h*0.5);
-  cx.quadraticCurveTo(-112-len*0.3,-h*0.6,-112-len*0.55,0);
-  cx.quadraticCurveTo(-112-len*0.3,h*0.6,-110,h*0.5);cx.closePath();cx.fill();
-  if(ab>0.4){
-   cx.fillStyle='rgba(255,235,200,'+(0.5*ab)+')';
-   for(let n=1;n<=4;n++){cx.beginPath();cx.ellipse(-112-n*len/5.2,0,len/22,h*0.45,0,0,6.3);cx.fill();}
-  }
+  cx.fillStyle=g;cx.beginPath();cx.moveTo(-110,-h*0.5);cx.quadraticCurveTo(-112-len*0.3,-h*0.6,-112-len*0.55,0);cx.quadraticCurveTo(-112-len*0.3,h*0.6,-110,h*0.5);cx.closePath();cx.fill();
+  if(ab>0.4){cx.fillStyle='rgba(255,235,200,'+(0.5*ab)+')';for(let n=1;n<=4;n++){cx.beginPath();cx.ellipse(-112-n*len/5.2,0,len/22,h*0.45,0,0,6.3);cx.fill()}}
   cx.globalCompositeOperation='source-over';
  }
-
+ function poly(f,p){cx.fillStyle=f;cx.beginPath();cx.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++)cx.lineTo(p[i][0],p[i][1]);cx.closePath();cx.fill()}
  function body(gear){
-  const dark='#5b6770',mid='#929ea8',lite='#c9d1d7';
-  let g;
+  const dark='#5b6770',mid='#929ea8',lite='#c9d1d7';let g;
   if(gear>0.02){
-   const my=14+(G-14-6)*gear;
-   const ny=11+(G-11-4.5)*gear;
+   const my=14+(G-20)*gear,ny=11+(G-15.5)*gear;
    cx.strokeStyle='#2a3238';cx.lineWidth=3;cx.lineCap='round';
-   cx.beginPath();cx.moveTo(-14,13);cx.lineTo(-14,my);cx.stroke();
-   cx.beginPath();cx.moveTo(78,12);cx.lineTo(78,ny);cx.stroke();
-   cx.fillStyle='#14191c';
-   cx.beginPath();cx.arc(-14,my,6,0,6.3);cx.fill();
-   cx.beginPath();cx.arc(78,ny,4.5,0,6.3);cx.fill();
-   cx.fillStyle='#8c969d';
-   cx.beginPath();cx.arc(-14,my,2.2,0,6.3);cx.fill();
-   cx.beginPath();cx.arc(78,ny,1.8,0,6.3);cx.fill();
+   cx.beginPath();cx.moveTo(-14,13);cx.lineTo(-14,my);cx.stroke();cx.beginPath();cx.moveTo(78,12);cx.lineTo(78,ny);cx.stroke();
+   cx.fillStyle='#14191c';cx.beginPath();cx.arc(-14,my,6,0,6.3);cx.fill();cx.beginPath();cx.arc(78,ny,4.5,0,6.3);cx.fill();
   }
-
-  if(jetImgOK){
-   const iw=270,ih=iw*jetImg.naturalHeight/jetImg.naturalWidth;
-   cx.drawImage(jetImg,-135,-ih/2,iw,ih);
-   return;
-  }
-
-  cx.fillStyle=mid;cx.beginPath();
-  cx.moveTo(-56,-14);cx.lineTo(-95,-54);cx.lineTo(-111,-54);cx.lineTo(-108,-10);cx.closePath();cx.fill();
-  cx.strokeStyle='rgba(20,28,34,.6)';cx.lineWidth=0.8;
-  cx.beginPath();cx.moveTo(-100,-52);cx.lineTo(-103,-11);cx.stroke();
-  cx.fillStyle='#d9e0e5';cx.fillRect(-112,-57,16,3);
-
-  cx.fillStyle=dark;cx.beginPath();
-  cx.moveTo(-76,11);cx.lineTo(-94,27);cx.lineTo(-106,27);cx.lineTo(-104,10);cx.closePath();cx.fill();
-
-  cx.fillStyle=dark;cx.beginPath();
-  cx.moveTo(-90,7);cx.lineTo(-122,19);cx.lineTo(-133,19);cx.lineTo(-112,5);cx.closePath();cx.fill();
-
-  g=cx.createLinearGradient(0,-22,0,16);
-  g.addColorStop(0,lite);g.addColorStop(0.5,mid);g.addColorStop(1,dark);
-  cx.fillStyle=g;cx.beginPath();
-  cx.moveTo(104,-9);cx.lineTo(70,-13);cx.lineTo(30,-15);cx.lineTo(-60,-15);cx.lineTo(-104,-11);
-  cx.lineTo(-114,-7);cx.lineTo(-114,8);cx.lineTo(-100,11);cx.lineTo(-40,14);cx.lineTo(30,15);
-  cx.lineTo(80,13);cx.lineTo(104,10);cx.closePath();cx.fill();
-
-  cx.fillStyle='#b1bbc3';cx.beginPath();
-  cx.moveTo(14,-15);cx.quadraticCurveTo(-4,-24,-50,-21);cx.lineTo(-100,-13);cx.lineTo(-100,-11);
-  cx.lineTo(-60,-15);cx.closePath();cx.fill();
-
-  cx.strokeStyle='rgba(20,28,34,.35)';cx.lineWidth=0.7;
-  [[44,-13,44,13],[-8,-15,-8,14],[-36,-15,-36,13],[-82,-13,-82,11]].forEach(l=>{
-   cx.beginPath();cx.moveTo(l[0],l[1]);cx.lineTo(l[2],l[3]);cx.stroke();
-  });
-  cx.beginPath();cx.moveTo(100,-1);cx.lineTo(-100,2);cx.stroke();
-
-  g=cx.createLinearGradient(0,8,0,30);
-  g.addColorStop(0,'#a2adb6');g.addColorStop(1,'#6c7882');
-  cx.fillStyle=g;cx.beginPath();
-  cx.moveTo(34,10);cx.lineTo(-30,29);cx.lineTo(-72,29);cx.lineTo(-62,10);cx.closePath();cx.fill();
-  cx.strokeStyle='rgba(15,22,28,.55)';cx.lineWidth=0.8;cx.stroke();
-
-  cx.fillStyle='#4a555d';cx.fillRect(-18,29,4,4);
-  g=cx.createLinearGradient(0,30,0,41);
-  g.addColorStop(0,'#c0c9cf');g.addColorStop(1,'#68737c');
+  poly(mid,[[-56,-14],[-95,-54],[-111,-54],[-108,-10]]);
+  poly(dark,[[-76,11],[-94,27],[-106,27],[-104,10]]);
+  poly(dark,[[-90,7],[-122,19],[-133,19],[-112,5]]);
+  g=cx.createLinearGradient(0,-22,0,16);g.addColorStop(0,lite);g.addColorStop(0.5,mid);g.addColorStop(1,dark);
+  poly(g,[[104,-9],[70,-13],[30,-15],[-60,-15],[-104,-11],[-114,-7],[-114,8],[-100,11],[-40,14],[30,15],[80,13],[104,10]]);
+  poly('#b1bbc3',[[14,-15],[-4,-22],[-50,-21],[-100,-13],[-100,-11],[-60,-15]]);
+  g=cx.createLinearGradient(0,8,0,30);g.addColorStop(0,'#a2adb6');g.addColorStop(1,'#6c7882');
+  poly(g,[[34,10],[-30,29],[-72,29],[-62,10]]);
+  g=cx.createLinearGradient(0,30,0,41);g.addColorStop(0,'#c0c9cf');g.addColorStop(1,'#68737c');
   cx.fillStyle=g;cx.beginPath();cx.ellipse(-16,36,34,5.5,0,0,6.3);cx.fill();
-  cx.fillStyle='#4a555d';cx.beginPath();
-  cx.moveTo(-46,36);cx.lineTo(-52,31);cx.lineTo(-44,34);cx.closePath();cx.fill();
-
-  g=cx.createLinearGradient(0,-31,0,-12);
-  g.addColorStop(0,'rgba(200,236,255,.95)');g.addColorStop(1,'rgba(40,90,130,.92)');
-  cx.fillStyle=g;cx.beginPath();
-  cx.moveTo(66,-13);cx.quadraticCurveTo(58,-31,36,-29);cx.quadraticCurveTo(20,-27,14,-15);cx.closePath();cx.fill();
-  cx.strokeStyle='#323c43';cx.lineWidth=1.2;cx.stroke();
-  cx.beginPath();cx.moveTo(40,-29);cx.lineTo(43,-14);cx.stroke();
-  cx.fillStyle='rgba(255,255,255,.55)';
-  cx.beginPath();cx.ellipse(52,-21,6,2,-0.5,0,6.3);cx.fill();
-
+  g=cx.createLinearGradient(0,-31,0,-12);g.addColorStop(0,'rgba(200,236,255,.95)');g.addColorStop(1,'rgba(40,90,130,.92)');
+  poly(g,[[66,-13],[58,-27],[40,-29],[20,-26],[14,-15]]);
   cx.fillStyle='#0e1317';cx.beginPath();cx.ellipse(103,0.5,4.5,10.5,0,0,6.3);cx.fill();
-  g=cx.createLinearGradient(0,-8,0,9);
-  g.addColorStop(0,'#dde3e8');g.addColorStop(1,'#7c8892');
-  cx.fillStyle=g;cx.beginPath();cx.moveTo(103,-6);cx.lineTo(136,1.5);cx.lineTo(103,8);cx.closePath();cx.fill();
-  cx.fillStyle='#2f7d5d';cx.beginPath();cx.arc(133,1.6,2.3,0,6.3);cx.fill();
-  cx.strokeStyle='#4b565e';cx.lineWidth=1.2;
-  cx.beginPath();cx.moveTo(136,1.5);cx.lineTo(154,1);cx.stroke();
-
+  g=cx.createLinearGradient(0,-8,0,9);g.addColorStop(0,'#dde3e8');g.addColorStop(1,'#7c8892');
+  poly(g,[[103,-6],[136,1.5],[103,8]]);
   cx.fillStyle='#2b2522';cx.fillRect(-119,-8,13,17);
-  cx.strokeStyle='rgba(255,255,255,.18)';cx.lineWidth=0.8;
-  for(let i=0;i<4;i++){cx.beginPath();cx.moveTo(-117+i*3.4,-8);cx.lineTo(-117+i*3.4,9);cx.stroke();}
-
   cx.fillStyle='#00694c';cx.beginPath();cx.arc(-58,-2,6.2,0,6.3);cx.fill();
   cx.fillStyle='#e03c31';cx.beginPath();cx.arc(-59,-2,3.3,0,6.3);cx.fill();
   cx.fillStyle='#00694c';cx.beginPath();cx.arc(-93,-36,3.6,0,6.3);cx.fill();
   cx.fillStyle='#e03c31';cx.beginPath();cx.arc(-93.6,-36,2,0,6.3);cx.fill();
  }
-
  function drawJet(j,t,k){
-  const p=t-j.ts,q=p-j.rot;
-  let x=j.x0*W,alt=0,pitch=0,gear=1;
+  const p=t-j.ts,q=p-j.rot;let x=j.x0*W,alt=0,pitch=0,gear=1;
   if(p>0)x+=0.5*0.095*W*p*p;
-  if(q>0){alt=(26*q*q+26*q)*k;pitch=Math.min(0.42,q*0.32);gear=1-sm(0.25,1.0,q);}
+  if(q>0){alt=(26*q*q+26*q)*k;pitch=Math.min(0.42,q*0.32);gear=1-sm(0.25,1.0,q)}
   const sc=j.sc*k,base=H*(0.655+0.05*j.i);
   if(x-170*sc>W)return;
   const thr=0.12+0.88*sm(j.ts-0.3,j.ts+0.7,t),ab=sm(j.ts-0.1,j.ts+1.4,t);
-  let y=base-G*sc-alt;
-  if(p>0&&alt===0)y+=(Math.random()-.5)*1.6;
-  cx.fillStyle='rgba(0,0,0,'+(0.35*Math.max(0,1-alt/(260*k)))+')';
-  cx.beginPath();cx.ellipse(x,base+3*sc,120*sc,7*sc,0,0,6.3);cx.fill();
+  let y=base-G*sc-alt;if(p>0&&alt===0)y+=(Math.random()-.5)*1.6;
+  cx.fillStyle='rgba(0,0,0,'+(0.35*Math.max(0,1-alt/(260*k)))+')';cx.beginPath();cx.ellipse(x,base+3*sc,120*sc,7*sc,0,0,6.3);cx.fill();
   if(ab>0.05&&alt<150*k){
    const gl=cx.createRadialGradient(x-130*sc,base,0,x-130*sc,base,150*sc*ab+10);
    gl.addColorStop(0,'rgba(255,170,80,'+(0.3*ab)+')');gl.addColorStop(1,'rgba(255,120,40,0)');
-   cx.globalCompositeOperation='lighter';cx.fillStyle=gl;cx.fillRect(x-300*sc,base-60*sc,340*sc,120*sc);
-   cx.globalCompositeOperation='source-over';
+   cx.globalCompositeOperation='lighter';cx.fillStyle=gl;cx.fillRect(x-300*sc,base-60*sc,340*sc,120*sc);cx.globalCompositeOperation='source-over';
   }
-  cx.save();
-  cx.translate(x,y);cx.scale(sc,sc);
-  cx.translate(-14,G);cx.rotate(-pitch);cx.translate(14,-G);
-  flame(ab,thr);body(gear);
-  cx.restore();
+  cx.save();cx.translate(x,y);cx.scale(sc,sc);cx.translate(-14,G);cx.rotate(-pitch);cx.translate(14,-G);flame(ab,thr);body(gear);cx.restore();
  }
-
  function draw(t,dt){
   const k=Math.max(0.5,Math.min(1.25,W/900)),gy=H*0.575;
   scroll+=dt*320*sm(2.4,6,t)*(1-0.5*sm(8,10,t));
   cx.clearRect(0,0,W,H);
-  let g=cx.createLinearGradient(0,0,0,gy);
-  g.addColorStop(0,'#040a14');g.addColorStop(0.55,'#10303b');g.addColorStop(1,'#e07b3c');
+  let g=cx.createLinearGradient(0,0,0,gy);g.addColorStop(0,'#040a14');g.addColorStop(0.55,'#10303b');g.addColorStop(1,'#e07b3c');
   cx.fillStyle=g;cx.fillRect(0,0,W,gy+2);
-  cx.fillStyle='rgba(255,255,255,.7)';
-  stars.forEach(s=>cx.fillRect(s[0]*W,s[1]*H,s[2],s[2]));
-  cx.fillStyle='#0b1518';
-  const pw=420,off=(scroll*0.15)%pw;
-  for(let b=-pw;b<W+pw;b+=pw){
-   const bx=b-off;
-   cx.fillRect(bx+20,gy-26*k-4,90*k,26*k+4);cx.fillRect(bx+170*k,gy-16*k,60*k,16*k);cx.fillRect(bx+300*k,gy-46*k,7*k,46*k);
-  }
-  g=cx.createLinearGradient(0,gy,0,H);
-  g.addColorStop(0,'#0c1a14');g.addColorStop(0.06,'#23282a');g.addColorStop(1,'#101315');
+  cx.fillStyle='rgba(255,255,255,.7)';stars.forEach(s=>cx.fillRect(s[0]*W,s[1]*H,s[2],s[2]));
+  cx.fillStyle='#0b1518';const pw=420,off=(scroll*0.15)%pw;
+  for(let b=-pw;b<W+pw;b+=pw){const bx=b-off;cx.fillRect(bx+20,gy-26*k-4,90*k,26*k+4);cx.fillRect(bx+170*k,gy-16*k,60*k,16*k);cx.fillRect(bx+300*k,gy-46*k,7*k,46*k)}
+  g=cx.createLinearGradient(0,gy,0,H);g.addColorStop(0,'#0c1a14');g.addColorStop(0.06,'#23282a');g.addColorStop(1,'#101315');
   cx.fillStyle=g;cx.fillRect(0,gy,W,H-gy);
   const blink=0.6+0.4*Math.sin(t*6);
   for(let x=-(scroll%90);x<W;x+=90){
-   cx.fillStyle='rgba(255,190,90,'+(0.55+0.4*blink)+')';
-   cx.beginPath();cx.arc(x,gy+H*0.03,2.4*k+0.6,0,6.3);cx.fill();
-   cx.fillStyle='rgba(120,190,255,.8)';
-   cx.beginPath();cx.arc(x+45,H*0.975,2.2*k+0.6,0,6.3);cx.fill();
+   cx.fillStyle='rgba(255,190,90,'+(0.55+0.4*blink)+')';cx.beginPath();cx.arc(x,gy+H*0.03,2.4*k+0.6,0,6.3);cx.fill();
+   cx.fillStyle='rgba(120,190,255,.8)';cx.beginPath();cx.arc(x+45,H*0.975,2.2*k+0.6,0,6.3);cx.fill();
   }
   cx.fillStyle='rgba(235,235,225,.65)';
-  [0.73,0.84].forEach(r=>{for(let x=-(scroll%110);x<W;x+=110)cx.fillRect(x,H*r,60*k+10,3*k+1);});
-  cx.save();
-  const sh=2.4*sm(3,8,t)*(1-sm(8.6,10,t));
-  cx.translate((Math.random()-.5)*sh,(Math.random()-.5)*sh);
-  jets.forEach(j=>drawJet(j,t,k));
-  cx.restore();
+  [0.73,0.84].forEach(r=>{for(let x=-(scroll%110);x<W;x+=110)cx.fillRect(x,H*r,60*k+10,3*k+1)});
+  cx.save();const sh=2.4*sm(3,8,t)*(1-sm(8.6,10,t));cx.translate((Math.random()-.5)*sh,(Math.random()-.5)*sh);
+  jets.forEach(j=>drawJet(j,t,k));cx.restore();
   cx.fillStyle='rgba(0,0,0,'+(1-sm(0,0.9,t))+')';cx.fillRect(0,0,W,H);
  }
-
  function finish(){
   if(done)return;done=true;
   try{if(N&&ac)N.master.gain.setTargetAtTime(0,ac.currentTime,0.12)}catch(e){}
-  overlay.classList.add('fade-out');
-  setTimeout(()=>{overlay.remove();try{ac&&ac.close()}catch(e){}},900);
+  overlay.classList.add('fade-out');setTimeout(()=>{overlay.remove();try{ac&&ac.close()}catch(e){}},900);
  }
  document.getElementById('introSkip').addEventListener('click',finish);
-
  function frame(ts){
-  if(done)return;
-  if(start===null){start=ts;last=ts;}
+  if(done)return;if(start===null){start=ts;last=ts}
   const t=(ts-start)/1000,dt=Math.min(0.05,(ts-last)/1000);last=ts;
-  draw(t,dt);updateAudio(t);
-  if(t>=DURATION){finish();return;}
-  requestAnimationFrame(frame);
+  draw(t,dt);updateAudio(t);if(t>=DURATION){finish();return}requestAnimationFrame(frame);
  }
  requestAnimationFrame(frame);
 })();
 
+const $=id=>document.getElementById(id);
+
+// ===== sheet markup (same for preview and print/PDF) =====
+function sheetMarkup(p){return `<div class="sh-head"><span class="t1">PARADE STATE</span><span class="t2">AC TAKING & HANDING OVER FLT (HANGAR)</span><div class="sh-date">DATE : <span id="${p}Date"></span></div></div><div id="${p}Note" class="sheet-note hidden"></div><table class="print-grid" id="${p}Grid"></table><div class="print-layout-container" id="${p}Lists"></div><div class="signatures-bottom"><div class="sg-l"><b>PREPARED BY</b><div class="sg-name" id="${p}Prep">PARVEZ<br>SGT</div></div><div class="sg-c"><b>JCOIC</b></div><div class="sg-r"><b>OIC</b></div></div>`}
+$("previewSheet").innerHTML=sheetMarkup("preview");
+$("printSheet").innerHTML=sheetMarkup("print");
+
 // ===================== CLOUD (FIREBASE) =====================
-const firebaseConfig = {
-  databaseURL: "https://hangar-2f228-default-rtdb.firebaseio.com/"
-};
-
-let dbRef = null;
-let isCloudEnabled = false;
-
-function setBadge(txt, ok, tip){
- const el=document.getElementById("cloudStatus");
- if(!el)return;
- el.textContent=txt;
- el.style.background=ok===false?"#fdecea":"#e8f5e9";
- el.style.color=ok===false?"#b3261e":"#2e7d32";
- el.title=tip||"";
-}
-
-try {
-  if(firebaseConfig.databaseURL && firebaseConfig.databaseURL !== "YOUR_FIREBASE_DATABASE_URL_HERE"){
-    firebase.initializeApp(firebaseConfig);
-    dbRef = firebase.database().ref("manpower_app");
-    isCloudEnabled = true;
-    setBadge("Cloud Connecting…", true);
-  } else {
-    setBadge("Local Only", false);
-  }
-} catch(e) {
-  setBadge("Local Mode", false, String(e&&e.message||e));
-}
+const firebaseConfig={databaseURL:"https://hangar-2f228-default-rtdb.firebaseio.com/"};
+let dbRef=null,isCloudEnabled=false;
+function setBadge(txt,ok,tip){const el=$("cloudStatus");if(!el)return;el.textContent=txt;el.style.background=ok===false?"#fdecea":"#e8f5e9";el.style.color=ok===false?"#b3261e":"#2e7d32";el.title=tip||""}
+try{
+ if(firebaseConfig.databaseURL&&firebaseConfig.databaseURL!=="YOUR_FIREBASE_DATABASE_URL_HERE"){
+  firebase.initializeApp(firebaseConfig);dbRef=firebase.database().ref("manpower_app");isCloudEnabled=true;setBadge("Cloud Connecting…",true);
+ }else setBadge("Local Only",false);
+}catch(e){setBadge("Local Mode",false,String(e&&e.message||e))}
 
 let ranks=[{rank:"MWO",names:["Shaheen","Nazrul"]},{rank:"SWO",names:["M. Ali","Kusru"]},{rank:"WO",names:["Jahangir","Khairul","Hasan","Salam","Hasim","Kalam","Josim","Kamrul","Enam","Raisul"]},{rank:"SGT",names:["Akash","Alek","Habib","Ashik","Shimul","Shaheen","M. Ali","Parvez","Kaisar","Anis","Imran","Abdullah","Jafor","Adam","Rakib"]},{rank:"CPL",names:["Saiful","Chunnu","Imran","Arif","Jahid","Razzak","Milon","Bokul","Nasim","Shawon","Al Amin","Rejaul","Sajed","Sujon","Jomir","Tofazzol"]},{rank:"LAC",names:["Rakib","Tanvir","Sento","Mohit","Hossain"]},{rank:"AC",names:[]},{rank:"Attachment",names:["WO Khalek","SGT Sourav","CPL Akbar"]}];
 
 const statuses=["All Duty On","All Duty Off","Leave","QRF Duty","CMH","Form 295","On Parade","ON PT","ON FOD","Civil Tech","TD/Courier","Mess/Canteen","CMH SR/FMLY SR","CMH / M Room Admit","Milk Duty","EDP/PG/ITD C","BASAE Out/Exam","Under Clearance","GST/GH","Afternoon","Parade","Out of Parade","Attachment"];
-const statusShort={"All Duty On":"Duty On","All Duty Off":"Duty Off","Leave":"Leave","QRF Duty":"QRF Duty","CMH":"CMH","Form 295":"Form 295","On Parade":"On Parade","ON PT":"ON PT","ON FOD":"ON FOD","Civil Tech":"Civil Tech","TD/Courier":"TD/Courier","Mess/Canteen":"Mess/Canteen","CMH SR/FMLY SR":"CMH SR/FMLY SR","CMH / M Room Admit":"CMH / M Room Admit","Milk Duty":"Milk Duty","EDP/PG/ITD C":"EDP/PG/ITD C","BASAE Out/Exam":"BASAE Out/Exam","Under Clearance":"Under Clearance","GST/GH":"GST/GH","Afternoon":"Afternoon","Parade":"Parade","Out of Parade":"Out of Parade","Attachment":"Attachment"};
+const statusShort={};statuses.forEach(s=>statusShort[s]=s);statusShort["All Duty On"]="Duty On";statusShort["All Duty Off"]="Duty Off";
 const militaryOrder=["MWO","SWO","WO","SGT","CPL","LAC","AC"];let people=[];
 
 function slugOld(v){return encodeURIComponent(String(v==null?"":v).trim().toLowerCase())||"person"}
@@ -587,225 +347,118 @@ function rebuildPeople(){
   g.names.forEach((name,i)=>{
    name=String(name==null?"":name);
    const key=name.trim().toLowerCase();seen[key]=(seen[key]||0)+1;
-   people.push({
-    id:"p_"+slugPart(g.rank)+"_"+slugPart(name)+"_"+seen[key],
-    oldId:"p_"+slugOld(g.rank)+"_"+slugOld(name)+"_"+seen[key],
-    legacyId:g.rank+"_"+i,rank:g.rank,name
-   });
+   people.push({id:"p_"+slugPart(g.rank)+"_"+slugPart(name)+"_"+seen[key],oldId:"p_"+slugOld(g.rank)+"_"+slugOld(name)+"_"+seen[key],legacyId:g.rank+"_"+i,rank:g.rank,name});
   });
  });
 }
 rebuildPeople();
 
-function totalManpower(){return people.length}function militaryCount(){return people.filter(p=>militaryOrder.includes(p.rank)).length}const $=id=>document.getElementById(id);
+function totalManpower(){return people.length}function militaryCount(){return people.filter(p=>militaryOrder.includes(p.rank)).length}
 let current={},currentLeave={},currentDuty={},currentEd={},activeStatus="Leave",saved={},activeLeavePersonId=null,activeDutyPersonId=null,activeEdPersonId=null,pendingPreviousStatus="On Parade";
-let dutyFor="All Duty On"; 
-let detailEditMode=false; 
-let undoStack = [];
+let dutyFor="All Duty On",detailEditMode=false,undoStack=[];
 
 const today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
-let boundDate=today(); 
+let boundDate=today();
 function date(){return $("stateDate").value||today()}
 
 function pushUndo(){
- undoStack.push({
-  date: boundDate,
-  current: JSON.parse(JSON.stringify(current)),
-  currentLeave: JSON.parse(JSON.stringify(currentLeave)),
-  currentDuty: JSON.parse(JSON.stringify(currentDuty)),
-  currentEd: JSON.parse(JSON.stringify(currentEd))
- });
- if(undoStack.length > 20) undoStack.shift();
+ undoStack.push({date:boundDate,current:JSON.parse(JSON.stringify(current)),currentLeave:JSON.parse(JSON.stringify(currentLeave)),currentDuty:JSON.parse(JSON.stringify(currentDuty)),currentEd:JSON.parse(JSON.stringify(currentEd))});
+ if(undoStack.length>20)undoStack.shift();
 }
-
 function applyUndo(){
- if(!undoStack.length) return alert("No recent state changes to undo.");
- const last = undoStack.pop();
- $("stateDate").value = last.date;
- boundDate = last.date;
- current = last.current;
- currentLeave = last.currentLeave;
- currentDuty = last.currentDuty;
- currentEd = last.currentEd;
- renderAll();
- autoSaveBuffer();
- alert("Undo applied!");
+ if(!undoStack.length)return alert("No recent state changes to undo.");
+ const last=undoStack.pop();
+ $("stateDate").value=last.date;boundDate=last.date;current=last.current;currentLeave=last.currentLeave;currentDuty=last.currentDuty;currentEd=last.currentEd;
+ renderAll();autoSaveBuffer();alert("Undo applied!");
 }
-
-$("undoBtn").onclick = applyUndo;
+$("undoBtn").onclick=applyUndo;
 
 function blank(){const x={};people.forEach(p=>x[p.id]="On Parade");return x}
 function ensureCurrent(){people.forEach(p=>{if(!current[p.id])current[p.id]="On Parade"})}
-function key(){return "state-office-manpower-v1"}function rosterKey(){return "state-office-manpower-roster-v1"}
-function rosterTsKey(){return "state-office-roster-ts-v1"}
-function syncFlagKey(){return "state-office-cloud-synced-v1"}
+const key=()=>"state-office-manpower-v1",rosterKey=()=>"state-office-manpower-roster-v1",rosterTsKey=()=>"state-office-roster-ts-v1",syncFlagKey=()=>"state-office-cloud-synced-v1";
 
 let rosterTs=0,rosterDirty=false,cloudLoaded=false,migrating=false,flushing=false,flushWaiters=[];
 const pendingDates=new Set();
-
 function cleanJSON(o){return JSON.parse(JSON.stringify(o))}
 function normalizeRanks(r){
  if(!r)return null;
  const arr=Array.isArray(r)?r:Object.values(r);
- const out=arr.filter(g=>g&&typeof g.rank==="string").map(g=>{
-  const names=(Array.isArray(g.names)?g.names:Object.values(g.names||{})).map(n=>String(n));
-  return {rank:g.rank,names};
- });
+ const out=arr.filter(g=>g&&typeof g.rank==="string").map(g=>({rank:g.rank,names:(Array.isArray(g.names)?g.names:Object.values(g.names||{})).map(n=>String(n))}));
  return out.length?out:null;
 }
-function cacheRoster(){
- try{localStorage.setItem(rosterKey(),JSON.stringify(ranks));localStorage.setItem(rosterTsKey(),String(rosterTs))}catch(e){}
-}
+function cacheRoster(){try{localStorage.setItem(rosterKey(),JSON.stringify(ranks));localStorage.setItem(rosterTsKey(),String(rosterTs))}catch(e){}}
 function cloudMsg(r){
  if(r==="ok")return "saved permanently to cloud ✓";
  if(r==="wait")return "saved on this device (will upload when cloud connects)";
  if(r==="error")return "saved on this device ONLY - cloud save FAILED (check internet / Firebase rules)";
  return "saved on this device";
 }
-
 function flushCloud(){
  if(!isCloudEnabled||!dbRef)return Promise.resolve("local");
  if(!cloudLoaded)return Promise.resolve("wait");
  if(flushing)return new Promise(res=>flushWaiters.push(res));
- const upd={},dates=Array.from(pendingDates),sent={};
- const sentRoster=rosterDirty,sentTs=rosterTs;
- let any=false;
+ const upd={},dates=Array.from(pendingDates),sent={},sentRoster=rosterDirty,sentTs=rosterTs;let any=false;
  if(sentRoster){upd.ranks=cleanJSON(ranks);upd.ranksUpdatedAt=sentTs;any=true}
- dates.forEach(d=>{
-  sent[d]=saved[d]?saved[d].savedAt:null;
-  upd["saved/"+d]=saved[d]?cleanJSON(saved[d]):null;
-  any=true;
- });
+ dates.forEach(d=>{sent[d]=saved[d]?saved[d].savedAt:null;upd["saved/"+d]=saved[d]?cleanJSON(saved[d]):null;any=true});
  if(!any)return Promise.resolve("ok");
- flushing=true;
- setBadge("Saving to cloud…",true);
- let promise;
- try{promise=dbRef.update(upd)}catch(err){promise=Promise.reject(err)}
+ flushing=true;setBadge("Saving to cloud…",true);
+ let promise;try{promise=dbRef.update(upd)}catch(err){promise=Promise.reject(err)}
  return promise.then(()=>{
   if(sentRoster&&rosterTs===sentTs)rosterDirty=false;
   dates.forEach(d=>{const cur=saved[d]?saved[d].savedAt:null;if(cur===sent[d])pendingDates.delete(d)});
   if(migrating){try{localStorage.setItem(syncFlagKey(),"1")}catch(e){}migrating=false}
-  setBadge("Cloud Saved ✓",true);
-  return "ok";
- }).catch(err=>{
-  console.error("Cloud save failed",err);
-  setBadge("Cloud Save Failed ✗",false,String(err&&err.message||err));
-  return "error";
- }).then(result=>{
-  flushing=false;
-  const w=flushWaiters;flushWaiters=[];
-  if(w.length){
-   if(result==="ok")flushCloud().then(r=>w.forEach(f=>f(r)));
-   else w.forEach(f=>f(result));
-  }
+  setBadge("Cloud Saved ✓",true);return "ok";
+ }).catch(err=>{console.error("Cloud save failed",err);setBadge("Cloud Save Failed ✗",false,String(err&&err.message||err));return "error"}).then(result=>{
+  flushing=false;const w=flushWaiters;flushWaiters=[];
+  if(w.length){if(result==="ok")flushCloud().then(r=>w.forEach(f=>f(r)));else w.forEach(f=>f(result))}
   return result;
  });
 }
-
 function initCloudListener(){
  if(!isCloudEnabled||!dbRef)return;
  dbRef.on("value",snap=>{
-  const data=snap.val()||{};
-  let rosterChanged=false;
-
+  const data=snap.val()||{};let rosterChanged=false;
   if(!rosterDirty){
-   const cloudRanks=normalizeRanks(data.ranks);
-   const localRanks=normalizeRanks(ranks)||[];
+   const cloudRanks=normalizeRanks(data.ranks),localRanks=normalizeRanks(ranks)||[];
    if(cloudRanks){
-    const cloudTs=Number(data.ranksUpdatedAt)||1;
-    const same=JSON.stringify(cloudRanks)===JSON.stringify(localRanks);
-    if(cloudTs>rosterTs){
-     if(!same){ranks=cloudRanks;rebuildPeople();rosterChanged=true}
-     rosterTs=cloudTs;cacheRoster();
-    }else if(!same&&rosterTs>=1&&(rosterTs>cloudTs||cloudTs<=1)){
-     rosterTs=(rosterTs>1)?rosterTs:Date.now();cacheRoster();rosterDirty=true;
-    }
-   }else if(rosterTs>=1){
-    rosterTs=(rosterTs>1)?rosterTs:Date.now();cacheRoster();rosterDirty=true;
-   }
+    const cloudTs=Number(data.ranksUpdatedAt)||1,same=JSON.stringify(cloudRanks)===JSON.stringify(localRanks);
+    if(cloudTs>rosterTs){if(!same){ranks=cloudRanks;rebuildPeople();rosterChanged=true}rosterTs=cloudTs;cacheRoster()}
+    else if(!same&&rosterTs>=1&&(rosterTs>cloudTs||cloudTs<=1)){rosterTs=(rosterTs>1)?rosterTs:Date.now();cacheRoster();rosterDirty=true}
+   }else if(rosterTs>=1){rosterTs=(rosterTs>1)?rosterTs:Date.now();cacheRoster();rosterDirty=true}
   }
-
   const cloudSaved=(data.saved&&typeof data.saved==="object")?data.saved:{};
-  let synced=false;
-  try{synced=!!localStorage.getItem(syncFlagKey())}catch(e){}
+  let synced=false;try{synced=!!localStorage.getItem(syncFlagKey())}catch(e){}
   const merged={};
-  Object.keys(cloudSaved).forEach(d=>{
-   if(pendingDates.has(d))return;
-   if(cloudSaved[d]&&typeof cloudSaved[d]==="object")merged[d]=normalizeRecord(cloudSaved[d]);
-  });
+  Object.keys(cloudSaved).forEach(d=>{if(pendingDates.has(d))return;if(cloudSaved[d]&&typeof cloudSaved[d]==="object")merged[d]=normalizeRecord(cloudSaved[d])});
   if(!synced){
    migrating=true;
-   Object.keys(saved).forEach(d=>{
-    const l=saved[d];if(!l)return;
-    const c=merged[d];
-    if(!c||String(l.savedAt||"")>String(c.savedAt||"")){merged[d]=normalizeRecord(l);pendingDates.add(d)}
-   });
+   Object.keys(saved).forEach(d=>{const l=saved[d];if(!l)return;const c=merged[d];if(!c||String(l.savedAt||"")>String(c.savedAt||"")){merged[d]=normalizeRecord(l);pendingDates.add(d)}});
   }
   pendingDates.forEach(d=>{if(saved[d])merged[d]=saved[d]});
-  saved=merged;
-  persistLocalStore();
-
+  saved=merged;persistLocalStore();
   const modalOpen=!!(activeLeavePersonId||activeDutyPersonId||activeEdPersonId);
-  if(!modalOpen){
-   if(saved[boundDate])applyRecord(saved[boundDate]);
-   else buildNewDay(boundDate);
-   applyPrep(boundDate);
-  }
-  cloudLoaded=true;
-  setBadge("Cloud Active ✓",true);
-  refreshSaved();
-  renderAll(!modalOpen);
+  if(!modalOpen){if(saved[boundDate])applyRecord(saved[boundDate]);else buildNewDay(boundDate);applyPrep(boundDate)}
+  cloudLoaded=true;setBadge("Cloud Active ✓",true);refreshSaved();renderAll(!modalOpen);
   if(!flushing)flushCloud();
- },err=>{
-  console.error("Cloud read blocked",err);
-  setBadge("Cloud Blocked ✗",false,String(err&&err.message||err));
- });
+ },err=>{console.error("Cloud read blocked",err);setBadge("Cloud Blocked ✗",false,String(err&&err.message||err))});
 }
-
 function loadStore(){
  try{const x=JSON.parse(localStorage.getItem(key())||"{}");saved=x&&typeof x==="object"&&!Array.isArray(x)?x:{}}catch(e){saved={}}
  try{
   const custom=JSON.parse(localStorage.getItem(rosterKey())||"null");
-  if(Array.isArray(custom)&&custom.length&&custom.every(g=>g&&typeof g.rank==="string"&&Array.isArray(g.names))){
-   ranks=custom;
-   rebuildPeople();
-   rosterTs=Number(localStorage.getItem(rosterTsKey()))||1;
-  }
+  if(Array.isArray(custom)&&custom.length&&custom.every(g=>g&&typeof g.rank==="string"&&Array.isArray(g.names))){ranks=custom;rebuildPeople();rosterTs=Number(localStorage.getItem(rosterTsKey()))||1}
  }catch(e){}
  Object.keys(saved).forEach(d=>{if(saved[d]&&typeof saved[d]==="object")saved[d]=normalizeRecord(saved[d])});
 }
-
-function persistLocalStore(){
- try{localStorage.setItem(key(),JSON.stringify(saved));return true}catch(e){return false}
-}
-function persistStore(arg){
- persistLocalStore();
- if(arg==="all")Object.keys(saved).forEach(d=>pendingDates.add(d));
- else if(arg)pendingDates.add(arg);
- return flushCloud();
-}
-function persistRoster(){
- rosterTs=Date.now();
- rosterDirty=true;
- cacheRoster();
- return flushCloud();
-}
-
-function pick(o,p){
- if(!o)return undefined;
- if(o[p.id]!==undefined)return o[p.id];
- if(o[p.oldId]!==undefined)return o[p.oldId];
- return undefined;
-}
+function persistLocalStore(){try{localStorage.setItem(key(),JSON.stringify(saved));return true}catch(e){return false}}
+function persistStore(arg){persistLocalStore();if(arg==="all")Object.keys(saved).forEach(d=>pendingDates.add(d));else if(arg)pendingDates.add(arg);return flushCloud()}
+function persistRoster(){rosterTs=Date.now();rosterDirty=true;cacheRoster();return flushCloud()}
+function pick(o,p){if(!o)return undefined;if(o[p.id]!==undefined)return o[p.id];if(o[p.oldId]!==undefined)return o[p.oldId];return undefined}
 
 function normalizeRecord(record){
- const out={statuses:{},leaveDetails:{},dutyDetails:{},edDetails:{},savedAt:record&&record.savedAt||new Date().toISOString(),
-  prepName:String(record&&record.prepName||""),prepRank:String(record&&record.prepRank||"")};
- const st=record&&record.statuses&&typeof record.statuses==="object"?record.statuses:{};
- const lv=record&&record.leaveDetails&&typeof record.leaveDetails==="object"?record.leaveDetails:{};
- const dt=record&&record.dutyDetails&&typeof record.dutyDetails==="object"?record.dutyDetails:{};
- const ed=record&&record.edDetails&&typeof record.edDetails==="object"?record.edDetails:{};
-
+ const out={statuses:{},leaveDetails:{},dutyDetails:{},edDetails:{},savedAt:record&&record.savedAt||new Date().toISOString(),prepName:String(record&&record.prepName||""),prepRank:String(record&&record.prepRank||"")};
+ const o=k=>record&&record[k]&&typeof record[k]==="object"?record[k]:{};
+ const st=o("statuses"),lv=o("leaveDetails"),dt=o("dutyDetails"),ed=o("edDetails");
  people.forEach(p=>{
   const s=pick(st,p),sl=st[p.legacyId];
   out.statuses[p.id]=statuses.includes(s)?s:(statuses.includes(sl)?sl:"On Parade");
@@ -815,186 +468,107 @@ function normalizeRecord(record){
  });
  return out;
 }
+function applyRecord(record){const n=normalizeRecord(record||{});current=n.statuses;currentLeave=n.leaveDetails;currentDuty=n.dutyDetails;currentEd=n.edDetails}
 
-function applyRecord(record){
- const normalized=normalizeRecord(record||{});
- current=normalized.statuses;
- currentLeave=normalized.leaveDetails;
- currentDuty=normalized.dutyDetails;
- currentEd=normalized.edDetails;
-}
-
-// ---------- PREPARED BY (saved with every day's state) ----------
-// a saved day shows the name used on THAT day; an old day without a name, or a new day, uses the latest earlier name
+// Prepared By is saved with each day's state
 function resolvePrep(d){
  const rec=saved[d];
- if(rec&&rec.prepName)return {name:rec.prepName,rank:rec.prepRank||""};
+ if(rec&&rec.prepName)return{name:rec.prepName,rank:rec.prepRank||""};
  const ks=Object.keys(saved).filter(k=>k<d&&saved[k]&&saved[k].prepName).sort();
- if(ks.length){const r=saved[ks[ks.length-1]];return {name:r.prepName,rank:r.prepRank||""}}
+ if(ks.length){const r=saved[ks[ks.length-1]];return{name:r.prepName,rank:r.prepRank||""}}
  let g=null;try{g=JSON.parse(localStorage.getItem("state-office-prep-v1")||"null")}catch(e){}
- if(g&&g.name)return {name:g.name,rank:g.rank||""};
- return {name:"PARVEZ",rank:"SGT"};
+ if(g&&g.name)return{name:g.name,rank:g.rank||""};
+ return{name:"PARVEZ",rank:"SGT"};
 }
 function applyPrep(d){
- const ae=document.activeElement;
- if(ae&&(ae.id==="prepName"||ae.id==="prepRank"))return;
- const pp=resolvePrep(d);
- $("prepName").value=pp.name;
- $("prepRank").value=pp.rank;
+ const ae=document.activeElement;if(ae&&(ae.id==="prepName"||ae.id==="prepRank"))return;
+ const pp=resolvePrep(d);$("prepName").value=pp.name;$("prepRank").value=pp.rank;
 }
 function onPrepChange(){
  try{localStorage.setItem("state-office-prep-v1",JSON.stringify({name:$("prepName").value.trim(),rank:$("prepRank").value.trim()}))}catch(e){}
- renderPrintState();
- autoSaveBuffer();
+ renderPrintState();autoSaveBuffer();
 }
 
-function addDaysToDateStr(dateStr, days){
- const parts = dateStr.split("-");
- if(parts.length !== 3) return dateStr;
- const d = new Date(parseInt(parts[0],10), parseInt(parts[1],10)-1, parseInt(parts[2],10));
- d.setDate(d.getDate() + days);
+function addDaysToDateStr(s,days){
+ const a=s.split("-");if(a.length!==3)return s;
+ const d=new Date(+a[0],+a[1]-1,+a[2]);d.setDate(d.getDate()+days);
  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
-
 function buildNewDay(S){
  current=blank();currentLeave={};currentDuty={};currentEd={};
-
- // Check Day-1 (yesterday) for TF / Sy Duty (non-PD) -> Carry forward to Duty Off today
- const prev1Date = addDaysToDateStr(S, -1);
- if(saved[prev1Date]){
-  const rec1 = saved[prev1Date];
-  people.forEach(p=>{
-   const prevStatus = pick(rec1.statuses, p);
-   const prevDuty = pick(rec1.dutyDetails, p) || "";
-   if(prevStatus === "All Duty On"){
-    if((prevDuty.includes("T/F") || prevDuty.includes("Sy Duty")) && !prevDuty.includes("PD")){
-     current[p.id] = "All Duty Off";
-     const shiftPart = prevDuty.split(" - ")[1] || "A Shift";
-     currentDuty[p.id] = `Night Off - ${shiftPart}`;
-    }
-   }
-  });
- }
-
- // Check Day-2 (2 days ago) for Sy Duty with PD -> Carry forward to Duty Off today (3rd day)
- const prev2Date = addDaysToDateStr(S, -2);
- if(saved[prev2Date]){
-  const rec2 = saved[prev2Date];
-  people.forEach(p=>{
-   const prevStatus2 = pick(rec2.statuses, p);
-   const prevDuty2 = pick(rec2.dutyDetails, p) || "";
-   if(prevStatus2 === "All Duty On"){
-    if(prevDuty2.includes("Sy Duty") && prevDuty2.includes("PD")){
-     current[p.id] = "All Duty Off";
-     currentDuty[p.id] = `Night Off - PD`;
-    }
-   }
-  });
- }
-
- // Carry forward remaining statuses/details for anyone not overridden above
- const prevs = Object.keys(saved).filter(d=>d<S&&saved[d]).sort();
- const last = prevs[prevs.length-1];
+ const rec1=saved[addDaysToDateStr(S,-1)];
+ if(rec1)people.forEach(p=>{
+  const ps=pick(rec1.statuses,p),pd=pick(rec1.dutyDetails,p)||"";
+  if(ps==="All Duty On"&&(pd.includes("T/F")||pd.includes("Sy Duty"))&&!pd.includes("PD")){
+   current[p.id]="All Duty Off";currentDuty[p.id]=`Night Off - ${pd.split(" - ")[1]||"A Shift"}`;
+  }
+ });
+ const rec2=saved[addDaysToDateStr(S,-2)];
+ if(rec2)people.forEach(p=>{
+  const ps=pick(rec2.statuses,p),pd=pick(rec2.dutyDetails,p)||"";
+  if(ps==="All Duty On"&&pd.includes("Sy Duty")&&pd.includes("PD")){current[p.id]="All Duty Off";currentDuty[p.id]="Night Off - PD"}
+ });
+ const prevs=Object.keys(saved).filter(d=>d<S&&saved[d]).sort(),last=prevs[prevs.length-1];
  if(last){
-  const rec = saved[last];
+  const rec=saved[last];
   people.forEach(p=>{
-   if(current[p.id] !== "On Parade") return; // already handled by above carry-forwards
-   const s = pick(rec.statuses, p);
-   if(!statuses.includes(s)) return;
-   if(s==="Leave"){
-    const lv = pick(rec.leaveDetails, p);
-    if(lv && lv.to && S > lv.to) return;
-    if(lv) currentLeave[p.id] = Object.assign({}, lv);
-   }else if(s==="EDP/PG/ITD C"){
-    const ed = pick(rec.edDetails, p);
-    if(ed && ed.to && S > ed.to) return;
-    if(ed) currentEd[p.id] = Object.assign({}, ed);
-   }else if(s==="All Duty On" || s==="All Duty Off"){
-    const du = pick(rec.dutyDetails, p);
-    if(du) currentDuty[p.id] = du;
-   }
-   current[p.id] = s;
+   if(current[p.id]!=="On Parade")return;
+   const s=pick(rec.statuses,p);if(!statuses.includes(s))return;
+   if(s==="Leave"){const lv=pick(rec.leaveDetails,p);if(lv&&lv.to&&S>lv.to)return;if(lv)currentLeave[p.id]=Object.assign({},lv)}
+   else if(s==="EDP/PG/ITD C"){const ed=pick(rec.edDetails,p);if(ed&&ed.to&&S>ed.to)return;if(ed)currentEd[p.id]=Object.assign({},ed)}
+   else if(s==="All Duty On"||s==="All Duty Off"){const du=pick(rec.dutyDetails,p);if(du)currentDuty[p.id]=du}
+   current[p.id]=s;
   });
  }
 }
-
-function loadDay(d){
- boundDate=d;
- if(saved[d])applyRecord(saved[d]);
- else buildNewDay(d);
- applyPrep(d);
-}
-
+function loadDay(d){boundDate=d;if(saved[d])applyRecord(saved[d]);else buildNewDay(d);applyPrep(d)}
 function propagateDetail(id,field,status,oldD,newD){
  if(!oldD||!newD)return;
  Object.keys(saved).forEach(d=>{
-  if(d<=boundDate)return;
-  const rec=saved[d];
+  if(d<=boundDate)return;const rec=saved[d];
   if(!rec||!rec.statuses||rec.statuses[id]!==status)return;
-  const det=rec[field]&&rec[field][id];
-  if(!det)return;
+  const det=rec[field]&&rec[field][id];if(!det)return;
   const same=status==="Leave"?(det.to===oldD.to&&det.type===oldD.type):(det.to===oldD.to&&det.from===oldD.from);
   if(!same)return;
-  if(d<=newD.to){rec[field][id]=Object.assign({},newD)}
-  else{rec.statuses[id]="On Parade";delete rec[field][id]}
+  if(d<=newD.to){rec[field][id]=Object.assign({},newD)}else{rec.statuses[id]="On Parade";delete rec[field][id]}
   pendingDates.add(d);
  });
 }
 
 function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function statusOptions(selected){return statuses.map(s=>`<option value="${esc(s)}" ${s===selected?"selected":""}>${esc(statusShort[s])}</option>`).join("")}
+function statusOptions(sel){return statuses.map(s=>`<option value="${esc(s)}" ${s===sel?"selected":""}>${esc(statusShort[s])}</option>`).join("")}
 function countStatus(s){return people.filter(p=>current[p.id]===s).length}
 function countRankStatus(rank,s){return people.filter(p=>(rank==="Total"||p.rank===rank)&&current[p.id]===s).length}
 function available(){return people.filter(p=>["All Duty On","On Parade","ON PT","ON FOD","Parade"].includes(current[p.id])).length}
-
 function renderMetrics(){
  const boxes=[["Total manpower",totalManpower()],["Military",militaryCount()],["Attachment",people.filter(p=>p.rank==="Attachment").length],["Available",available()],["On leave",countStatus("Leave")],["All Duty Off",countStatus("All Duty Off")],["Other disposal",totalManpower()-available()-countStatus("Leave")-countStatus("All Duty Off")]];
  $("metrics").innerHTML=boxes.map(([l,n])=>`<div class="metric"><strong>${n}</strong><span>${l}</span></div>`).join("");
 }
-
 function renderTabs(){
  $("statusTabs").innerHTML=statuses.map(s=>`<button class="tab ${s===activeStatus?"active":""}" data-status="${esc(s)}" type="button">${esc(statusShort[s])} <span>(${countStatus(s)})</span></button>`).join("");
  $("statusTabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{activeStatus=b.dataset.status;renderTabs();renderRoster()});
 }
-
-function formatDutyText(dutyStr){
- if(!dutyStr) return "";
- if(dutyStr.startsWith("T/F")){
-  return dutyStr.replace("T/F (Task Force)", "TF Duty").replace("T/F", "TF Duty");
- }
- return dutyStr;
-}
-
+function formatDutyText(d){if(!d)return "";if(d.startsWith("T/F"))return d.replace("T/F (Task Force)","TF Duty").replace("T/F","TF Duty");return d}
 function shortDuty(d){
- if(!d)return "";
- const parts=String(d).split(" - ");
- let t=(parts[0]||"").trim();
- const sh=(parts[1]||"").replace(/\s*Shift/i,"").trim();
+ if(!d)return "";const parts=String(d).split(" - ");let t=(parts[0]||"").trim();const sh=(parts[1]||"").replace(/\s*Shift/i,"").trim();
  if(/^night off/i.test(t))return "Night Off";
- if(/^T\/F/i.test(t))t="TF";
- else if(/^Sy/i.test(t))t="Sy";
+ if(/^T\/F/i.test(t))t="TF";else if(/^Sy/i.test(t))t="Sy";
  return sh?`${t}-${sh}`:t;
 }
+function displayDate(iso){if(!iso)return "";const a=iso.split("-");return a.length===3?`${a[2]}.${a[1]}.${a[0].slice(-2)}`:iso}
 
 function renderRoster(){
- const rf=$("rankFilter").value||"All ranks",q=$("search").value.trim().toLowerCase();
- let html="";
+ const rf=$("rankFilter").value||"All ranks",q=$("search").value.trim().toLowerCase();let html="";
  ranks.forEach(g=>{
   const group=people.filter(p=>p.rank===g.rank&&(rf==="All ranks"||p.rank===rf)&&(!q||(p.name+" "+p.rank).toLowerCase().includes(q)));
   if(!group.length)return;
   html+=`<div class="rank-block"><div class="rank-head"><span>${esc(g.rank)}</span><span>${group.filter(p=>current[p.id]===activeStatus).length}/${group.length} · ${group.length} listed</span></div>`;
   group.forEach(p=>{
-   const leave=currentLeave[p.id]||{type:"A/L",to:""};
-   let noteText="";
-   if(current[p.id]==="Leave"&&leave.to){
-    noteText=` · (${esc(leave.type)} to ${esc(displayDate(leave.to))})`;
-   } else if((current[p.id]==="All Duty On"||current[p.id]==="All Duty Off")&&currentDuty[p.id]){
-    noteText=` · (${esc(formatDutyText(currentDuty[p.id]))})`;
-   } else if(current[p.id]==="EDP/PG/ITD C"&&currentEd[p.id]&&currentEd[p.id].from){
-    noteText=` · (wef ${esc(displayDate(currentEd[p.id].from))} to ${esc(displayDate(currentEd[p.id].to))})`;
-   } else if(current[p.id]==="TD/Courier"){
-    noteText=` · (TD)`;
-   }
+   const leave=currentLeave[p.id]||{type:"A/L",to:""};let noteText="";
+   if(current[p.id]==="Leave"&&leave.to)noteText=` · (${esc(leave.type)} to ${esc(displayDate(leave.to))})`;
+   else if((current[p.id]==="All Duty On"||current[p.id]==="All Duty Off")&&currentDuty[p.id])noteText=` · (${esc(formatDutyText(currentDuty[p.id]))})`;
+   else if(current[p.id]==="EDP/PG/ITD C"&&currentEd[p.id]&&currentEd[p.id].from)noteText=` · (wef ${esc(displayDate(currentEd[p.id].from))} to ${esc(displayDate(currentEd[p.id].to))})`;
+   else if(current[p.id]==="TD/Courier")noteText=` · (TD)`;
    const hasDetails=["Leave","All Duty On","All Duty Off","EDP/PG/ITD C"].includes(current[p.id]);
    html+=`<div class="person"><div class="name"><b>${esc(p.name)}</b><small>${esc(p.rank)} · Current: ${esc(current[p.id])}${noteText}</small></div><select aria-label="Status for ${esc(p.rank+" "+p.name)}" data-person="${esc(p.id)}" data-previous="${esc(current[p.id])}">${statusOptions(current[p.id])}</select><div class="person-actions">${hasDetails?`<button class="secondary small" data-details="${esc(p.id)}" type="button">Edit entry</button>`:""}<button class="secondary small" data-edit="${esc(p.id)}" type="button">Edit</button><button class="danger small" data-delete="${esc(p.id)}" type="button">Delete</button></div></div>`;
   });
@@ -1002,220 +576,116 @@ function renderRoster(){
  });
  $("roster").innerHTML=html||'<div class="empty">No personnel match your filters.</div>';
  $("roster").querySelectorAll("select[data-person]").forEach(sel=>sel.onchange=()=>{
-  pushUndo();
-  const id=sel.dataset.person;
-  const val=sel.value;
-  current[id]=val;
-  if(val==="Leave"){
-   pendingPreviousStatus=sel.dataset.previous||"On Parade";
-   openLeaveModal(id);
-  } else if(val==="All Duty On"||val==="All Duty Off"){
-   pendingPreviousStatus=sel.dataset.previous||"On Parade";
-   openDutyModal(id,false,val);
-  } else if(val==="EDP/PG/ITD C"){
-   pendingPreviousStatus=sel.dataset.previous||"On Parade";
-   openEdModal(id);
-  } else {
-   delete currentLeave[id];
-   delete currentDuty[id];
-   delete currentEd[id];
-   renderAll(false);
-   autoSaveBuffer();
-  }
+  pushUndo();const id=sel.dataset.person,val=sel.value;current[id]=val;
+  if(val==="Leave"){pendingPreviousStatus=sel.dataset.previous||"On Parade";openLeaveModal(id)}
+  else if(val==="All Duty On"||val==="All Duty Off"){pendingPreviousStatus=sel.dataset.previous||"On Parade";openDutyModal(id,false,val)}
+  else if(val==="EDP/PG/ITD C"){pendingPreviousStatus=sel.dataset.previous||"On Parade";openEdModal(id)}
+  else{delete currentLeave[id];delete currentDuty[id];delete currentEd[id];renderAll(false);autoSaveBuffer()}
  });
  $("roster").querySelectorAll("[data-details]").forEach(b=>b.onclick=()=>{
   const id=b.dataset.details,s=current[id];
-  if(s==="Leave")openLeaveModal(id,true);
-  else if(s==="All Duty On"||s==="All Duty Off")openDutyModal(id,true,s);
-  else if(s==="EDP/PG/ITD C")openEdModal(id,true);
+  if(s==="Leave")openLeaveModal(id,true);else if(s==="All Duty On"||s==="All Duty Off")openDutyModal(id,true,s);else if(s==="EDP/PG/ITD C")openEdModal(id,true);
  });
  $("roster").querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editPerson(b.dataset.edit));
  $("roster").querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deletePerson(b.dataset.delete));
 }
 
-// ---------------- LEAVE ----------------
+// LEAVE
 function openLeaveModal(id,edit){
- detailEditMode=!!edit;
- activeLeavePersonId=id;
- const p=people.find(x=>x.id===id);
+ detailEditMode=!!edit;activeLeavePersonId=id;const p=people.find(x=>x.id===id);
  if(!p){activeLeavePersonId=null;detailEditMode=false;return}
  $("modalPersonName").textContent=`${p.rank} ${p.name} - Leave Entry${edit?" (edit)":""}`;
- const lv=currentLeave[id]||{type:"A/L",to:""};
- $("modalLeaveType").value=lv.type||"A/L";
- $("modalReportDate").value=lv.to||"";
+ const lv=currentLeave[id]||{type:"A/L",to:""};$("modalLeaveType").value=lv.type||"A/L";$("modalReportDate").value=lv.to||"";
  $("leaveModal").classList.remove("hidden");
 }
-function closeLeaveModal(restoreStatus=true){
- if(restoreStatus&&!detailEditMode&&activeLeavePersonId){current[activeLeavePersonId]=pendingPreviousStatus;renderAll(false)}
- $("leaveModal").classList.add("hidden");
- activeLeavePersonId=null;
- detailEditMode=false;
+function closeLeaveModal(restore=true){
+ if(restore&&!detailEditMode&&activeLeavePersonId){current[activeLeavePersonId]=pendingPreviousStatus;renderAll(false)}
+ $("leaveModal").classList.add("hidden");activeLeavePersonId=null;detailEditMode=false;
 }
 $("closeModalBtn").onclick=closeLeaveModal;
 $("saveLeaveBtn").onclick=()=>{
- if(!activeLeavePersonId)return;
- const to=$("modalReportDate").value;
- if(!to)return alert("Please enter report date.");
- const id=activeLeavePersonId,wasEdit=detailEditMode,old=currentLeave[id];
- if(wasEdit)pushUndo();
- currentLeave[id]={type:$("modalLeaveType").value,to:to};
- current[id]="Leave";
- closeLeaveModal(false);
- if(wasEdit)propagateDetail(id,"leaveDetails","Leave",old,currentLeave[id]);
- renderAll();
- autoSaveBuffer();
+ if(!activeLeavePersonId)return;const to=$("modalReportDate").value;if(!to)return alert("Please enter report date.");
+ const id=activeLeavePersonId,wasEdit=detailEditMode,old=currentLeave[id];if(wasEdit)pushUndo();
+ currentLeave[id]={type:$("modalLeaveType").value,to};current[id]="Leave";closeLeaveModal(false);
+ if(wasEdit)propagateDetail(id,"leaveDetails","Leave",old,currentLeave[id]);renderAll();autoSaveBuffer();
 };
-
-// ---------------- DUTY ON / DUTY OFF (Night Off) ----------------
+// DUTY ON / OFF
 function openDutyModal(id,edit,forStatus){
- detailEditMode=!!edit;
- dutyFor=forStatus||current[id]||"All Duty On";
- activeDutyPersonId=id;
- const p=people.find(x=>x.id===id);
- if(!p){activeDutyPersonId=null;detailEditMode=false;return}
+ detailEditMode=!!edit;dutyFor=forStatus||current[id]||"All Duty On";activeDutyPersonId=id;
+ const p=people.find(x=>x.id===id);if(!p){activeDutyPersonId=null;detailEditMode=false;return}
  const off=dutyFor==="All Duty Off";
  $("modalDutyPersonName").textContent=`${p.rank} ${p.name} - ${off?"Duty Off / Night Off":"Duty Selection"}${edit?" (edit)":""}`;
  $("modalDutyHelp").textContent=off?"Choose Night Off, or the duty this person is off from, and the shift.":"Choose duty type and shift for this person.";
- const isCiv = p.rank === "Civilian";
- const dutySel = $("modalDutyType");
- if(isCiv){
-  dutySel.innerHTML=(off?'<option value="Night Off">Night Off</option>':'')+'<option value="Section Night">Section Night</option><option value="Form 108">Form 108</option>';
- } else {
-  dutySel.innerHTML=(off?'<option value="Night Off">Night Off</option>':'')+'<option value="T/F (Task Force)">T/F (Task Force)</option><option value="Sy Duty">Sy Duty</option><option value="DO">DO</option><option value="Form 108">Form 108</option>';
- }
- const def=off?"Night Off - A Shift":(isCiv?"Section Night":"T/F (Task Force)");
- const rawDuty = currentDuty[id] || def;
- const parts = rawDuty.split(" - ");
- dutySel.value = parts[0] || rawDuty;
- if(dutySel.value!==(parts[0]||rawDuty))dutySel.selectedIndex=0;
- $("modalDutyShift").value = parts[1] || "A Shift";
- $("dutyModal").classList.remove("hidden");
+ const isCiv=p.rank==="Civilian",sel=$("modalDutyType"),no=off?'<option value="Night Off">Night Off</option>':'';
+ sel.innerHTML=isCiv?no+'<option value="Section Night">Section Night</option><option value="Form 108">Form 108</option>':no+'<option value="T/F (Task Force)">T/F (Task Force)</option><option value="Sy Duty">Sy Duty</option><option value="DO">DO</option><option value="Form 108">Form 108</option>';
+ const raw=currentDuty[id]||(off?"Night Off - A Shift":(isCiv?"Section Night":"T/F (Task Force)")),parts=raw.split(" - ");
+ sel.value=parts[0]||raw;if(sel.value!==(parts[0]||raw))sel.selectedIndex=0;
+ $("modalDutyShift").value=parts[1]||"A Shift";$("dutyModal").classList.remove("hidden");
 }
-function closeDutyModal(restoreStatus=true){
- if(restoreStatus&&!detailEditMode&&activeDutyPersonId){current[activeDutyPersonId]=pendingPreviousStatus;renderAll(false)}
- $("dutyModal").classList.add("hidden");
- activeDutyPersonId=null;
- detailEditMode=false;
+function closeDutyModal(restore=true){
+ if(restore&&!detailEditMode&&activeDutyPersonId){current[activeDutyPersonId]=pendingPreviousStatus;renderAll(false)}
+ $("dutyModal").classList.add("hidden");activeDutyPersonId=null;detailEditMode=false;
 }
 $("closeDutyModalBtn").onclick=closeDutyModal;
 $("saveDutyBtn").onclick=()=>{
- if(!activeDutyPersonId) return;
- const id=activeDutyPersonId,wasEdit=detailEditMode;
- if(wasEdit)pushUndo();
- const dutyType = $("modalDutyType").value;
- const shift = $("modalDutyShift").value;
- currentDuty[id] = `${dutyType} - ${shift}`;
- current[id]=dutyFor;
- closeDutyModal(false);
- renderAll();
- autoSaveBuffer();
+ if(!activeDutyPersonId)return;const id=activeDutyPersonId,wasEdit=detailEditMode;if(wasEdit)pushUndo();
+ currentDuty[id]=`${$("modalDutyType").value} - ${$("modalDutyShift").value}`;current[id]=dutyFor;closeDutyModal(false);renderAll();autoSaveBuffer();
 };
-
-// ---------------- ED / COURSE ----------------
+// ED / COURSE
 function openEdModal(id,edit){
- detailEditMode=!!edit;
- activeEdPersonId=id;
- const p=people.find(x=>x.id===id);
+ detailEditMode=!!edit;activeEdPersonId=id;const p=people.find(x=>x.id===id);
  if(!p){activeEdPersonId=null;detailEditMode=false;return}
  $("modalEdPersonName").textContent=`${p.rank} ${p.name} - ED / Course Details${edit?" (edit)":""}`;
- const ed=currentEd[id]||{from:"",to:""};
- $("modalEdStartDate").value=ed.from||"";
- $("modalEdReportDate").value=ed.to||"";
+ const ed=currentEd[id]||{from:"",to:""};$("modalEdStartDate").value=ed.from||"";$("modalEdReportDate").value=ed.to||"";
  $("edModal").classList.remove("hidden");
 }
-function closeEdModal(restoreStatus=true){
- if(restoreStatus&&!detailEditMode&&activeEdPersonId){current[activeEdPersonId]=pendingPreviousStatus;renderAll(false)}
- $("edModal").classList.add("hidden");
- activeEdPersonId=null;
- detailEditMode=false;
+function closeEdModal(restore=true){
+ if(restore&&!detailEditMode&&activeEdPersonId){current[activeEdPersonId]=pendingPreviousStatus;renderAll(false)}
+ $("edModal").classList.add("hidden");activeEdPersonId=null;detailEditMode=false;
 }
 $("closeEdModalBtn").onclick=closeEdModal;
 $("saveEdBtn").onclick=()=>{
- if(!activeEdPersonId) return;
- const from=$("modalEdStartDate").value,to=$("modalEdReportDate").value;
+ if(!activeEdPersonId)return;const from=$("modalEdStartDate").value,to=$("modalEdReportDate").value;
  if(from&&to&&to<from)return alert("Finish date cannot be earlier than start date.");
  if(!from||!to)return alert("Please enter both start and finish dates.");
- const id=activeEdPersonId,wasEdit=detailEditMode,old=currentEd[id];
- if(wasEdit)pushUndo();
- currentEd[id]={from,to};
- current[id]="EDP/PG/ITD C";
- closeEdModal(false);
- if(wasEdit)propagateDetail(id,"edDetails","EDP/PG/ITD C",old,currentEd[id]);
- renderAll();
- autoSaveBuffer();
+ const id=activeEdPersonId,wasEdit=detailEditMode,old=currentEd[id];if(wasEdit)pushUndo();
+ currentEd[id]={from,to};current[id]="EDP/PG/ITD C";closeEdModal(false);
+ if(wasEdit)propagateDetail(id,"edDetails","EDP/PG/ITD C",old,currentEd[id]);renderAll();autoSaveBuffer();
 };
 
-function displayDate(iso){if(!iso)return "";const a=iso.split("-");return a.length===3?`${a[2]}.${a[1]}.${a[0].slice(-2)}`:iso}
-
 function nameIndex(p){
- const g=ranks.find(x=>x.rank===p.rank);
- if(!g)return -1;
- const lower=p.name.trim().toLowerCase();
- const occ=people.filter(x=>x.rank===p.rank&&x.name.trim().toLowerCase()===lower).findIndex(x=>x.id===p.id);
- let seen=-1;
- for(let i=0;i<g.names.length;i++){
-  if(String(g.names[i]).trim().toLowerCase()===lower){seen++;if(seen===occ)return i}
- }
+ const g=ranks.find(x=>x.rank===p.rank);if(!g)return -1;
+ const lower=p.name.trim().toLowerCase(),occ=people.filter(x=>x.rank===p.rank&&x.name.trim().toLowerCase()===lower).findIndex(x=>x.id===p.id);
+ let seen=-1;for(let i=0;i<g.names.length;i++){if(String(g.names[i]).trim().toLowerCase()===lower){seen++;if(seen===occ)return i}}
  return -1;
 }
-
 function deletePerson(id){
  const p=people.find(x=>x.id===id);if(!p||!confirm(`Delete ${p.rank} ${p.name}?`))return;
- const g=ranks.find(x=>x.rank===p.rank);
- const ix=nameIndex(p);
- if(g&&ix>=0){g.names.splice(ix,1);}
+ const g=ranks.find(x=>x.rank===p.rank),ix=nameIndex(p);if(g&&ix>=0)g.names.splice(ix,1);
  delete current[id];delete currentLeave[id];delete currentDuty[id];delete currentEd[id];
- rebuildPeople();
- const pr=persistRoster();
- renderAll();
- autoSaveBuffer();
- pr.then(r=>alert("Person deleted - "+cloudMsg(r)));
+ rebuildPeople();const pr=persistRoster();renderAll();autoSaveBuffer();pr.then(r=>alert("Person deleted - "+cloudMsg(r)));
 }
-
 function editPerson(id){
  const p=people.find(x=>x.id===id);if(!p)return;
  const newName=prompt("Edit name:",p.name);if(!newName||!newName.trim())return;
  const newRankIn=prompt("Edit rank:",p.rank);if(!newRankIn||!newRankIn.trim())return;
- const name=newName.trim(),rankIn=newRankIn.trim();
- const idx=nameIndex(p),oldG=ranks.find(x=>x.rank===p.rank);
- const oldId=p.id,oldOldId=p.oldId;
-
- let ng=ranks.find(x=>x.rank.toLowerCase()===rankIn.toLowerCase());
- if(!ng){ng={rank:rankIn,names:[]};ranks.push(ng)}
+ const name=newName.trim(),rankIn=newRankIn.trim(),idx=nameIndex(p),oldG=ranks.find(x=>x.rank===p.rank),oldId=p.id,oldOldId=p.oldId;
+ let ng=ranks.find(x=>x.rank.toLowerCase()===rankIn.toLowerCase());if(!ng){ng={rank:rankIn,names:[]};ranks.push(ng)}
  let pos=-1;
- if(ng===oldG&&idx>=0){oldG.names[idx]=name;pos=idx}
- else{
-  if(oldG&&idx>=0){oldG.names.splice(idx,1);}
-  ng.names.push(name);
- }
+ if(ng===oldG&&idx>=0){oldG.names[idx]=name;pos=idx}else{if(oldG&&idx>=0)oldG.names.splice(idx,1);ng.names.push(name)}
  rebuildPeople();
- const grp=people.filter(x=>x.rank===ng.rank);
- const np=pos>=0?grp[pos]:grp[grp.length-1];
-
+ const grp=people.filter(x=>x.rank===ng.rank),np=pos>=0?grp[pos]:grp[grp.length-1];
  if(np&&np.id!==oldId){
   const nid=np.id;
-  [current,currentLeave,currentDuty,currentEd].forEach(m=>{
-   if(m[oldId]!==undefined){m[nid]=m[oldId];delete m[oldId]}
-  });
+  [current,currentLeave,currentDuty,currentEd].forEach(m=>{if(m[oldId]!==undefined){m[nid]=m[oldId];delete m[oldId]}});
   Object.keys(saved).forEach(d=>{
-   const rec=saved[d];if(!rec)return;
-   let changed=false;
-   ["statuses","leaveDetails","dutyDetails","edDetails"].forEach(f=>{
-    const m=rec[f];if(!m)return;
-    [oldId,oldOldId].forEach(k=>{
-     if(m[k]!==undefined){if(m[nid]===undefined)m[nid]=m[k];delete m[k];changed=true}
-    });
-   });
+   const rec=saved[d];if(!rec)return;let changed=false;
+   ["statuses","leaveDetails","dutyDetails","edDetails"].forEach(f=>{const m=rec[f];if(!m)return;[oldId,oldOldId].forEach(k=>{if(m[k]!==undefined){if(m[nid]===undefined)m[nid]=m[k];delete m[k];changed=true}})});
    if(changed)pendingDates.add(d);
   });
  }
- ensureCurrent();
- const pr=persistRoster();
- renderAll();
- autoSaveBuffer();
- pr.then(r=>alert("Name updated - "+cloudMsg(r)));
+ ensureCurrent();const pr=persistRoster();renderAll();autoSaveBuffer();pr.then(r=>alert("Name updated - "+cloudMsg(r)));
 }
-
 function renderRankTable(){
  const rs=statuses.filter(s=>s!=="Form 295"||countStatus(s)>0);
  let h="<table><thead><tr><th>Rank</th><th>Total</th>"+rs.map(s=>`<th>${esc(statusShort[s])}</th>`).join("")+"<th>Available</th></tr></thead><tbody>";
@@ -1224,771 +694,362 @@ function renderRankTable(){
  });
  $("rankTable").innerHTML=h+"</tbody></table>";
 }
-
 function renderDetails(){
  $("reportSummary").innerHTML=`<p><b>Daily state date:</b> ${esc(date())}</p><p><b>Total listed:</b> ${totalManpower()} &nbsp; <b>Available:</b> ${available()} &nbsp; <b>Not available:</b> ${totalManpower()-available()}</p>`;
  $("statusDetails").innerHTML=statuses.filter(s=>s!=="Form 295"||countStatus(s)>0).map(s=>{
   const list=people.filter(p=>current[p.id]===s);
   return `<div class="rank-block"><div class="rank-head"><span>${esc(s)}</span><span>${list.length} personnel</span></div><div style="padding:6px 8px">${list.length?list.map(p=>{
-   let tag = "";
-   if(s==="Leave"&&currentLeave[p.id]) tag=` (${esc(currentLeave[p.id].type||"A/L")} to ${esc(displayDate(currentLeave[p.id].to))})`;
-   else if((s==="All Duty On"||s==="All Duty Off")&&currentDuty[p.id]) tag=` (${esc(formatDutyText(currentDuty[p.id]))})`;
-   else if(s==="EDP/PG/ITD C"&&currentEd[p.id]) tag=` (wef ${esc(displayDate(currentEd[p.id].from))} to ${esc(displayDate(currentEd[p.id].to))})`;
-   else if(s==="TD/Courier") tag=` (TD)`;
+   let tag="";
+   if(s==="Leave"&&currentLeave[p.id])tag=` (${esc(currentLeave[p.id].type||"A/L")} to ${esc(displayDate(currentLeave[p.id].to))})`;
+   else if((s==="All Duty On"||s==="All Duty Off")&&currentDuty[p.id])tag=` (${esc(formatDutyText(currentDuty[p.id]))})`;
+   else if(s==="EDP/PG/ITD C"&&currentEd[p.id])tag=` (wef ${esc(displayDate(currentEd[p.id].from))} to ${esc(displayDate(currentEd[p.id].to))})`;
+   else if(s==="TD/Courier")tag=` (TD)`;
    return `<span style="display:inline-block;margin:2px 4px 2px 0;padding:3px 6px;border:1px solid var(--line);border-radius:6px">${esc(p.rank)} ${esc(p.name)}${tag}</span>`;
   }).join(""):'<span class="empty">None assigned</span>'}</div></div>`;
  }).join("");
 }
-
-function actualRank(p){
- if(p.rank!=="Attachment") return p.rank;
- const m = p.name.match(/^\s*(MWO|SWO|WO|SGT|CPL|LAC|AC)\b/i);
- return m ? m[1].toUpperCase() : "WO";
-}
+function actualRank(p){if(p.rank!=="Attachment")return p.rank;const m=p.name.match(/^\s*(MWO|SWO|WO|SGT|CPL|LAC|AC)\b/i);return m?m[1].toUpperCase():"WO"}
 
 function getActiveColumns(){
- const hasPt = countStatus("ON PT") > 0;
- const hasFod = countStatus("ON FOD") > 0;
-
+ const hasPt=countStatus("ON PT")>0,hasFod=countStatus("ON FOD")>0,nc=p=>p.rank!=="Civilian";
  const cols=[
-  ["OFFICE STRG",p=>p.rank!=="Attachment"&&p.rank!=="Civilian"],
-  ["TD/COUR/UN",p=>current[p.id]==="TD/Courier"],
-  ["ATTACH",p=>p.rank==="Attachment"||current[p.id]==="Attachment"],
-  ["EFFECTIVE STRG",p=>p.rank!=="Civilian"],
-  ["LEAVE",p=>current[p.id]==="Leave"&&p.rank!=="Civilian"],
-  ["F-295 / Air Movement",p=>current[p.id]==="Form 295"&&p.rank!=="Civilian"],
-  ["QRT DUTY",p=>current[p.id]==="QRF Duty"&&p.rank!=="Civilian"],
-  ["ALL DUTY ON",p=>current[p.id]==="All Duty On"&&p.rank!=="Civilian"],
-  ["ALL DUTY OFF",p=>current[p.id]==="All Duty Off"&&p.rank!=="Civilian"],
-  ["MESS/CANTEEN",p=>current[p.id]==="Mess/Canteen"&&p.rank!=="Civilian"],
-  ["CMH S/R, FMLY SR",p=>current[p.id]==="CMH SR/FMLY SR"&&p.rank!=="Civilian"],
-  ["CMH / MI ROOM ADMIT",p=>(current[p.id]==="CMH / M Room Admit"||current[p.id]==="CMH")&&p.rank!=="Civilian"],
-  ["MILK DUTY",p=>current[p.id]==="Milk Duty"&&p.rank!=="Civilian"],
-  ["ED/PPGF/ATTD C",p=>current[p.id]==="EDP/PG/ITD C"&&p.rank!=="Civilian"],
-  ["BASAE OJT/EXAM",p=>current[p.id]==="BASAE Out/Exam"&&p.rank!=="Civilian"],
-  ["UNDER CLEARENCE",p=>current[p.id]==="Under Clearance"&&p.rank!=="Civilian"],
-  ["GST / GH",p=>current[p.id]==="GST/GH"&&p.rank!=="Civilian"],
-  ["AFTERNOON",p=>current[p.id]==="Afternoon"&&p.rank!=="Civilian"],
-  ["PARADE",p=>current[p.id]==="Parade"&&p.rank!=="Civilian"],
-  ["OUT OF PARADE",p=> {
-    if(p.rank==="Civilian" || p.rank==="Attachment") return false;
-    const st = current[p.id];
-    return st && st !== "On Parade" && st !== "ON PT" && st !== "ON FOD" && st !== "TD/Courier";
-  }]
+  ["OFFICE STRG",p=>p.rank!=="Attachment"&&nc(p)],["TD/COUR/UN",p=>current[p.id]==="TD/Courier"],["ATTACH",p=>p.rank==="Attachment"||current[p.id]==="Attachment"],["EFFECTIVE STRG",nc],
+  ["LEAVE",p=>current[p.id]==="Leave"&&nc(p)],["F-295 / Air Movement",p=>current[p.id]==="Form 295"&&nc(p)],["QRT DUTY",p=>current[p.id]==="QRF Duty"&&nc(p)],
+  ["ALL DUTY ON",p=>current[p.id]==="All Duty On"&&nc(p)],["ALL DUTY OFF",p=>current[p.id]==="All Duty Off"&&nc(p)],["MESS/CANTEEN",p=>current[p.id]==="Mess/Canteen"&&nc(p)],
+  ["CMH S/R, FMLY SR",p=>current[p.id]==="CMH SR/FMLY SR"&&nc(p)],["CMH / MI ROOM ADMIT",p=>(current[p.id]==="CMH / M Room Admit"||current[p.id]==="CMH")&&nc(p)],
+  ["MILK DUTY",p=>current[p.id]==="Milk Duty"&&nc(p)],["ED/PPGF/ATTD C",p=>current[p.id]==="EDP/PG/ITD C"&&nc(p)],["BASAE OJT/EXAM",p=>current[p.id]==="BASAE Out/Exam"&&nc(p)],
+  ["UNDER CLEARENCE",p=>current[p.id]==="Under Clearance"&&nc(p)],["GST / GH",p=>current[p.id]==="GST/GH"&&nc(p)],["AFTERNOON",p=>current[p.id]==="Afternoon"&&nc(p)],["PARADE",p=>current[p.id]==="Parade"&&nc(p)],
+  ["OUT OF PARADE",p=>{if(p.rank==="Civilian"||p.rank==="Attachment")return false;const st=current[p.id];return st&&st!=="On Parade"&&st!=="ON PT"&&st!=="ON FOD"&&st!=="TD/Courier"}]
  ];
-
- if(!hasPt && !hasFod){
-  cols.push(["ON PARADE",p=>current[p.id]==="On Parade"&&p.rank!=="Civilian"]);
- }
- if(hasPt){
-  cols.push(["ON PT",p=>current[p.id]==="ON PT"&&p.rank!=="Civilian"]);
- }
- if(hasFod){
-  cols.push(["ON FOD",p=>current[p.id]==="ON FOD"&&p.rank!=="Civilian"]);
- }
-
+ if(!hasPt&&!hasFod)cols.push(["ON PARADE",p=>current[p.id]==="On Parade"&&nc(p)]);
+ if(hasPt)cols.push(["ON PT",p=>current[p.id]==="ON PT"&&nc(p)]);
+ if(hasFod)cols.push(["ON FOD",p=>current[p.id]==="ON FOD"&&nc(p)]);
  return cols;
 }
-
 function computeGridData(){
- const cols = getActiveColumns();
- const rows = [];
-
+ const cols=getActiveColumns(),rows=[];
  militaryOrder.forEach(r=>{
-  const officeList = people.filter(p=>p.rank===r && p.rank!=="Attachment");
-  const attachList = people.filter(p=>(p.rank==="Attachment"||current[p.id]==="Attachment") && actualRank(p)===r);
-  const officeStrg = officeList.length;
-  const attachStrg = attachList.length;
-  const tdCount = officeList.filter(p=>current[p.id]==="TD/Courier").length;
-  const effectiveStrg = (officeStrg - tdCount) + attachStrg;
-  const vals = cols.map((c,i)=>{
-   if(i===0) return officeStrg;
-   if(i===1) return tdCount;
-   if(i===2) return attachStrg;
-   if(i===3) return effectiveStrg;
-   return officeList.filter(c[1]).length + attachList.filter(c[1]).length;
-  });
-  rows.push({label:r,vals,total:false});
+  const officeList=people.filter(p=>p.rank===r&&p.rank!=="Attachment"),attachList=people.filter(p=>(p.rank==="Attachment"||current[p.id]==="Attachment")&&actualRank(p)===r);
+  const officeStrg=officeList.length,attachStrg=attachList.length,tdCount=officeList.filter(p=>current[p.id]==="TD/Courier").length,eff=(officeStrg-tdCount)+attachStrg;
+  rows.push({label:r,vals:cols.map((c,i)=>i===0?officeStrg:i===1?tdCount:i===2?attachStrg:i===3?eff:officeList.filter(c[1]).length+attachList.filter(c[1]).length),total:false});
  });
-
- const milPeople = people.filter(p=>militaryOrder.includes(p.rank)&&p.rank!=="Attachment");
- const allAttach = people.filter(p=>p.rank==="Attachment"||(current[p.id]==="Attachment"&&p.rank!=="Civilian"));
- const totalOffice = milPeople.length;
- const totalTd = milPeople.filter(p=>current[p.id]==="TD/Courier").length;
- const tvals = cols.map((c,i)=>{
-  if(i===0) return totalOffice;
-  if(i===1) return totalTd;
-  if(i===2) return allAttach.length;
-  if(i===3) return (totalOffice - totalTd) + allAttach.length;
-  return milPeople.filter(c[1]).length + allAttach.filter(c[1]).length;
- });
- rows.push({label:"TOTAL",vals:tvals,total:true});
- return {cols,rows};
+ const mil=people.filter(p=>militaryOrder.includes(p.rank)&&p.rank!=="Attachment"),allAtt=people.filter(p=>p.rank==="Attachment"||(current[p.id]==="Attachment"&&p.rank!=="Civilian"));
+ const tO=mil.length,tT=mil.filter(p=>current[p.id]==="TD/Courier").length;
+ rows.push({label:"TOTAL",vals:cols.map((c,i)=>i===0?tO:i===1?tT:i===2?allAtt.length:i===3?(tO-tT)+allAtt.length:mil.filter(c[1]).length+allAtt.filter(c[1]).length),total:true});
+ return{cols,rows};
 }
-
-function cellText(row,i,n){
- if(row.total)return String(n);
- if(n!==0)return String(n);
- return i===3?"0":"";
-}
-
+function cellText(row,i,n){if(row.total)return String(n);if(n!==0)return String(n);return i===3?"0":""}
 function generateGridHTML(){
- const {cols,rows} = computeGridData();
- const head=(txt,extra)=>`<th class="vertical${extra||""}"><div class="vwrap"><span class="rot-text">${esc(txt)}</span></div></th>`;
- let h=`<colgroup><col style="width:6%">${cols.map(()=>"<col>").join("")}</colgroup>`;
- h+="<thead><tr>"+head("RANK"," rankcol")+cols.map(c=>head(c[0],"")).join("")+"</tr></thead><tbody>";
- rows.forEach(row=>{
-  h+=`<tr${row.total?' class="totalrow"':''}><th class="rankcol">${esc(row.label)}</th>`+row.vals.map((n,i)=>`<td>${cellText(row,i,n)}</td>`).join("")+"</tr>";
- });
+ const{cols,rows}=computeGridData();
+ const head=(t,x)=>`<th class="vertical${x||""}"><div class="vwrap"><span class="rot-text">${esc(t)}</span></div></th>`;
+ let h=`<colgroup><col style="width:6%">${cols.map(()=>"<col>").join("")}</colgroup><thead><tr>`+head("RANK"," rankcol")+cols.map(c=>head(c[0],"")).join("")+"</tr></thead><tbody>";
+ rows.forEach(row=>{h+=`<tr${row.total?' class="totalrow"':''}><th class="rankcol">${esc(row.label)}</th>`+row.vals.map((n,i)=>`<td>${cellText(row,i,n)}</td>`).join("")+"</tr>"});
  return h+"</tbody>";
 }
-
 function getCivilianTag(p){
- const s = current[p.id];
- if(!s || s === "On Parade" || s === "ON PT" || s === "ON FOD") return "";
- if(s === "Leave"){
-  const lv = currentLeave[p.id] || {};
-  return lv.to ? `${lv.type || "A/L"}(${displayDate(lv.to)})` : (lv.type || "Leave");
- }
- if(s === "All Duty On" || s === "All Duty Off"){
-  const d = currentDuty[p.id];
-  return d ? shortDuty(d) : statusShort[s] || s;
- }
- if(s === "EDP/PG/ITD C"){
-  const ed = currentEd[p.id];
-  return ed && (ed.from || ed.to) ? `ED(wef ${displayDate(ed.from)} to ${displayDate(ed.to)})` : "ED";
- }
- if(s === "TD/Courier") return "TD";
- return statusShort[s] || s;
+ const s=current[p.id];if(!s||s==="On Parade"||s==="ON PT"||s==="ON FOD")return "";
+ if(s==="Leave"){const lv=currentLeave[p.id]||{};return lv.to?`${lv.type||"A/L"}(${displayDate(lv.to)})`:(lv.type||"Leave")}
+ if(s==="All Duty On"||s==="All Duty Off"){const d=currentDuty[p.id];return d?shortDuty(d):statusShort[s]||s}
+ if(s==="EDP/PG/ITD C"){const ed=currentEd[p.id];return ed&&(ed.from||ed.to)?`ED(wef ${displayDate(ed.from)} to ${displayDate(ed.to)})`:"ED"}
+ if(s==="TD/Courier")return "TD";
+ return statusShort[s]||s;
 }
 
+// 4 columns like the standard sheet: [LEAVE, QRF, CMH] [DUTY ON/OFF + others] [ON PARADE (2 sub-columns) + ATTACHMENT] [Civil Tech]
 function buildListBlocks(){
  function getList(k){
-  if(k==="Civil Tech") return people.filter(p=>p.rank==="Civilian"||(p.rank!=="Attachment"&&current[p.id]==="Civil Tech"));
+  if(k==="Civil Tech")return people.filter(p=>p.rank==="Civilian"||(p.rank!=="Attachment"&&current[p.id]==="Civil Tech"));
   return people.filter(p=>p.rank!=="Civilian"&&p.rank!=="Attachment"&&current[p.id]===k);
  }
-
  function block(k,title){
-  let list = k==="ATTACHMENT" ? people.filter(p=>p.rank==="Attachment"||current[p.id]==="ATTACHMENT") : getList(k);
-  if(!list.length) return null;
-  if(k==="On Parade"||k==="ON PT"||k==="ON FOD") list = list.slice().sort((a,b)=>militaryOrder.indexOf(a.rank)-militaryOrder.indexOf(b.rank));
-
-  const items = list.map(p=>{
-   let t = "";
-   if(k==="ATTACHMENT"){
-     let cleanName = p.name.replace(/^(MWO|SWO|WO|SGT|CPL|LAC|AC)\s+/i, "");
-     t = `${actualRank(p)} ${cleanName}`;
-   } else if(p.rank==="Civilian"){
-     const civTag = getCivilianTag(p);
-     t = civTag ? `${p.name} ${civTag}` : p.name;
-   } else {
-     t = `${p.rank} ${p.name}`;
-   }
-
+  let list=k==="ATTACHMENT"?people.filter(p=>p.rank==="Attachment"||current[p.id]==="ATTACHMENT"):getList(k);
+  if(!list.length)return null;
+  if(k==="On Parade"||k==="ON PT"||k==="ON FOD")list=list.slice().sort((a,b)=>militaryOrder.indexOf(a.rank)-militaryOrder.indexOf(b.rank));
+  const items=list.map(p=>{
+   let t="";
+   if(k==="ATTACHMENT"){t=`${actualRank(p)} ${p.name.replace(/^(MWO|SWO|WO|SGT|CPL|LAC|AC)\s+/i,"")}`}
+   else if(p.rank==="Civilian"){const ct=getCivilianTag(p);t=ct?`${p.name} ${ct}`:p.name}
+   else t=`${p.rank} ${p.name}`;
    if(k==="ATTACHMENT"){
     const s=current[p.id];
-    if(s==="Leave"){
-     const lv=currentLeave[p.id]||{};
-     if(lv.to) t+=`-${lv.type||"A/L"}(${displayDate(lv.to)})`;
-    }else if((s==="All Duty On"||s==="All Duty Off")&&currentDuty[p.id]){
-     t+="-"+shortDuty(currentDuty[p.id]);
-    }else if(s&&s!=="On Parade"&&s!=="Attachment"){
-     t+="-"+(statusShort[s]||s);
-    }
-   } else if(p.rank!=="Civilian"){
-    if((k==="All Duty On"||k==="All Duty Off"||k==="Civil Tech") && currentDuty[p.id]){
-     t += "-" + shortDuty(currentDuty[p.id]);
-    } else if(k==="EDP/PG/ITD C" && currentEd[p.id]){
-     const ed = currentEd[p.id];
-     if(ed.from||ed.to) t += ` (wef ${displayDate(ed.from)} to ${displayDate(ed.to)})`;
-    } else if(k==="Leave"){
-      const lv = currentLeave[p.id]||{};
-      if(lv.to) t += `-${lv.type||"A/L"}(${displayDate(lv.to)})`;
-    }
+    if(s==="Leave"){const lv=currentLeave[p.id]||{};if(lv.to)t+=`-${lv.type||"A/L"}(${displayDate(lv.to)})`}
+    else if((s==="All Duty On"||s==="All Duty Off")&&currentDuty[p.id])t+="-"+shortDuty(currentDuty[p.id]);
+    else if(s&&s!=="On Parade"&&s!=="Attachment")t+="-"+(statusShort[s]||s);
+   }else if(p.rank!=="Civilian"){
+    if((k==="All Duty On"||k==="All Duty Off"||k==="Civil Tech")&&currentDuty[p.id])t+="-"+shortDuty(currentDuty[p.id]);
+    else if(k==="EDP/PG/ITD C"&&currentEd[p.id]){const ed=currentEd[p.id];if(ed.from||ed.to)t+=` (wef ${displayDate(ed.from)} to ${displayDate(ed.to)})`}
+    else if(k==="Leave"){const lv=currentLeave[p.id]||{};if(lv.to)t+=`-${lv.type||"A/L"}(${displayDate(lv.to)})`}
    }
    return t;
   });
-  return {k,title,items,grid:["On Parade","ON PT","ON FOD"].includes(k),start:0};
+  return{k,title,items,grid:["On Parade","ON PT","ON FOD"].includes(k),start:0};
  }
-
- const paradeBlocks = [];
- if(countStatus("ON PT") === 0 && countStatus("ON FOD") === 0){
-  paradeBlocks.push(["On Parade","ON PARADE"]);
- }
- if(countStatus("ON PT") > 0){
-  paradeBlocks.push(["ON PT","ON PT"]);
- }
- if(countStatus("ON FOD") > 0){
-  paradeBlocks.push(["ON FOD","ON FOD"]);
- }
-
- const layout = [
-  [["Leave","LEAVE"], ["CMH / M Room Admit","CMH ADMIT"], ["CMH","CMH"], ["CMH SR/FMLY SR","CMH S/R, FMLY SR"]],
-  [["All Duty On","ALL DUTY ON"], ["All Duty Off","ALL DUTY OFF"], ["EDP/PG/ITD C","ED/PPGF/ATTD C"], ["Milk Duty","MILK DUTY"]],
-  [["QRF Duty","QRF DUTY"], ["Form 295","F-295"], ["TD/Courier","TD"], ["Mess/Canteen","MESS/CANTEEN"], ["BASAE Out/Exam","BASAE OJT/EXAM"], ["Under Clearance","UNDER CLEARENCE"], ["GST/GH","GST / GH"], ["Afternoon","AFTERNOON"], ["Parade","PARADE"], ["Out of Parade","OUT OF PARADE"]],
-  paradeBlocks,
-  [["ATTACHMENT","ATTACHMENT"], ["Civil Tech","Civil Tech"]]
+ const paradeBlocks=[];
+ if(countStatus("ON PT")===0&&countStatus("ON FOD")===0)paradeBlocks.push(["On Parade","ON PARADE"]);
+ if(countStatus("ON PT")>0)paradeBlocks.push(["ON PT","ON PT"]);
+ if(countStatus("ON FOD")>0)paradeBlocks.push(["ON FOD","ON FOD"]);
+ const layout=[
+  [["Leave","LEAVE"],["QRF Duty","QRF DUTY"],["CMH / M Room Admit","CMH ADMIT"],["CMH","CMH"],["CMH SR/FMLY SR","CMH S/R, FMLY SR"]],
+  [["All Duty On","ALL DUTY ON"],["All Duty Off","ALL DUTY OFF"],["EDP/PG/ITD C","ED/PPGF/ATTD C"],["Milk Duty","MILK DUTY"],["Form 295","F-295"],["TD/Courier","TD"],["Mess/Canteen","MESS/CANTEEN"],["BASAE Out/Exam","BASAE OJT/EXAM"],["Under Clearance","UNDER CLEARENCE"],["GST/GH","GST / GH"],["Afternoon","AFTERNOON"],["Parade","PARADE"],["Out of Parade","OUT OF PARADE"]],
+  paradeBlocks.concat([["ATTACHMENT","ATTACHMENT"]]),
+  [["Civil Tech","Civil Tech"]]
  ];
-
- const cols = layout.map(g=>g.map(([k,t])=>block(k,t)).filter(Boolean));
-
- const flat=[].concat.apply([],cols);
- let base=0;
+ const cols=layout.map(g=>g.map(([k,t])=>block(k,t)).filter(Boolean));
+ const flat=[].concat.apply([],cols);let base=0;
  flat.filter(b=>["On Parade","ON PT","ON FOD"].includes(b.k)).forEach(b=>{b.start=base;base+=b.items.length});
- const att=flat.find(b=>b.k==="ATTACHMENT");
- if(att){att.start=base;base+=att.items.length}
- const ct=flat.find(b=>b.k==="Civil Tech");
- if(ct)ct.start=base;
-
+ const att=flat.find(b=>b.k==="ATTACHMENT");if(att){att.start=base;base+=att.items.length}
+ const ct=flat.find(b=>b.k==="Civil Tech");if(ct)ct.start=base;
  return cols;
 }
-
 function generateListsHTML(){
  const li=(t,n)=>`<li><span class="item-num">${n}</span><span class="item-text">${esc(t)}</span></li>`;
- return buildListBlocks().map(col=>{
-  const colHtml = col.map(b=>{
-   let body;
-   if(b.grid){
-    const half=Math.ceil(b.items.length/2);
-    const a=b.items.slice(0,half).map((t,i)=>li(t,b.start+i+1)).join("");
-    const c=b.items.slice(half).map((t,i)=>li(t,b.start+half+i+1)).join("");
-    body=`<div class="two-col"><ol>${a}</ol><ol>${c}</ol></div>`;
-   }else{
-    body=`<ol>${b.items.map((t,i)=>li(t,b.start+i+1)).join("")}</ol>`;
-   }
-   return `<div class="print-block"><h3>${esc(b.title)}</h3>${body}</div>`;
-  }).join("");
-  return `<div class="print-col">${colHtml}</div>`;
- }).join("");
+ return buildListBlocks().map(col=>`<div class="print-col">${col.map(b=>{
+  let body;
+  if(b.grid){const half=Math.ceil(b.items.length/2);body=`<div class="two-col"><ol>${b.items.slice(0,half).map((t,i)=>li(t,b.start+i+1)).join("")}</ol><ol>${b.items.slice(half).map((t,i)=>li(t,b.start+half+i+1)).join("")}</ol></div>`}
+  else body=`<ol>${b.items.map((t,i)=>li(t,b.start+i+1)).join("")}</ol>`;
+  return `<div class="print-block"><h3>${esc(b.title)}</h3>${body}</div>`;
+ }).join("")}</div>`).join("");
 }
 
+// ---------- fit ONE A4 page ----------
+// 1) text too big -> shrink text (k) to the LARGEST size that fits (binary search)
+// 2) page not full -> stretch row heights and gaps (g, up to 2.2x) to fill the page like the standard sheet
 const MM_PX=96/25.4;
 function fitSheet(){
- const root=document.documentElement,el=$("printState");
- if(!el)return 1;
- const inner=el.querySelector(".sheet-inner");
- if(!inner)return 1;
- const wasHidden=el.classList.contains("hidden");
- el.classList.remove("hidden");
- el.classList.add("measuring");
- const avail=(209-20-15)*MM_PX;
- let k=1;
- for(let i=0;i<5;i++){
-  root.style.setProperty("--k",String(k));
-  const h=inner.getBoundingClientRect().height;
-  if(h<=avail)break;
-  k=Math.max(0.5,k*(avail/h)*0.995);
- }
- el.classList.remove("measuring");
- if(wasHidden)el.classList.add("hidden");
- return k;
+ const root=document.documentElement,el=$("printState");if(!el)return;
+ const inner=el.querySelector(".sheet-inner");if(!inner)return;
+ const wasHidden=el.classList.contains("hidden");el.classList.remove("hidden");el.classList.add("measuring");
+ const cs=getComputedStyle(root),mm=v=>parseFloat(cs.getPropertyValue(v))||0;
+ const avail=(209-mm("--mt")-mm("--mb"))*MM_PX-3;
+ const Hh=(k,g)=>{root.style.setProperty("--k",String(k));root.style.setProperty("--g",String(g));return inner.getBoundingClientRect().height};
+ let k=1,g=1;
+ if(Hh(1,1)>avail){let lo=0.4,hi=1;for(let i=0;i<14;i++){const m=(lo+hi)/2;if(Hh(m,1)<=avail)lo=m;else hi=m}k=lo}
+ else{let lo=1,hi=2.2;for(let i=0;i<12;i++){const m=(lo+hi)/2;if(Hh(1,m)<=avail)lo=m;else hi=m}g=lo}
+ Hh(k,g);el.classList.remove("measuring");if(wasHidden)el.classList.add("hidden");
+ const a=$("fitInfo"),b=$("fitGap");if(a)a.textContent=Math.round(k*100)+"%";if(b)b.textContent=g.toFixed(1)+"x";
 }
-
 function renderPrintState(){
- const d=date().split("-").reverse().join("/");
- const grid=generateGridHTML();
- const lists=generateListsHTML();
- const prepared=`${esc($("prepName").value.trim()||"PARVEZ")}<br>${esc($("prepRank").value.trim()||"SGT")}`;
- const noteText = $("customNoteInput").value.trim();
-
- $("printDate").textContent=d;
- $("printGrid").innerHTML=grid;
- $("printListsContainer").innerHTML=lists;
- $("printPreparedBy").innerHTML=prepared;
-
- $("previewDate").textContent=d;
- $("previewGrid").innerHTML=grid;
- $("previewListsContainer").innerHTML=lists;
- $("previewPreparedBy").innerHTML=prepared;
-
- if(noteText){
-  $("customNoteDisplay").textContent = noteText;
-  $("customNoteDisplay").classList.remove("hidden");
-  $("printCustomNoteDisplay").textContent = noteText;
-  $("printCustomNoteDisplay").classList.remove("hidden");
- } else {
-  $("customNoteDisplay").classList.add("hidden");
-  $("printCustomNoteDisplay").classList.add("hidden");
- }
-
+ const d=date().split("-").reverse().join("/"),grid=generateGridHTML(),lists=generateListsHTML();
+ const prepared=`${esc($("prepName").value.trim()||"PARVEZ")}<br>${esc($("prepRank").value.trim()||"SGT")}`,note=$("customNoteInput").value.trim();
+ ["preview","print"].forEach(p=>{
+  $(p+"Date").textContent=d;$(p+"Grid").innerHTML=grid;$(p+"Lists").innerHTML=lists;$(p+"Prep").innerHTML=prepared;
+  const n=$(p+"Note");if(note){n.textContent=note;n.classList.remove("hidden")}else n.classList.add("hidden");
+ });
  applyTypography($("fontSizeSelect").value,$("fontFamilySelect").value,$("fontWeightSelect").value);
  fitSheet();
 }
-
-function applyTypography(sz, fontFamily, fontWeight){
- const r=document.documentElement.style;
- r.setProperty("--fs",sz);
- r.setProperty("--ff",fontFamily);
- r.setProperty("--fw",fontWeight);
-}
-
-$("fontSizeSelect").onchange = function(){ renderPrintState(); };
-$("fontFamilySelect").onchange = function(){ renderPrintState(); };
-$("fontWeightSelect").onchange = function(){ renderPrintState(); };
-$("customNoteInput").oninput = renderPrintState;
-$("editNotesBtn").onclick = function(){ $("customNoteInput").parentNode.classList.toggle("hidden"); };
-
-// Prepared By: live preview while typing, saved with the day's state when you leave the box
+function applyTypography(sz,ff,fw){const r=document.documentElement.style;r.setProperty("--fs",sz);r.setProperty("--ff",ff);r.setProperty("--fw",fw)}
+$("fontSizeSelect").onchange=renderPrintState;$("fontFamilySelect").onchange=renderPrintState;$("fontWeightSelect").onchange=renderPrintState;
+$("customNoteInput").oninput=renderPrintState;
+$("editNotesBtn").onclick=()=>$("customNoteInput").parentNode.classList.toggle("hidden");
 $("prepName").oninput=renderPrintState;$("prepRank").oninput=renderPrintState;
 $("prepName").onchange=onPrepChange;$("prepRank").onchange=onPrepChange;
 
-function renderAll(reRoster=true){
- ensureCurrent();
- renderMetrics();
- renderTabs();
- refreshRankSelectors();
- if(reRoster)renderRoster();
- renderRankTable();
- renderDetails();
- renderPrintState();
+function renderAll(reRoster=true){ensureCurrent();renderMetrics();renderTabs();refreshRankSelectors();if(reRoster)renderRoster();renderRankTable();renderDetails();renderPrintState()}
+function refreshRankSelectors(){
+ const rf=$("rankFilter"),old=rf.value||"All ranks";
+ rf.innerHTML='<option>All ranks</option>'+ranks.map(g=>`<option value="${esc(g.rank)}">${esc(g.rank)}</option>`).join("");
+ rf.value=["All ranks",...ranks.map(g=>g.rank)].includes(old)?old:"All ranks";
+ const ar=$("addRank"),prev=ar.value;
+ ar.innerHTML=ranks.map(g=>`<option value="${esc(g.rank)}">${esc(g.rank)}</option>`).join("")+'<option value="__new__">New rank…</option>';
+ ar.value=ranks.some(g=>g.rank===prev)?prev:(ranks[0]?.rank||"__new__");
 }
 
-function refreshRankSelectors(){const rf=$("rankFilter"),old=rf.value||"All ranks";rf.innerHTML='<option>All ranks</option>'+ranks.map(g=>`<option value="${esc(g.rank)}">${esc(g.rank)}</option>`).join("");rf.value=["All ranks",...ranks.map(g=>g.rank)].includes(old)?old:"All ranks";const ar=$("addRank"),prev=ar.value;ar.innerHTML=ranks.map(g=>`<option value="${esc(g.rank)}">${esc(g.rank)}</option>`).join("")+'<option value="__new__">New rank…</option>';ar.value=ranks.some(g=>g.rank===prev)?prev:(ranks[0]?.rank||"__new__")}
-
-// ===================== PDF (A4 landscape) =====================
-function pdfOptions(){
- return {
-  margin:       0,
-  filename:     `State_Office_${date()}.pdf`,
-  image:        { type: 'jpeg', quality: 0.98 },
-  html2canvas:  { scale: 2, useCORS: true, logging: false, backgroundColor: "#ffffff", width: 1123, windowWidth: 1123 },
-  jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' },
-  pagebreak:    { mode: ['avoid-all'] }
- };
-}
-
-$("savePdfBtn").addEventListener("click", function(e){
- e.preventDefault();
- autoSaveBuffer();
- renderPrintState();
-
- const printEl = document.getElementById("printState");
- printEl.classList.remove("hidden");
-
- html2pdf().from(printEl).set(pdfOptions()).save().then(() => {
-  printEl.classList.add("hidden");
-  alert("PDF downloaded successfully in A4 Landscape!");
- }).catch(err => {
-  printEl.classList.add("hidden");
-  alert("PDF export failed: "+(err&&err.message||err));
- });
+// ===================== PDF =====================
+function pdfOptions(){return{margin:0,filename:`State_Office_${date()}.pdf`,image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true,logging:false,backgroundColor:"#ffffff",width:1123,windowWidth:1123},jsPDF:{unit:'mm',format:'a4',orientation:'landscape'},pagebreak:{mode:['avoid-all']}}}
+$("savePdfBtn").addEventListener("click",function(e){
+ e.preventDefault();autoSaveBuffer();renderPrintState();
+ const el=$("printState");el.classList.remove("hidden");
+ html2pdf().from(el).set(pdfOptions()).save().then(()=>{el.classList.add("hidden");alert("PDF downloaded successfully in A4 Landscape!")}).catch(err=>{el.classList.add("hidden");alert("PDF export failed: "+(err&&err.message||err))});
 });
-
 async function makePdfBlob(){
- renderPrintState();
- const printEl=$("printState");
- printEl.classList.remove("hidden");
- try{
-  return await html2pdf().set(pdfOptions()).from(printEl).outputPdf("blob");
- }finally{
-  printEl.classList.add("hidden");
- }
+ renderPrintState();const el=$("printState");el.classList.remove("hidden");
+ try{return await html2pdf().set(pdfOptions()).from(el).outputPdf("blob")}finally{el.classList.add("hidden")}
 }
 
 // ===================== SAVE =====================
-$("saveOnlyBtn").onclick=function(){
- const btn=this;btn.disabled=true;
- autoSaveBuffer().then(r=>{
-  btn.disabled=false;
-  alert(`State of ${displayDate(boundDate)} - `+cloudMsg(r));
- });
-};
+$("saveOnlyBtn").onclick=function(){const b=this;b.disabled=true;autoSaveBuffer().then(r=>{b.disabled=false;alert(`State of ${displayDate(boundDate)} - `+cloudMsg(r))})};
 
-// ===================== SEND BY EMAIL (direct, PDF attached) =====================
-// Uses the free FormSubmit.co mail relay: the browser posts the PDF and FormSubmit emails it to the address you type.
+// ===================== SEND BY EMAIL (FormSubmit relay, PDF attached) =====================
 let pendingPdf=null;
 try{$("mailTo").value=localStorage.getItem("state-office-mail-to")||""}catch(e){}
 $("mailTo").onchange=()=>{try{localStorage.setItem("state-office-mail-to",$("mailTo").value.trim())}catch(e){}};
-
-function mailSubject(){return "Parade State - AC Taking & Handing Over Flt - "+date().split("-").reverse().join("/")}
-function mailBody(){return "Please find attached the Parade/PT/FOD State of "+date().split("-").reverse().join("/")+".\n\nPrepared by: "+($("prepRank").value.trim()||"SGT")+" "+($("prepName").value.trim()||"PARVEZ")}
-
+const mailSubject=()=>"Parade State - AC Taking & Handing Over Flt - "+date().split("-").reverse().join("/");
+const mailBody=()=>"Please find attached the Parade/PT/FOD State of "+date().split("-").reverse().join("/")+".\n\nPrepared by: "+($("prepRank").value.trim()||"SGT")+" "+($("prepName").value.trim()||"PARVEZ");
 const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-function setMailStatus(kind,html){
- const el=$("mailStatus");
- el.className="mail-status "+kind;
- el.innerHTML=html;
-}
-function nowTime(){return new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}
-
-// backup way: download the PDF and open the mail app with the address filled in
+function setMailStatus(kind,html){const el=$("mailStatus");el.className="mail-status "+kind;el.innerHTML=html}
+const nowTime=()=>new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
 function fallbackMail(to){
  const f=pendingPdf;if(!f)return;
- const url=URL.createObjectURL(f);
- const a=document.createElement("a");a.href=url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();
+ const url=URL.createObjectURL(f),a=document.createElement("a");a.href=url;a.download=f.name;document.body.appendChild(a);a.click();a.remove();
  setTimeout(()=>URL.revokeObjectURL(url),8000);
- setTimeout(()=>{
-  alert("PDF downloaded: "+f.name+"\nYour mail app opens now - please attach that PDF to the mail.");
-  window.location.href="mailto:"+to+"?subject="+encodeURIComponent(mailSubject())+"&body="+encodeURIComponent(mailBody()+"\n\n(Attach the downloaded file: "+f.name+")");
- },400);
+ setTimeout(()=>{alert("PDF downloaded: "+f.name+"\nYour mail app opens now - please attach that PDF to the mail.");
+  window.location.href="mailto:"+to+"?subject="+encodeURIComponent(mailSubject())+"&body="+encodeURIComponent(mailBody()+"\n\n(Attach the downloaded file: "+f.name+")")},400);
 }
-
 $("shareMailBtn").onclick=function(){
- $("modalMailInput").value=($("mailTo").value||"").trim();
- $("mailStatus").className="mail-status hidden";
- $("shareFallbackBtn").classList.add("hidden");
- $("shareModal").classList.remove("hidden");
- setTimeout(()=>$("modalMailInput").focus(),50);
+ $("modalMailInput").value=($("mailTo").value||"").trim();$("mailStatus").className="mail-status hidden";$("shareFallbackBtn").classList.add("hidden");
+ $("shareModal").classList.remove("hidden");setTimeout(()=>$("modalMailInput").focus(),50);
 };
-
 async function doSendEmail(){
  const to=($("modalMailInput").value||"").trim();
- if(!EMAIL_RE.test(to)){
-  setMailStatus("err","Please type a valid email address (example: name@example.com).");
-  return;
- }
- $("mailTo").value=to;
- try{localStorage.setItem("state-office-mail-to",to)}catch(e){}
-
- const btn=$("shareGoBtn"),old=btn.textContent;
- btn.disabled=true;btn.textContent="Sending…";
- $("shareFallbackBtn").classList.add("hidden");
- setMailStatus("wait","Preparing the PDF and sending to <b>"+esc(to)+"</b> …");
- autoSaveBuffer();
-
+ if(!EMAIL_RE.test(to))return setMailStatus("err","Please type a valid email address (example: name@example.com).");
+ $("mailTo").value=to;try{localStorage.setItem("state-office-mail-to",to)}catch(e){}
+ const btn=$("shareGoBtn"),old=btn.textContent;btn.disabled=true;btn.textContent="Sending…";$("shareFallbackBtn").classList.add("hidden");
+ setMailStatus("wait","Preparing the PDF and sending to <b>"+esc(to)+"</b> …");autoSaveBuffer();
  try{
-  const blob=await makePdfBlob();
-  const file=new File([blob],`State_Office_${date()}.pdf`,{type:"application/pdf"});
-  pendingPdf=file;
-
+  const blob=await makePdfBlob(),file=new File([blob],`State_Office_${date()}.pdf`,{type:"application/pdf"});pendingPdf=file;
   const fd=new FormData();
-  fd.append("attachment",file,file.name);
-  fd.append("_subject",mailSubject());
-  fd.append("_captcha","false");
-  fd.append("_template","table");
-  fd.append("Message",mailBody());
-  fd.append("State date",date().split("-").reverse().join("/"));
-
+  fd.append("attachment",file,file.name);fd.append("_subject",mailSubject());fd.append("_captcha","false");fd.append("_template","table");
+  fd.append("Message",mailBody());fd.append("State date",date().split("-").reverse().join("/"));
   const res=await fetch("https://formsubmit.co/ajax/"+to,{method:"POST",headers:{"Accept":"application/json"},body:fd});
-  let j=null;try{j=await res.json()}catch(e){}
-  j=j||{};
-  const msg=String(j.message||"");
-  const okFlag=res.ok&&(j.success===true||j.success==="true");
-  const kb=Math.round(file.size/1024);
-
-  if(/activat/i.test(msg)){
-   setMailStatus("wait","⏳ <b>Almost done - first time for this address.</b><br>The mail service sent an <b>activation mail</b> to <b>"+esc(to)+"</b>. Open that inbox (check Spam too) and click the activation link. This state is held and delivered right after you activate. Next time it goes straight through.");
-  }else if(okFlag){
-   setMailStatus("ok","✔ <b>Sent at "+nowTime()+"</b> to <b>"+esc(to)+"</b><br>PDF <b>"+esc(file.name)+"</b> ("+kb+" KB, A4 landscape - same as the print copy) was accepted by the mail service. Please check that inbox (and Spam) to be sure it arrived.");
-  }else{
-   setMailStatus("err","✖ <b>Not sent.</b> "+esc(msg||("Mail service answered with error "+res.status+"."))+"<br>You can send it with your own mail app instead.");
-   $("shareFallbackBtn").classList.remove("hidden");
-  }
+  let j=null;try{j=await res.json()}catch(e){}j=j||{};
+  const msg=String(j.message||""),okFlag=res.ok&&(j.success===true||j.success==="true"),kb=Math.round(file.size/1024);
+  if(/activat/i.test(msg))setMailStatus("wait","⏳ <b>Almost done - first time for this address.</b><br>The mail service sent an <b>activation mail</b> to <b>"+esc(to)+"</b>. Open that inbox (check Spam too) and click the activation link. This state is held and delivered right after you activate. Next time it goes straight through.");
+  else if(okFlag)setMailStatus("ok","✔ <b>Sent at "+nowTime()+"</b> to <b>"+esc(to)+"</b><br>PDF <b>"+esc(file.name)+"</b> ("+kb+" KB, A4 landscape - same as the print copy) was accepted by the mail service. Please check that inbox (and Spam) to be sure it arrived.");
+  else{setMailStatus("err","✖ <b>Not sent.</b> "+esc(msg||("Mail service answered with error "+res.status+"."))+"<br>You can send it with your own mail app instead.");$("shareFallbackBtn").classList.remove("hidden")}
  }catch(err){
-  console.error(err);
-  setMailStatus("err","✖ <b>Not sent.</b> Could not reach the mail service (internet problem, or it is blocked on this network).<br>You can send it with your own mail app instead.");
-  $("shareFallbackBtn").classList.remove("hidden");
+  console.error(err);setMailStatus("err","✖ <b>Not sent.</b> Could not reach the mail service (internet problem, or it is blocked on this network).<br>You can send it with your own mail app instead.");$("shareFallbackBtn").classList.remove("hidden");
  }
  btn.disabled=false;btn.textContent=old;
 }
-
 $("shareGoBtn").onclick=doSendEmail;
 $("modalMailInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();doSendEmail()}});
 $("shareFallbackBtn").onclick=async function(){
- const to=($("modalMailInput").value||"").trim();
- if(!EMAIL_RE.test(to))return setMailStatus("err","Please type a valid email address first.");
- if(!pendingPdf){
-  try{const blob=await makePdfBlob();pendingPdf=new File([blob],`State_Office_${date()}.pdf`,{type:"application/pdf"})}
-  catch(err){return setMailStatus("err","PDF could not be prepared: "+esc(err&&err.message||err))}
- }
+ const to=($("modalMailInput").value||"").trim();if(!EMAIL_RE.test(to))return setMailStatus("err","Please type a valid email address first.");
+ if(!pendingPdf){try{const blob=await makePdfBlob();pendingPdf=new File([blob],`State_Office_${date()}.pdf`,{type:"application/pdf"})}catch(err){return setMailStatus("err","PDF could not be prepared: "+esc(err&&err.message||err))}}
  fallbackMail(to);
 };
 $("shareCancelBtn").onclick=()=>$("shareModal").classList.add("hidden");
 
-// ===================== EXCEL (.xlsx) EXPORT =====================
+// ===================== EXCEL =====================
 function getTypo(){
- const fam=$("fontFamilySelect").value;
- let name=fam.split(",")[0].replace(/['"]/g,"").trim();
- if(!name||name==="system-ui")name="Arial";
- const pt=parseFloat($("fontSizeSelect").value)||10;
- return {name:name,pt:pt,bold:$("fontWeightSelect").value!=="normal"};
+ let name=$("fontFamilySelect").value.split(",")[0].replace(/['"]/g,"").trim();if(!name||name==="system-ui")name="Arial";
+ return{name,pt:parseFloat($("fontSizeSelect").value)||10,bold:$("fontWeightSelect").value!=="normal"};
 }
-
 async function buildExcel(){
  if(typeof ExcelJS==="undefined")throw new Error("Excel library did not load. Check internet and refresh the page.");
- const T=getTypo();
- const data=computeGridData(),cols=data.cols,rows=data.rows;
- const blocks=buildListBlocks();
- const total=1+cols.length;
-
- const wb=new ExcelJS.Workbook();
- wb.creator="State Office Manpower";
- const ws=wb.addWorksheet("State",{
-  views:[{showGridLines:false}],
-  pageSetup:{paperSize:9,orientation:"landscape",fitToPage:true,fitToWidth:1,fitToHeight:1,horizontalCentered:true,
-   margins:{left:1,right:1,top:0.79,bottom:0.59,header:0.2,footer:0.2}}
- });
-
- const BLACK={argb:"FF000000"},thin={style:"thin",color:BLACK};
- const box={top:thin,left:thin,bottom:thin,right:thin};
- const rowH=Math.max(14,T.pt*1.4);
-
+ const T=getTypo(),data=computeGridData(),cols=data.cols,rows=data.rows,blocks=buildListBlocks(),total=1+cols.length;
+ const wb=new ExcelJS.Workbook();wb.creator="State Office Manpower";
+ const ws=wb.addWorksheet("State",{views:[{showGridLines:false}],pageSetup:{paperSize:9,orientation:"landscape",fitToPage:true,fitToWidth:1,fitToHeight:1,horizontalCentered:true,margins:{left:0.5,right:0.5,top:0.5,bottom:0.4,header:0.2,footer:0.2}}});
+ const BLACK={argb:"FF000000"},thin={style:"thin",color:BLACK},box={top:thin,left:thin,bottom:thin,right:thin},rowH=Math.max(14,T.pt*1.4);
  function put(r1,c1,r2,c2,val,o){
-  o=o||{};
-  if(r1!==r2||c1!==c2)ws.mergeCells(r1,c1,r2,c2);
+  o=o||{};if(r1!==r2||c1!==c2)ws.mergeCells(r1,c1,r2,c2);
   for(let r=r1;r<=r2;r++)for(let c=c1;c<=c2;c++){
    const cell=ws.getCell(r,c);
    cell.font={name:T.name,size:o.size||T.pt,bold:o.bold!==undefined?o.bold:T.bold,underline:!!o.underline,color:BLACK};
-   const al={horizontal:o.h||"center",vertical:o.v||"middle"};
-   if(o.rot)al.textRotation=o.rot;
-   if(o.wrap)al.wrapText=true;
-   else if(o.shrink)al.shrinkToFit=true;
-   cell.alignment=al;
-   if(o.border)cell.border=o.border;
+   const al={horizontal:o.h||"center",vertical:o.v||"middle"};if(o.rot)al.textRotation=o.rot;if(o.wrap)al.wrapText=true;else if(o.shrink)al.shrinkToFit=true;
+   cell.alignment=al;if(o.border)cell.border=o.border;
   }
   if(val!==undefined&&val!==null)ws.getCell(r1,c1).value=val;
  }
-
- ws.getColumn(1).width=6.8;
- for(let c=2;c<=total;c++)ws.getColumn(c).width=5.7;
-
+ ws.getColumn(1).width=6.8;for(let c=2;c<=total;c++)ws.getColumn(c).width=5.7;
  let r=1;
- put(r,1,r,total,"PARADE STATE",{underline:true,bold:true,size:T.pt+1});
- ws.getRow(r).height=Math.max(16,(T.pt+1)*1.5);
- r++;
+ put(r,1,r,total,"PARADE STATE",{underline:true,bold:true,size:T.pt+1});ws.getRow(r).height=Math.max(16,(T.pt+1)*1.5);r++;
  const dateCols=Math.max(4,Math.round(total*0.2));
- put(r,1,r,dateCols,null,{});
- put(r,dateCols+1,r,total-dateCols,"AC TAKING & HANDING OVER FLT (HANGAR)",{underline:true,bold:true,size:T.pt+1});
- put(r,total-dateCols+1,r,total,"DATE : "+date().split("-").reverse().join("/"),{h:"right"});
- ws.getRow(r).height=Math.max(16,(T.pt+1)*1.5);
- r++;
-
- const note=$("customNoteInput").value.trim();
- if(note){put(r,1,r,total,note,{size:Math.max(6,T.pt-1)});ws.getRow(r).height=14;r++}
+ put(r,1,r,dateCols,null,{});put(r,dateCols+1,r,total-dateCols,"AC TAKING & HANDING OVER FLT (HANGAR)",{underline:true,bold:true,size:T.pt+1});
+ put(r,total-dateCols+1,r,total,"DATE : "+date().split("-").reverse().join("/"),{h:"right",bold:true});ws.getRow(r).height=Math.max(16,(T.pt+1)*1.5);r++;
+ const note=$("customNoteInput").value.trim();if(note){put(r,1,r,total,note,{size:Math.max(6,T.pt-1)});ws.getRow(r).height=14;r++}
  ws.getRow(r).height=6;r++;
-
- const hs=Math.max(6,T.pt-1.5);
+ const hs=Math.max(6,T.pt-1);
  put(r,1,r,1,"RANK",{rot:90,wrap:true,border:box,size:hs,v:"bottom"});
- cols.forEach((c,i)=>put(r,i+2,r,i+2,c[0],{rot:90,wrap:true,border:box,size:hs,v:"bottom"}));
- ws.getRow(r).height=92;
- r++;
- rows.forEach(row=>{
-  put(r,1,r,1,row.label,{border:box});
-  row.vals.forEach((n,i)=>{
-   const t=cellText(row,i,n);
-   put(r,i+2,r,i+2,t===""?null:Number(t),{border:box});
-  });
-  ws.getRow(r).height=rowH;
-  r++;
- });
- ws.getRow(r).height=20;r++; // gap between the table and the lists
-
- const listStart=r;
- const W5=[1.45,1.2,1.0,1.9,0.95],sumW=W5.reduce((a,b)=>a+b,0);
- let acc=0,cs=1;const ends=[];
+ cols.forEach((c,i)=>put(r,i+2,r,i+2,c[0],{rot:90,wrap:true,border:box,size:hs,v:"bottom"}));ws.getRow(r).height=92;r++;
+ rows.forEach(row=>{put(r,1,r,1,row.label,{border:box});row.vals.forEach((n,i)=>{const t=cellText(row,i,n);put(r,i+2,r,i+2,t===""?null:Number(t),{border:box})});ws.getRow(r).height=rowH;r++});
+ ws.getRow(r).height=20;r++;
+ const listStart=r,W4=[1.3,1.15,2.6,1.05],sumW=W4.reduce((a,b)=>a+b,0);let acc=0,cs=1;const ends=[];
  blocks.forEach((colBlocks,ci)=>{
-  acc+=W5[ci];
-  let ce=(ci===blocks.length-1)?total:Math.round(acc/sumW*total);
-  ce=Math.min(total,Math.max(cs,ce));
-  let rr=listStart;
+  acc+=W4[ci];let ce=(ci===blocks.length-1)?total:Math.round(acc/sumW*total);ce=Math.min(total,Math.max(cs,ce));let rr=listStart;
   colBlocks.forEach(b=>{
-   put(rr,cs,rr,ce,b.title,{h:"left",underline:true,bold:true,shrink:true});
-   rr++;
+   put(rr,cs,rr,ce,b.title,{h:"left",underline:true,bold:true,shrink:true});rr++;
    const label=(n,t)=>`${n}  ${t}`;
    if(b.grid&&(ce-cs+1)>=2){
-    const mid=cs+Math.ceil((ce-cs+1)/2)-1;
-    const half=Math.ceil(b.items.length/2);
-    for(let j=0;j<half;j++){
-     put(rr,cs,rr,mid,label(b.start+j+1,b.items[j]),{h:"left",shrink:true});
-     if(half+j<b.items.length)put(rr,mid+1,rr,ce,label(b.start+half+j+1,b.items[half+j]),{h:"left",shrink:true});
-     rr++;
-    }
-   }else{
-    b.items.forEach((t,i)=>{put(rr,cs,rr,ce,label(b.start+i+1,t),{h:"left",shrink:true});rr++});
-   }
+    const mid=cs+Math.ceil((ce-cs+1)/2)-1,half=Math.ceil(b.items.length/2);
+    for(let j=0;j<half;j++){put(rr,cs,rr,mid,label(b.start+j+1,b.items[j]),{h:"left",shrink:true});if(half+j<b.items.length)put(rr,mid+1,rr,ce,label(b.start+half+j+1,b.items[half+j]),{h:"left",shrink:true});rr++}
+   }else b.items.forEach((t,i)=>{put(rr,cs,rr,ce,label(b.start+i+1,t),{h:"left",shrink:true});rr++});
    rr++;
   });
-  ends.push(rr);
-  cs=ce+1;
+  ends.push(rr);cs=ce+1;
  });
  const endRow=Math.max.apply(null,[listStart].concat(ends));
  for(let x=listStart;x<endRow;x++)ws.getRow(x).height=Math.max(13,T.pt*1.3);
- ws.getRow(endRow).height=18; // gap above the signatures
- r=endRow+1;
-
- // signatures: PREPARED BY / JCOIC / OIC on one row, name + rank under PREPARED BY
- const a=Math.round(total/3),b2=Math.round(total*2/3);
- const sp=[[1,a],[a+1,b2],[b2+1,total]];
- put(r,sp[0][0],r,sp[0][1],"PREPARED BY",{underline:true,bold:true,h:"left"});
- put(r,sp[1][0],r,sp[1][1],"JCOIC",{underline:true,bold:true});
- put(r,sp[2][0],r,sp[2][1],"OIC",{underline:true,bold:true,h:"right"});
- r++;
- ws.getRow(r).height=20;r++; // signature space
- put(r,sp[0][0],r,sp[0][1],$("prepName").value.trim()||"PARVEZ",{bold:true,h:"left"});
- r++;
+ ws.getRow(endRow).height=18;r=endRow+1;
+ const a=Math.round(total/3),b2=Math.round(total*2/3),sp=[[1,a],[a+1,b2],[b2+1,total]];
+ put(r,sp[0][0],r,sp[0][1],"PREPARED BY",{underline:true,bold:true,h:"left"});put(r,sp[1][0],r,sp[1][1],"JCOIC",{underline:true,bold:true});put(r,sp[2][0],r,sp[2][1],"OIC",{underline:true,bold:true,h:"right"});r++;
+ ws.getRow(r).height=20;r++;
+ put(r,sp[0][0],r,sp[0][1],$("prepName").value.trim()||"PARVEZ",{bold:true,h:"left"});r++;
  put(r,sp[0][0],r,sp[0][1],$("prepRank").value.trim()||"SGT",{bold:true,h:"left"});
-
  ws.pageSetup.printArea="A1:"+ws.getColumn(total).letter+r;
-
- const buf=await wb.xlsx.writeBuffer();
- const blob=new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
- const url=URL.createObjectURL(blob);
- const link=document.createElement("a");
- link.href=url;
- link.download=`State_Office_${date()}.xlsx`;
- document.body.appendChild(link);
- link.click();
- link.remove();
- setTimeout(()=>URL.revokeObjectURL(url),5000);
+ const buf=await wb.xlsx.writeBuffer(),blob=new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),url=URL.createObjectURL(blob),link=document.createElement("a");
+ link.href=url;link.download=`State_Office_${date()}.xlsx`;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),5000);
 }
-
-$("saveExcelBtn").addEventListener("click", async function(e){
- e.preventDefault();
- autoSaveBuffer();
- try{
-  await buildExcel();
-  alert("Excel file downloaded successfully (A4 Landscape, same as preview)!");
- }catch(err){
-  console.error(err);
-  alert("Excel export failed: "+(err&&err.message||err));
- }
+$("saveExcelBtn").addEventListener("click",async function(e){
+ e.preventDefault();autoSaveBuffer();
+ try{await buildExcel();alert("Excel file downloaded successfully (A4 Landscape, same as preview)!")}catch(err){console.error(err);alert("Excel export failed: "+(err&&err.message||err))}
 });
 
 function clearAllToParade(){
- pushUndo();
- if(!confirm("Are you sure you want to reset all personnel status to 'On Parade' for today?")) return;
- current = blank();
- currentLeave = {};
- currentDuty = {};
- currentEd = {};
- renderAll();
- autoSaveBuffer();
- alert("All personnel reset to On Parade!");
+ pushUndo();if(!confirm("Are you sure you want to reset all personnel status to 'On Parade' for today?"))return;
+ current=blank();currentLeave={};currentDuty={};currentEd={};renderAll();autoSaveBuffer();alert("All personnel reset to On Parade!");
 }
+$("clearAllParadeBtn").addEventListener("click",e=>{e.preventDefault();clearAllToParade()});
 
-$("clearAllParadeBtn").addEventListener("click", function(e){
- e.preventDefault();
- clearAllToParade();
-});
-
-// saves the current screen state (and the Prepared By name) under the date it BELONGS to
 function autoSaveBuffer(){
  const d=boundDate;
- saved[d]={statuses:{...current},leaveDetails:{...currentLeave},dutyDetails:{...currentDuty},edDetails:{...currentEd},savedAt:new Date().toISOString(),
-  prepName:$("prepName").value.trim(),prepRank:$("prepRank").value.trim()};
- const pr=persistStore(d);
- refreshSaved();
- return pr;
+ saved[d]={statuses:{...current},leaveDetails:{...currentLeave},dutyDetails:{...currentDuty},edDetails:{...currentEd},savedAt:new Date().toISOString(),prepName:$("prepName").value.trim(),prepRank:$("prepRank").value.trim()};
+ const pr=persistStore(d);refreshSaved();return pr;
 }
-
 function refreshSaved(){
- const ks=Object.keys(saved).sort().reverse();
- const optionsHtml = ks.length?ks.map(k=>`<option value="${esc(k)}">${esc(k)}</option>`).join(""):'<option value="">No saved records yet</option>';
- $("savedSelect").innerHTML=optionsHtml;
- $("topRedDateFilter").innerHTML='<option value="">Select Saved Date State…</option>' + optionsHtml;
+ const ks=Object.keys(saved).sort().reverse(),o=ks.length?ks.map(k=>`<option value="${esc(k)}">${esc(k)}</option>`).join(""):'<option value="">No saved records yet</option>';
+ $("savedSelect").innerHTML=o;$("topRedDateFilter").innerHTML='<option value="">Select Saved Date State…</option>'+o;
 }
-
-function loadDate(targetDate){
- const d = targetDate || $("savedSelect").value || $("topRedDateFilter").value;
- if(!d||!saved[d])return alert("Choose a saved date first.");
- if(saved[boundDate])autoSaveBuffer();
- pushUndo();
- $("stateDate").value=d;
- loadDay(d);
- $("topRedDateFilter").value=d;
- renderAll();
+function loadDate(target){
+ const d=target||$("savedSelect").value||$("topRedDateFilter").value;if(!d||!saved[d])return alert("Choose a saved date first.");
+ if(saved[boundDate])autoSaveBuffer();pushUndo();$("stateDate").value=d;loadDay(d);$("topRedDateFilter").value=d;renderAll();
 }
-
-$("topRedDateFilter").onchange=function(){ if(this.value) loadDate(this.value); };
-
-function deleteSavedDate(){
- const d=$("savedSelect").value||$("topRedDateFilter").value;
- if(!d||!saved[d])return alert("Select a date to delete.");
- if(confirm(`Delete saved record for ${d}?`)){
-  delete saved[d];
-  persistStore(d);
-  refreshSaved();
-  alert("Deleted successfully.");
- }
-}
-$("deleteBtn").onclick=deleteSavedDate;
-
+$("topRedDateFilter").onchange=function(){if(this.value)loadDate(this.value)};
+$("deleteBtn").onclick=()=>{
+ const d=$("savedSelect").value||$("topRedDateFilter").value;if(!d||!saved[d])return alert("Select a date to delete.");
+ if(confirm(`Delete saved record for ${d}?`)){delete saved[d];persistStore(d);refreshSaved();alert("Deleted successfully.")}
+};
 $("exportBackup").onclick=()=>{
- const a=document.createElement("a");
- a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify({ranks,saved}));
- a.download=`manpower_backup_${today()}.json`;
- document.body.appendChild(a);
- a.click();
- a.remove();
+ const a=document.createElement("a");a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify({ranks,saved}));a.download=`manpower_backup_${today()}.json`;document.body.appendChild(a);a.click();a.remove();
 };
-
 $("exportHtmlBtn").onclick=()=>{
- const currentHtml = document.documentElement.outerHTML;
- const ranksRegex = /let ranks\s*=\s*\[[\s\S]*?\];/;
- const updatedRanksCode = "let ranks=" + JSON.stringify(ranks) + ";";
- const newHtml = "<!doctype html>\n" + currentHtml.replace(ranksRegex, () => updatedRanksCode);
-
- const blob = new Blob([newHtml], {type: "text/html"});
- const a = document.createElement("a");
- a.href = URL.createObjectURL(blob);
- a.download = "index.html";
- document.body.appendChild(a);
- a.click();
- a.remove();
- alert("Updated index.html exported!");
+ const html=document.documentElement.outerHTML,newHtml="<!doctype html>\n"+html.replace(/let ranks\s*=\s*\[[\s\S]*?\];/,()=>"let ranks="+JSON.stringify(ranks)+";");
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([newHtml],{type:"text/html"}));a.download="index.html";document.body.appendChild(a);a.click();a.remove();alert("Updated index.html exported!");
 };
-
 $("importBtn").onclick=()=>$("importFile").click();
 $("importFile").onchange=e=>{
- const f=e.target.files&&e.target.files[0];if(!f)return;
- const r=new FileReader();
+ const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();
  r.onload=ev=>{
   try{
-   const x=JSON.parse(ev.target.result);
-   ranks=x.ranks; saved=x.saved||{};
-   rebuildPeople();
+   const x=JSON.parse(ev.target.result);ranks=x.ranks;saved=x.saved||{};rebuildPeople();
    Object.keys(saved).forEach(d=>saved[d]=normalizeRecord(saved[d]));
-   const pr=persistRoster();
-   persistStore("all");
-   loadDay(boundDate);
-   refreshSaved(); renderAll();
-   pr.then(res=>alert("Backup restored - "+cloudMsg(res)));
-  }catch(err){alert("Invalid backup file.")}
-  finally{$("importFile").value=""}
+   const pr=persistRoster();persistStore("all");loadDay(boundDate);refreshSaved();renderAll();pr.then(res=>alert("Backup restored - "+cloudMsg(res)));
+  }catch(err){alert("Invalid backup file.")}finally{$("importFile").value=""}
  };
  r.readAsText(f);
 };
-
 $("stateDate").value=today();
-$("stateDate").onchange=()=>{
- if(saved[boundDate])autoSaveBuffer();
- loadDay(date());
- renderAll();
-};
-
-$("rankFilter").onchange=renderRoster; $("search").oninput=renderRoster;
+$("stateDate").onchange=()=>{if(saved[boundDate])autoSaveBuffer();loadDay(date());renderAll()};
+$("rankFilter").onchange=renderRoster;$("search").oninput=renderRoster;
 $("printBtn").onclick=()=>{renderPrintState();window.print()};
 window.addEventListener("beforeprint",()=>{renderPrintState()});
 $("togglePreviewBtn").onclick=()=>$("screenPreviewSection").classList.toggle("hidden");
-
 $("assignAllBtn").onclick=()=>{
- const rf=$("rankFilter").value||"All ranks",q=$("search").value.trim().toLowerCase(),ps=people.filter(p=>(rf==="All ranks"||p.rank===rf)&&(!q||(p.name).toLowerCase().includes(q)));
+ const rf=$("rankFilter").value||"All ranks",q=$("search").value.trim().toLowerCase(),ps=people.filter(p=>(rf==="All ranks"||p.rank===rf)&&(!q||p.name.toLowerCase().includes(q)));
  if(!ps.length)return alert("No personnel match filters.");
  if(!confirm(`Set ${ps.length} personnel to "${activeStatus}"?`))return;
- pushUndo();
- ps.forEach(p=>current[p.id]=activeStatus);
- renderAll();
- autoSaveBuffer();
+ pushUndo();ps.forEach(p=>current[p.id]=activeStatus);renderAll();autoSaveBuffer();
 };
-
 $("clearFilterBtn").onclick=()=>{$("rankFilter").value="All ranks";$("search").value="";renderRoster()};
 $("loadBtn").onclick=()=>loadDate();
-
 $("addPersonBtn").onclick=()=>{
  const name=$("newName").value.trim(),selected=$("addRank").value,custom=$("newRank").value.trim();
  if(!name)return alert("Enter personnel name.");
- let rank = selected==="__new__" ? custom : selected;
- if(!rank)return alert("Choose a rank or category.");
- let g=ranks.find(x=>x.rank.toLowerCase()===rank.toLowerCase());
- if(!g){g={rank,names:[]};ranks.push(g)}
- g.names.push(name);
- rebuildPeople();
- ensureCurrent();
- const pr=persistRoster();
- $("newName").value=""; $("newRank").value="";
- renderAll();
- autoSaveBuffer();
- pr.then(r=>alert("Manpower added - "+cloudMsg(r)));
+ const rank=selected==="__new__"?custom:selected;if(!rank)return alert("Choose a rank or category.");
+ let g=ranks.find(x=>x.rank.toLowerCase()===rank.toLowerCase());if(!g){g={rank,names:[]};ranks.push(g)}
+ g.names.push(name);rebuildPeople();ensureCurrent();const pr=persistRoster();
+ $("newName").value="";$("newRank").value="";renderAll();autoSaveBuffer();pr.then(r=>alert("Manpower added - "+cloudMsg(r)));
 };
 
 loadStore();
@@ -1997,6 +1058,5 @@ refreshSaved();
 renderAll();
 initCloudListener();
 </script>
-
 </body>
 </html>
